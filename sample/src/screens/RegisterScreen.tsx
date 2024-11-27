@@ -5,9 +5,8 @@ import { spacings, style } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor, } from '../constants/Color'
 import {
-  BY_CONTINUING_YOU_AGREE, EMAIL, PASSWORD, CONFIRM_PASSWORD, PLEASE_FILL_ALL_FIELD, INVALID_EMAIL_FORMAT, PASSWORD_MUST_BE_AT, APP_NAME,
-  PASSWORD_DO_NOT_MATCH, FIRST_NAME, LAST_NAME, TERM_OF_SERVICES, PRIVACY_POLICY,
-  ALREADY_HAVE_AN_ACCOUNT, LOGIN, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN,STOREFRONT_ACCESS_TOKEN
+  BY_CONTINUING_YOU_AGREE, EMAIL, PASSWORD, CONFIRM_PASSWORD, FIRST_NAME, LAST_NAME, TERM_OF_SERVICES, PRIVACY_POLICY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN,
+  ALREADY_HAVE_AN_ACCOUNT, LOGIN, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, STOREFRONT_ACCESS_TOKEN,
 } from '../constants/Constants'
 import { GOOGLE_LOGO_IMAGE, BACKGROUND_IMAGE, OTP_VERIFICATION_IMAGE, APPLE_LOGO_IMAGE } from '../assests/images'
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
@@ -51,7 +50,6 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false)
   const [showOTP, setShowOTP] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
   const [sessionId, setSessionId] = useState('');
@@ -62,264 +60,112 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
     logEvent('RegisterScreen Initialized');
   }, [])
 
+  const encodeBase64 = (input) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    let str = input;
+    let output = '';
+    for (let block = 0, charCode, i = 0, map = chars; str.charAt(i | 0) || (map = '=', i % 1); output += map.charAt(63 & block >> 8 - i % 1 * 8)) {
+      charCode = str.charCodeAt(i += 3 / 4);
+      block = block << 8 | charCode;
+    }
+    return output;
+  };
 
-  //sign in with user Details
-  // const handleSignUp = async () => {
-  //   logEvent('Sign up Button clicked');
-  //   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   setEmailError('');
-  //   setPasswordError('');
-  //   setConfirmPasswordError('');
-  //   if (!firstName) {
-  //     Alert.alert("Please Enter Your First Name")
-  //     return;
-  //   }
-  //   if (!lastName) {
-  //     Alert.alert("Please Enter Your Last Name")
-  //     return;
-  //   }
-  //   if (!phone) {
-  //     Alert.alert("Please Enter Your Phone Number")
-  //     return;
-  //   }
-  //   if (phone.length < 10) {
-  //     Alert.alert("Please Enter Your 10 Digit Phone Number")
-  //     return;
-  //   }
-  //   if (!emailPattern.test(email)) {
-  //     setEmailError(INVALID_EMAIL_FORMAT);
-  //     return;
-  //   }
-  //   if (password.length < 8) {
-  //     setPasswordError(PASSWORD_MUST_BE_AT);
-  //     return;
-  //   }
-  //   if (password !== confirmPassword) {
-  //     setConfirmPasswordError(PASSWORD_DO_NOT_MATCH);
-  //     return;
-  //   }
-  //   try {
-  //     setLoading(true)
-  //     const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN
-  //       },
-  //       body: JSON.stringify({
-  //         first_name: firstName,
-  //         last_name: lastName,
-  //         email: email,
-  //         phone: `+91${phone}`,
-  //         addresses: [{
-  //           address1: null,
-  //           city: null,
-  //           province: null,
-  //           country: null,
-  //           zip: null,
-  //           phone: null,
-  //           default: true
-  //         }],
-  //         password: password,
-  //         password_confirmation: confirmPassword
-  //       })
-  //     });
-  //     const responseData = await response.json();
-  //     console.log("responseData", responseData)
-  //     if (responseData.message) {
-  //       setOtpError('')
-  //       setError('')
-  //       setError(responseData.message)
-  //       setLoading(false)
-  //     }
-  //     else {
-  //       const formattedPhoneNumber = `+91${phone}`;
-  //       const confirmationResult = await auth().signInWithPhoneNumber(formattedPhoneNumber);
-  //       setConfirmation(confirmationResult)
-  //       setShowOTP(true);
-  //       await AsyncStorage.setItem('userDetails', JSON.stringify(responseData))
-  //     }
-  //   } catch (error) {
-  //     setLoading(false)
-  //     console.log('Registration error:', error);
-  //     logEvent(`Registration error: ${error}`);
-  //   }
-  // };
-
-  // const finalizeSignUp = async () => {
-  //   if (otp.length !== 6) {
-  //     setOtpError("Please enter the 6-digit OTP");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     await confirmation.confirm(otp)
-  //     // await AsyncStorage.setItem('userDetails', apiResponse);
-  //     Toast.show("User Registered Successfully");
-  //     setSuccessModalVisible(false);
-  //     setIsLoggedIn(true);
-  //     setShowOTP(false);
-  //     onCloseModal();
-  //     navigation.navigate('Cart');
-  //     dispatch(loginSuccess({ email, password }));
-  //     logEvent('User Registered Successfully');
-  //     handleNotificationTrigger();
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.log('Finalization error:', error);
-  //   }
-  // };
-  // const handleSignUp = async () => {
-  //   setError('');
-  //   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (!firstName) {
-  //     Alert.alert("Please Enter Your First Name")
-  //     return;
-  //   }
-  //   if (!lastName) {
-  //     Alert.alert("Please Enter Your Last Name")
-  //     return;
-  //   }
-  //   if (!phone) {
-  //     Alert.alert("Please Enter Your Phone Number")
-  //     return;
-  //   }
-  //   if (phone.length < 10) {
-  //     Alert.alert("Please Enter Your 10 Digit Phone Number")
-  //     return;
-  //   }
-  //   if (!emailPattern.test(email)) {
-  //     setEmailError(INVALID_EMAIL_FORMAT);
-  //     return;
-  //   }
-  //   if (password.length < 8) {
-  //     setPasswordError(PASSWORD_MUST_BE_AT);
-  //     return;
-  //   }
-  //   if (password !== confirmPassword) {
-  //     setConfirmPasswordError(PASSWORD_DO_NOT_MATCH);
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'X-Shopify-Access-Token': 'YOUR_ACCESS_TOKEN'
-  //       },
-  //       body: JSON.stringify({
-  //         first_name: firstName,
-  //         last_name: lastName,
-  //         email,
-  //         phone: `+91${phone}`,
-  //         addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
-  //         password,
-  //         password_confirmation: confirmPassword
-  //       })
-  //     });
-  //     const responseData = await response.json();
-  //     console.log("responseData:::", responseData)
-  //     if (responseData.message) {
-  //       setError(responseData.message);
-  //       setLoading(false);
-  //       return;
-  //     }
-  //     const formattedPhoneNumber = `+91${phone}`;
-  //     const otpResponse = await axios.get(`https://2factor.in/API/V1/2e98b3ba-9b7f-11ef-8b17-0200cd936042/SMS/${formattedPhoneNumber}/AUTOGEN/OTP1`);
-
-  //     if (otpResponse.data.Status === 'Success') {
-  //       console.log("working")
-  //       setSessionId(otpResponse.data.Details); // Save session ID for OTP verification
-  //       setShowOTP(true); // Show OTP modal
-  //       await AsyncStorage.setItem('userDetails', JSON.stringify(responseData)); // Save user data if needed
-  //     } else {
-  //       setError('Failed to send OTP');
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.log('Registration error:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSignUp = async () => {
     setError('');
     setLoading(true);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
     // Validation
-    if (!firstName) return Alert.alert("Please Enter Your First Name");
-    if (!lastName) return Alert.alert("Please Enter Your Last Name");
-    if (!phone) return Alert.alert("Please Enter Your Phone Number");
-    if (phone.length < 10) return Alert.alert("Please Enter Your 10 Digit Phone Number");
-    if (!emailPattern.test(email)) return setEmailError("Invalid email format");
-    if (password.length < 8) return setPasswordError("Password must be at least 8 characters");
-    if (password !== confirmPassword) return setConfirmPasswordError("Passwords do not match");
-  
+    // if (!firstName) return Alert.alert("Please Enter Your First Name");
+    // if (!lastName) return Alert.alert("Please Enter Your Last Name");
+    // if (!phone) return Alert.alert("Please Enter Your Phone Number");
+    // if (phone.length < 10) return Alert.alert("Please Enter Your 10 Digit Phone Number");
+    // if (!emailPattern.test(email)) return setEmailError("Invalid email format");
+    // if (password.length < 8) return setPasswordError("Password must be at least 8 characters");
+    // if (password !== confirmPassword) return setConfirmPasswordError("Passwords do not match");
+
     try {
       // Sign-up request
-      const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Access-Token': 'YOUR_ACCESS_TOKEN'
-        },
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          phone: `+91${phone}`,
-          addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
-          password,
-          password_confirmation: confirmPassword
-        })
-      });
-      
-      const responseData = await response.json();
-      console.log("responseData:::", responseData);
-  
-      if (responseData.message) {
-        setError(responseData.message);
-        setLoading(false);
-        return;
-      }
-  
-      // Save user details
-      await AsyncStorage.setItem('userDetails', JSON.stringify(responseData));
-  
-      // Login request to get token
-      const loginResponse = await fetch("https://warley-thv5m.ondigitalocean.app/api/customerLogin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      const loginData = await loginResponse.json();
-      if (loginResponse.ok && loginData.token) {
-        // Store the token in AsyncStorage
-        await AsyncStorage.setItem('authToken', loginData.token);
-  
-        // Send OTP request
+      // const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     // 'X-Shopify-Access-Token': 'YOUR_ACCESS_TOKEN'
+      //   },
+      //   body: JSON.stringify({
+      //     first_name: firstName,
+      //     last_name: lastName,
+      //     email,
+      //     phone: `+44${phone}`,
+      //     addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
+      //     password,
+      //     password_confirmation: confirmPassword
+      //   })
+      // });
+
+      // const responseData = await response.json();
+      // console.log("responseData:::", responseData);
+
+      // if (responseData.message) {
+      //   setError(responseData.message);
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // // Save user details
+      // await AsyncStorage.setItem('userDetails', JSON.stringify(responseData));
+
+      // // Login request to get token
+      // const loginResponse = await fetch("https://warley-thv5m.ondigitalocean.app/api/customerLogin", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({ email, password }),
+      // });
+
+      // const loginData = await loginResponse.json();
+      // if (loginResponse.ok && loginData.token) {
+      //   // Store the token in AsyncStorage
+      //   await AsyncStorage.setItem('authToken', loginData.token);
+
+
         const formattedPhoneNumber = `+91${phone}`;
-        const otpResponse = await axios.get(`https://2factor.in/API/V1/2e98b3ba-9b7f-11ef-8b17-0200cd936042/SMS/${formattedPhoneNumber}/AUTOGEN/OTP1`);
-  
-        if (otpResponse.data.Status === 'Success') {
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        const encodedAuth = encodeBase64(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`);
+        const fromNumber = formattedPhoneNumber.startsWith('+91') ? '+91 78891 01844' : '+44 7807 064256';
+
+        console.log('Phone:', formattedPhoneNumber, 'Auth:', encodedAuth);
+
+        const otpResponse = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${encodedAuth}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            To: formattedPhoneNumber,
+            From: fromNumber,
+            Body: `Your OTP for registering on WARLEY is: ${otp}`,
+          }).toString(),
+        });
+
+        const responseData = await otpResponse.json();
+        console.log('Twilio Response:', responseData);
+
+        if (responseData.ok) {
           console.log("OTP sent successfully");
-          setSessionId(otpResponse.data.Details); // Save session ID for OTP verification
+          setSessionId(otpResponse.data.Details);
+          // setSessionId(otpResponse.data.data.id); 
           setShowOTP(true); // Show OTP modal
         } else {
           setError('Failed to send OTP');
         }
-      } else {
-        setError("Login failed during signup. Please check your credentials.");
-      }
+      // } 
+      // else {
+      //   setError("Login failed during signup. Please check your credentials.");
+      // }
     } catch (error) {
       console.error('Registration error:', error);
       setError(error.message || "An unexpected error occurred");
@@ -327,36 +173,6 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
       setLoading(false);
     }
   };
-  
-
-  // const finalizeSignUp = async () => {
-  //   // setShowOTP(false);
-  //   setOtpError('');
-
-  //   if (otp.length !== 6) {
-  //     setOtpError("Please enter the 6-digit OTP");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-
-  //     // Verify OTP
-  //     await confirmation.confirm(otp);
-
-  //     // Finalize sign-up
-  //     Toast.show("User Registered Successfully");
-  //     setIsLoggedIn(true);
-  //     setShowOTP(false);
-  //     onCloseModal();
-  //     navigation.navigate('Cart');
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.log('Finalization error:', error);
-  //     setOtpError("OTP verification failed. Please try again.");
-  //   }
-  // };
 
   const finalizeSignUp = async () => {
     setOtpError('');
@@ -377,7 +193,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
         Toast.show("User Registered Successfully");
         setShowOTP(false);
         onCloseModal();
-        navigation.navigate('Cart'); 
+        navigation.navigate('Cart');
       } else {
         setOtpError("OTP verification failed. Please try again.");
       }
@@ -417,7 +233,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
         if (shopifyToken) {
           console.log('customerAccessToken', shopifyToken.accessToken)
           // await AsyncStorage.setItem('customerAccessToken', shopifyToken.accessToken);
-          
+
         }
       } else {
         const shopifyResponse = await registerUserToShopify({
@@ -433,9 +249,9 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
         if (shopifyToken) {
           console.log('customerAccessToken', shopifyToken.accessToken)
           // await AsyncStorage.setItem('customerAccessToken', shopifyToken.accessToken);
-          
+
         }
-        
+
 
         await AsyncStorage.setItem('userDetails', JSON.stringify(shopifyResponse))
         await AsyncStorage.setItem('isSocialAuth', 'true');
@@ -664,7 +480,16 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
             <View style={{ width: wp(7) }}>
               <MaterialCommunityIcons name={"phone"} size={20} color={colors.grayColor} />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              {/* <TextInput
+                placeholder="+91"
+                placeholderTextColor={colors.grayColor}
+                onChangeText={setPhone}
+                value={phone}
+                keyboardType="phone-pad"
+                style={{ color: colors.blackColor,width:"10%" }}
+                maxLength={2}
+              /> */}
               <TextInput
                 placeholder="Enter your Phone Number"
                 placeholderTextColor={colors.grayColor}

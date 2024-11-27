@@ -133,8 +133,8 @@ const OrderDetailsScreen = ({ route, navigation }) => {
                 <Text style={[styles.variantText, { color: colors.blackColor }]}>Variant: {item.variant_title}</Text>
               )}
               <Text style={[styles.quantityText, { color: colors.blackColor }]}>Quantity: {item.quantity}</Text>
-              <Text style={[styles.priceText, { color: colors.blackColor }]}>Price: {item.price} {order.currency}</Text>
-              <Text style={[styles.priceText, { color: colors.blackColor }]}>Total Price: {totalPrice} {order.currency}</Text>
+              <Text style={[styles.priceText, { color: colors.blackColor }]}>Price: {order.currency === "GBP" && "£"} {item.price} </Text>
+              <Text style={[styles.priceText, { color: colors.blackColor }]}>Total Price: {order.currency === "GBP" && "£"}{totalPrice} </Text>
 
             </View>
           </View>

@@ -111,7 +111,7 @@ function CatalogScreen({ navigation }: Props) {
       const fetchCollectionData = async () => {
         try {
           const response = await axios.get(`https://warleycollection-xr8ec.ondigitalocean.app/api/collectionData?shop=${STOREFRONT_DOMAIN}`);
-          console.log("shopifycollectionData", response.data.fetchCollectionsData)
+          // console.log("shopifycollectionData", response.data.fetchCollectionsData)
           const mainCategoryDetails = response.data.fetchCollectionsData
             .map((collection) => {
               const getMainCategoryDetails = (nestedCollection) => {
@@ -218,14 +218,14 @@ function CatalogScreen({ navigation }: Props) {
           showsVerticalScrollIndicator={false}
           keyExtractor={(index) => index.toString()}
           numColumns={4}
-          style={{ width: wp(100), height:Platform.OS === "android" ?"95%" :"83%", paddingBottom: 100}}
+          style={{ width: wp(100), height: Platform.OS === "android" ? "95%" : "83%", paddingBottom: 100 }}
         /> :
           <SkeletonPlaceholder>
             <View style={{ width: wp(100), height: hp(70), padding: spacings.large }}>
               {Array(7).fill().map((_, rowIndex) => (
                 <View key={rowIndex} style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   {Array(4).fill().map((_, colIndex) => (
-                    <View key={colIndex} style={{ width: wp(20), height: hp(10), borderRadius: 50, marginTop: 10 }} />
+                    <View key={colIndex} style={{ width: wp(20), height: Platform.OS === "android" ? hp(10) : hp(9), borderRadius: 50, marginTop: 10 }} />
                   ))}
                 </View>
               ))}

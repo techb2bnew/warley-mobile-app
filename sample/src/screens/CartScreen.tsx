@@ -740,7 +740,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                 <View style={[styles.costBlock, justifyContentSpaceBetween, flexDirectionRow]}>
                   <Text style={styles.costBlockText}>{SUBTOTAL}</Text>
                   <Text style={[styles.costBlockText, { color: themecolors.blackColor }]}>
-                    {getTotalAmount().totalAmount} {getTotalAmount().currencyCode}
+                    {getTotalAmount().currencyCode === "GBP" && "£"}  {getTotalAmount().totalAmount}
                   </Text>
                 </View>
 
@@ -754,7 +754,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                 <View style={[styles.costBlock, justifyContentSpaceBetween, flexDirectionRow, { borderTopColor: colors.border, borderTopWidth: 1, marginTop: spacings.large }]}>
                   <Text style={[styles.costBlockTextStrong, { color: themecolors.blackColor }]}>{TOTAL}</Text>
                   <Text style={[styles.costBlockTextStrong, { color: themecolors.blackColor }]}>
-                    {sum.toFixed(2)} {getTotalAmount().currencyCode}
+                    {getTotalAmount().currencyCode === "GBP" && "£"} {sum.toFixed(2)}
                   </Text>
                 </View>
                 <Text style={{
@@ -778,7 +778,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
           <View style={[flexDirectionRow, positionAbsolute, justifyContentSpaceBetween, { alignItems: "baseline", bottom: 0, width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(8) }]}>
             <View style={{ width: wp(50), justifyContent: "center", alignItems: "center", height: hp(10) }}>
               <View style={[styles.quantityContainer, alignJustifyCenter, { flexDirection: "column", width: wp(50) }]}>
-                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700" }}>Total: {getTotalAmount().currencyCode} {getTotalAmount().totalAmount} </Text>
+                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700" }}>Total: {getTotalAmount().currencyCode === "GBP" && "£"} {getTotalAmount().totalAmount} </Text>
                 {/* <Text style={{ backgroundColor: "#dafbd5", paddingHorizontal: 4, marginTop: 8, borderRadius: 5, color: "#018726" }}><AntDesign
                   name={"tag"}
                   size={15}
@@ -813,8 +813,12 @@ function price(value: { amount: string; currencyCode: string }) {
     return '-';
   }
   const { amount, currencyCode } = value;
-  return `${amount} ${currencyCode}`;
+
+  // Return formatted price with GBP symbol if currencyCode is GBP
+  return currencyCode === "GBP" ?  `£ ${amount}` : `${amount} ${currencyCode}`;
 }
+;
+
 
 function CartItem({
   item,
@@ -855,7 +859,7 @@ function CartItem({
 
     // Call addToCart with the variant ID and the new quantity to add
     addToCartitem(item.merchandise.id, 1); // Adds one more of the same item
-    Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
+    Toast.show(`${ quantity } item${ quantity !== 1 ? 's' : '' } added to cart`);
 
   };
 

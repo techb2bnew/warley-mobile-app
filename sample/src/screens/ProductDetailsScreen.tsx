@@ -143,7 +143,7 @@ function ProductDetailsScreen({ navigation, route }: Props) {
     return responseData.data.product.handle;
   };
 
-  const generateLink = async(pid: string) => {
+  const generateLink = async (pid: string) => {
     try {
       const link = await dynamicLinks().buildShortLink({
         link: `https://warley.page.link/XktS?productId=${pid}`,
@@ -161,7 +161,7 @@ function ProductDetailsScreen({ navigation, route }: Props) {
   }
 
   const shareProduct = async (id: string) => {
-    console.log("id",id)
+    console.log("id", id)
     setShareProductLoading(true)
     logEvent('Share Product Button Clicked');
     const getLink = await generateLink(id)
@@ -255,7 +255,8 @@ function ProductDetails({
 }) {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-  const image = (product?.images?.nodes) ? (product?.images?.nodes[0]?.src) : (product?.images?.edges) ? (product?.images?.edges[0]?.node) : (product?.image?.src);
+//  console.log("product?.images",product?.images)
+  const image = (product?.images?.nodes) ? (product?.images?.nodes[0]?.src || product?.images?.nodes[0]?.url) : (product?.images?.edges) ? (product?.images?.edges[0]?.node) : (product?.image?.src);
   const variant = getVariant(product);
   const [quantity, setQuantity] = useState(1);
   const outOfStock = inventoryQuantity && inventoryQuantity[0] <= 0;
@@ -697,7 +698,7 @@ function ProductDetails({
     Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
   };
 
-  
+
   const renderItem = ({ item }) => {
     const { author_name, profile_photo_url, rating, relative_time_description, text } = item;
     const maxLength = 120;
@@ -705,7 +706,7 @@ function ProductDetails({
     return (
       <View style={styles.reviewContainer}>
         <View style={styles.profileContainer}>
-        <FallbackAvatar name={author_name} />
+          <FallbackAvatar name={author_name} />
           {/* {profile_photo_url ? (
             <Image source={{ uri: profile_photo_url }} style={styles.profileImage} />
           ) : (
@@ -730,7 +731,7 @@ function ProductDetails({
           </View>
 
           {relative_time_description && (
-            <Text style={[styles.timeDescription, { color: themecolors.blackColor}]}>{relative_time_description}</Text>
+            <Text style={[styles.timeDescription, { color: themecolors.blackColor }]}>{relative_time_description}</Text>
           )}
           {text && <Text style={[styles.reviewText, { color: themecolors.blackColor }]}>{truncatedText}</Text>}
 
@@ -739,11 +740,10 @@ function ProductDetails({
     );
   };
 
-
   return (
     <View>
       <ScrollView
-        style={{ width: "100%", height: "93.8%", paddingBottom: spacings.large }}
+        style={{ width: "100%", height: "93.8%" , paddingBottom: spacings.large }}
         showsVerticalScrollIndicator={false}
       >
         <View key={product?.id} style={[styles.productItem, borderRadius10, { width: "100%", paddingBottom: hp(15) }]}>
@@ -770,7 +770,7 @@ function ProductDetails({
               <View style={[flexDirectionRow, { width: "100%" }]}>
                 {(variant?.price?.amount || variant?.price) && (
                   <Text style={[styles.productPrice, { color: "#eb4335", fontSize: 20 }]}>
-                   {(variant?.price?.currencyCode) ? variant.price.currencyCode : shopCurrency} {(variant?.price?.amount) ? variant.price.amount : variant.price} 
+                    {(variant?.price?.currencyCode) ? variant.price.currencyCode === "GBP" && "£" : shopCurrency} {(variant?.price?.amount) ? variant.price.amount : variant.price}
                   </Text>
                 )}
                 <Pressable style={[flexDirectionRow, alignItemsCenter, { marginLeft: spacings.large }]}>
@@ -879,7 +879,7 @@ function ProductDetails({
             />
             {shuffledReviews.length > 0 && <Pressable
               onPress={handleWriteReview}
-              style={[styles.outOfStockButton, borderRadius10,alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
+              style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
             >
               <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeNormal2x.fontSize, }, textAlign]}>
                 Write a Review
@@ -905,7 +905,7 @@ function ProductDetails({
                     </View>
                     <View style={[{ width: "100%", height: hp(9) }]}>
                       <Text style={[styles.relatedproductName, { color: themecolors.blackColor }]}>{trimcateText(item.title)}</Text>
-                      <Text style={[styles.relatedproductPrice, { paddingHorizontal: spacings.small, color: themecolors.blackColor }]}>{item?.variants[0]?.price} {shopCurrency}
+                      <Text style={[styles.relatedproductPrice, { paddingHorizontal: spacings.small, color: themecolors.blackColor }]}>{shopCurrency} {item?.variants[0]?.price}
                       </Text>
                     </View>
                     <View style={[{ width: "100%", flexDirection: "row" }, justifyContentSpaceBetween, alignItemsCenter]}>
@@ -947,9 +947,10 @@ function ProductDetails({
         </View>
       </ScrollView>
       <ChatButton onPress={handleChatButtonPress} bottom={Platform.OS === "android" ? hp(15) : hp(20)} />
-      <View style={[flexDirectionRow, positionAbsolute, justifyContentSpaceBetween, alignJustifyCenter, {
-        alignItems: "baseline",
-        bottom: Platform.OS === "android" ? hp(2) : !(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? hp(4) : hp(4), width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(10)
+      <View style={[flexDirectionRow, positionAbsolute, alignJustifyCenter, {
+        // alignItems: "baseline",
+        top: Platform.OS === "android" ? hp(77.6) : !(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? hp(68) : hp(68),
+        width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(8)
       }]}>
         <View style={[styles.addToCartButtonContainer, { paddingTop: 5 }]}>
           {(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? (
@@ -984,7 +985,7 @@ function ProductDetails({
           )}
         </View>
       </View>
-    </View>
+    </View >
   );
 }
 
@@ -1212,7 +1213,7 @@ function createStyles(colors: Colors) {
     profileContainer: {
       width: wp(20),
       height: hp(10),
-      paddingTop:spacings.large
+      paddingTop: spacings.large
       // alignItems: 'center',
       // justifyContent: 'center',
       // backgroundColor:'red'

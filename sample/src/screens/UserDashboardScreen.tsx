@@ -26,6 +26,7 @@ import ChatButton from '../components/ChatButton';
 import { scheduleNotification } from '../notifications';
 import useShopify from '../hooks/useShopify';
 import axios from 'axios';
+import { validate } from 'graphql';
 const { alignJustifyCenter, textAlign, positionAbsolute, resizeModeContain, flexDirectionRow, flex } = BaseStyle;
 
 const UserDashboardScreen = () => {
@@ -393,7 +394,7 @@ const UserDashboardScreen = () => {
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <View>
-              <Text style={[styles.wishListItemPrice, { color: colors.blackColor }]}> {itemCurrencyCode ? itemCurrencyCode : shopCurrency} <Text style={[styles.wishListItemPrice]}> {item.price?.[0] ? item.price?.[0] : itemPrice}</Text></Text>
+              <Text style={[styles.wishListItemPrice, { color: colors.blackColor }]}> {itemCurrencyCode ? itemCurrencyCode === "GBP" && "£" : shopCurrency} <Text style={[styles.wishListItemPrice]}> {item.price?.[0] ? item.price?.[0] : itemPrice}</Text></Text>
             </View>
             <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
               {inventoryQuantity > 0 ? (

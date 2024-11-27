@@ -64,7 +64,7 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress }) 
           <Text style={[styles.productName, { color: colors.blackColor }]}>{trimcateText(product?.title)}</Text>
           {priceAmount && (
             <Text style={[styles.productPrice, { color: colors.blackColor }]}>
-            {currencyCode ? currencyCode : shopCurrency}{priceAmount} 
+              {currencyCode ? currencyCode === "GBP" && "£" : shopCurrency}{priceAmount}
             </Text>)}
         </View>
         <View style={[{ width: "42%", paddingVertical: spacings.small, alignItems: "center", justifyContent: "space-around", marginLeft: spacings.large }]}>

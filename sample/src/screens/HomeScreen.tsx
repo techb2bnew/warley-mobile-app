@@ -36,7 +36,7 @@ const { height: screenHeight } = Dimensions.get('window');
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
   const selectedItem = useSelector((state) => state.menu.selectedItem);
-  const { isDarkMode,toggleTheme } = useThemes();
+  const { isDarkMode, toggleTheme } = useThemes();
   const colors = isDarkMode ? darkColors : lightColors;
   const { addToCart, addingToCart, clearCart } = useCart();
   const [inventoryQuantities, setInventoryQuantities] = useState('');
@@ -71,40 +71,40 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
   const productsBest = [
     {
-      id: 'gid://shopify/Collection/635469037914',
-      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2Fbanner-01.jpg?alt=media&token=82995738-3f13-4f43-a438-050532265b06",
-      name: "Rice"
+      id: 'gid://shopify/Product/9888472629594',
+      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2F1.png?alt=media&token=114dac4f-8cfd-40f0-a77f-764a14d367cd",
+
     },
     {
-      id: 'gid://shopify/Collection/635468284250',
-      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2Fbanner-02.jpg?alt=media&token=73e850b9-7d11-4c2c-8402-1eca39c70ce0",
-      name: "Lemon Juices"
+      id: 'gid://shopify/Product/9889518387546',
+      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2F2.png?alt=media&token=1b95ae67-a19d-4666-bf90-92f1589bf0ac",
+
     },
     {
-      id: 'gid://shopify/Collection/635465990490',
-      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2Fbanner-03.jpg?alt=media&token=adcce1fa-6615-4251-9a28-8976f7a08cc4",
-      name: "Mango Pulp"
+      id: 'gid://shopify/Product/9888057033050',
+      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2F3.png?alt=media&token=5051ccaf-a7a7-4c1f-8934-223c9a209dec",
+
     },
     {
-      id: 'gid://shopify/Collection/635466514778',
-      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2Fbanner-04.jpg?alt=media&token=95697b86-a68d-41e2-9e7e-2ff2f01fb373",
-      name: "Peas"
+      id: 'gid://shopify/Product/9888317079898',
+      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2F4.png?alt=media&token=209ed163-a796-4ded-b38c-564e8d6aa578",
+
     },
     {
-      id: 'gid://shopify/Collection/635466514778',
-      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2Fbanner-05.jpg?alt=media&token=1029d711-4283-4260-aaec-b6929369ecd7",
-      name: "Peas"
+      id: 'gid://shopify/Product/9888054247770',
+      image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/best%20deal%2F5.png?alt=media&token=3cbdd36f-b127-4270-9ba6-3add98d983ec",
+
     }
   ];
 
-  const carouselData = [
-    { id: 1, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-01.jpg?alt=media&token=d2c4ef0f-df98-4d8a-9d56-2882a79eff17", action: () => onPressCollection("gid://shopify/Collection/635461140826", "Plum Tomatoes") },
-    { id: 2, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-02.jpg?alt=media&token=2c08eff2-423b-41f7-a50e-1cb39e5203f7", action: () => onPressCollection("gid://shopify/Collection/635468284250", "Lemon Juices") },
-    { id: 3, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-03.jpg?alt=media&token=62104ead-f501-428d-b418-ad5863433157", action: () => onPressCollection("gid://shopify/Collection/635465990490", "Mango Pulp") },
-    { id: 4, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-04.jpg?alt=media&token=37072a70-a244-47e3-850f-d42075aa0084", action: () => onPressCollection("gid://shopify/Collection/635466514778", "Brown Lentils") },
-    { id: 5, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-05.jpg?alt=media&token=5b8938bc-ced4-4155-9e64-67558297654b", action: () => onPressCollection("gid://shopify/Collection/635468611930", "Tea") },
-    { id: 6, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2Fnew%20banner_1-06.jpg?alt=media&token=0a61bda5-c27f-484c-8337-66a3bd9c3f5f", action: () => onPressCollection("gid://shopify/Collection/635468611930", "Tea") },
 
+  const carouselData = [
+    { id: 1, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F1.png?alt=media&token=7ab1a97e-0f28-45f4-b7be-51777071c5f6", action: () => onPressCollection("gid://shopify/Collection/635461140826", "Plum Tomatoes") },
+    { id: 2, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F2.png?alt=media&token=b6ff8e15-3f21-4fc4-96ae-8f7e6853e5f7", action: () => onPressCollection("gid://shopify/Collection/635468284250", "Lemon Juices") },
+    { id: 3, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F5.png?alt=media&token=b8b7760e-4bf3-4b38-977e-7581816f21f9", action: () => onPressCollection("gid://shopify/Collection/635468611930", "Tea") },
+    { id: 4, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F3.png?alt=media&token=19e6600c-2701-4098-8ad9-7895829f15f8", action: () => onPressCollection("gid://shopify/Collection/635465990490", "Mango Pulp") },
+    { id: 5, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F4.png?alt=media&token=8f0269a7-cf1e-4002-b572-45b0c2c88f09", action: () => onPressCollection("gid://shopify/Collection/637613703514", "Lentils") },
+    { id: 6, image: "https://firebasestorage.googleapis.com/v0/b/warleystore-5a182.appspot.com/o/carousal%2F6.png?alt=media&token=248a9317-5fe7-4605-b414-bcdbb2f00475", action: () => onPressCollection("gid://shopify/Collection/635468611930", "Tea") },
   ];
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       myHeaders.append("X-Shopify-Access-Token", ADMINAPI_ACCESS_TOKEN);
       const graphql = JSON.stringify({
         query: `query MyQuery {
-         collection(id: "gid://shopify/Collection/635461599578") {
+         collection(id: "gid://shopify/Collection/637661774170") {
         products(first: 250) {
           nodes {
             id
@@ -201,7 +201,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       myHeaders.append("X-Shopify-Access-Token", ADMINAPI_ACCESS_TOKEN);
       const graphql = JSON.stringify({
         query: `query MyQuery {
-        collection(id: "gid://shopify/Collection/635461960026") {
+        collection(id: "gid://shopify/Collection/637662101850") {
           products(first: 4) {
             nodes {
               id
@@ -703,6 +703,110 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     // console.log(`Banner ${index + 1} clicked:`);
     if (item.action) item.action();
   };
+
+  const fetchBestProductDetails = async (productId) => {
+    const query = `
+        query getProductDetails($id: ID!) {
+            product(id: $id) {
+                id
+                title
+                description
+                vendor
+                tags
+                variants(first: 5) {
+                    edges {
+                        node {
+                            id
+                            title
+                            price {
+                                amount
+                                currencyCode
+                            }
+                            quantityAvailable 
+                            selectedOptions {
+                             name
+                             value
+                             }
+                        }
+                    }
+                }
+                images(first: 5) {
+                  nodes {
+                      src
+                  }
+              }
+            }
+        }
+    `;
+
+    const variables = { id: productId };
+
+    try {
+      const response = await fetch(`https://${STOREFRONT_DOMAIN}/api/2023-07/graphql.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
+        },
+        body: JSON.stringify({ query, variables }),
+      });
+
+      if (!response.ok) {
+        console.error(`HTTP error: ${response.status} ${response.statusText}`);
+        return null;
+      }
+
+      const data = await response.json();
+
+      if (data.errors) {
+        console.error('GraphQL errors:', data.errors);
+        return null;
+      }
+      // console.log("productdata",data.data.product)
+      return data.data.product;
+    } catch (error) {
+      console.error('Network error:', error);
+      return null;
+    }
+  };
+  
+  const handlePressBestDeal = async (item, index) => {
+    console.log("Handling press for item:", item);
+    try {
+      const productDetails = await fetchBestProductDetails(item.id);
+
+      // if (!productDetails) {
+      //     console.log('Error fetching product details or product not found.');
+      //     return;
+      // }
+      console.log("productDetails", productDetails)
+      const variant = getVariant(productDetails);
+      const tags = productDetails.tags;
+      const inventoryQuantities = productDetails?.variants?.edges?.map(
+        (variant) => variant.node.quantityAvailable
+      );
+
+      const options = productDetails?.variants?.edges?.map(
+        (variant) => variant.node.selectedOptions[0]
+      );
+      const ids = productDetails?.variants?.edges?.map(variant => variant.node.id);
+
+
+      // console.log("productDetailstags",options)
+      navigation.navigate('ProductDetails', {
+        product: productDetails,
+        variant: variant,
+        inventoryQuantity: inventoryQuantities,
+        tags: tags,
+        // option: options,
+        ids: ids,
+      });
+    } catch (error) {
+      console.error('Error handling product press:', error);
+    }
+  };
+
+
   return (
     <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
       <ScrollView
@@ -916,11 +1020,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 alignItems: 'center',
               }}
               showsHorizontalScrollIndicator={false}>
-              {productsBest?.map(item => (
+              {productsBest?.map((item, index) => (
                 <View key={item}>
-                  <TouchableOpacity style={{ marginRight: 10, overflow: "hidden", borderRadius: 10 }} onPress={() => onPressCollection(item.id, item.name)}>
+                  <Pressable style={{ marginRight: 10, overflow: "hidden", borderRadius: 10 }}
+                    onPress={() => handlePressBestDeal(item, index)}
+                  >
                     <Image source={{ uri: item.image }} style={{ width: 200, height: 200 }} />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               ))}
             </ScrollView>

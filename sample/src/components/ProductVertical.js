@@ -264,7 +264,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
             <View style={{ paddingLeft: 3 }}>
               {priceAmount && (
                 <Text style={[styles.productPrice, { color: colors.blackColor, marginTop: 10, paddingLeft: spacings.medium }]}>
-                 {currencyCode ? currencyCode : shopCurrency} {priceAmount} 
+                 {currencyCode ? currencyCode ==="GBP" && "£": shopCurrency} {priceAmount} 
                 </Text>)}
             </View>
             <View style={[{}]}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, Dimensions, Pressable, Image, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, Dimensions, Pressable, Image, ImageBackground, ActivityIndicator, ScrollView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import { useThemes } from '../context/ThemeContext';
 import { spacings, style } from '../constants/Fonts';
@@ -17,6 +17,7 @@ import { useCart } from '../context/Cart';
 import { scheduleNotification } from '../notifications';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import ChatButton from '../components/ChatButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { height: screenHeight } = Dimensions.get('window');
 const { resizeModeContain, textAlign, alignJustifyCenter, borderRadius10, overflowHidden, borderWidth1, flexDirectionRow } = BaseStyle;
 
@@ -24,7 +25,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     const { isDarkMode } = useThemes();
     const colors = isDarkMode ? darkColors : lightColors;
     const [modalView, setModalView] = useState('subcategory');
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const { tabss, category } = route.params;
     // console.log("category", category,":::::::",tabss);
     const [activeTab, setActiveTab] = useState(tabss[0]);
@@ -39,6 +40,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     const [options, setOptions] = useState([]);
     const [inventoryQuantities, setInventoryQuantities] = useState('');
     const { addToCart, addingToCart } = useCart();
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -159,8 +161,8 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
         }
     };
 
-
     const handleSubcategorySelect = (item) => {
+        setSelectedItem(item.url)
         // console.log("itemm:::::", item.url)
         if (item.subcategories && item.subcategories.length > 0) {
             setSelectedCategories((prev) => [...prev, item.title]);
@@ -177,6 +179,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
 
     const handleTabSelect = (tab) => {
         setActiveTab(tab);
+        setSelectedItem(tab.url)
         if (tab.subcategories && tab.subcategories.length > 0) {
             setNestedTabs(tab.subcategories);
             fetchProductsByHandle(tab.url);
@@ -188,6 +191,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     };
 
     const handleNestedTabSelect = (nestedTab) => {
+        setSelectedItem(nestedTab.url)
         fetchProductsByHandle(nestedTab.url);
         setModalVisible(false);
     };
@@ -206,16 +210,88 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     };
     const capitalizeFirstLetter = (routeName) => {
         const result = routeName
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
         setRouteName(result); // Set the result in state
-      };
+    };
     return (
         <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
             <>
                 <Header backIcon={true} text={routeName} navigation={navigation} />
-                <View style={{ paddingHorizontal: 10 }}>
+                <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
+                <View style={{ padding: 10 }}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {modalView === 'subcategory' && (
+                            <FlatList
+                                data={category}
+                                renderItem={({ item, index }) => {
+                                    const dynamicCategoryName = `CategoryName ${index + 1}`;
+                                    const mainCategoryName = item[dynamicCategoryName];
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => handleSubcategorySelect(item)}
+                                            style={[styles.subCategoryButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                        >
+                                            <Text style={[styles.subCategoryText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
+                                                {(item.CategoryName) || (mainCategoryName)}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+                                keyExtractor={(item) => item?.id?.toString()}
+                                horizontal={true}  // This makes the FlatList horizontal
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        )}
+
+                        {modalView === 'tab' && (
+                            <FlatList
+                                data={tab}
+                                renderItem={({ item, index }) => {
+                                    const dynamicSubcategoryName = item[`SubcategoryName ${index + 1}`] || item[`SubcategoryChildName ${index + 1}`];
+                                    const subcategoryName = dynamicSubcategoryName;
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => handleTabSelect(item)}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                        >
+                                            <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
+                                                {(item.SubcategoryName1) || (subcategoryName)}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+                                keyExtractor={(item) => item?.id?.toString()}
+                                horizontal={true}  // Horizontal layout for tab
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        )}
+
+                        {modalView === 'nestedTab' && (
+                            <FlatList
+                                data={nestedTabs}
+                                renderItem={({ item, index }) => {
+                                    const dynamicSubcategoryChildName = `SubcategoryChildName ${index + 1}`;
+                                    const subcategoryChildName = item[dynamicSubcategoryChildName];
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => handleNestedTabSelect(item)}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                        >
+                                            <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
+                                                {item.SubcategoryName2 || subcategoryChildName || 'No Subcategory Child Name'}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+                                keyExtractor={(item) => item?.url}
+                                horizontal={true}  // Horizontal layout for nested tabs
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        )}
+                    </ScrollView>
+
                     {loading && (
                         <SkeletonPlaceholder>
                             <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
@@ -272,12 +348,12 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                         )}
                     </View>
 
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.filterButton}>
+                    {/* <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.filterButton}>
                         <Image source={isDarkMode ? WHITE_FILTER_ICON : FILTER_ICON} style={styles.filterIcon} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
-                <Modal visible={modalVisible} transparent={true} animationType="slide">
+                {/* <Modal visible={modalVisible} transparent={true} animationType="slide">
                     <View style={styles.overlay}>
                         <ImageBackground
                             source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}
@@ -300,7 +376,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                                     }}
                                                     style={styles.subCategoryButton}
                                                 >
-                                                    <Text style={[styles.subCategoryText,{color:blackColor}]}>{(item.CategoryName) || (mainCategoryName)}</Text>
+                                                    <Text style={[styles.subCategoryText, { color: blackColor }]}>{(item.CategoryName) || (mainCategoryName)}</Text>
                                                 </TouchableOpacity>
                                             );
                                         }}
@@ -331,7 +407,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                                     }}
                                                     style={styles.tabButton}
                                                 >
-                                                    <Text style={[styles.tabText,{color:blackColor}]}>{(item.SubcategoryName1) || (subcategoryName)}</Text>
+                                                    <Text style={[styles.tabText, { color: blackColor }]}>{(item.SubcategoryName1) || (subcategoryName)}</Text>
                                                 </TouchableOpacity>
                                             );
                                         }}
@@ -350,15 +426,15 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                             const subcategoryChildName = item[dynamicSubcategoryChildName]; // Access dynamically using the correct key name
                                             return (
                                                 <TouchableOpacity onPress={() => handleNestedTabSelect(item)} style={styles.tabButton}>
-                                                    <Text style={[styles.tabText,{color:blackColor}]}>
-                                                        {item.SubcategoryName2 || subcategoryChildName || 'No Subcategory Child Name'} {/* Fallback if undefined */}
+                                                    <Text style={[styles.tabText, { color: blackColor }]}>
+                                                        {item.SubcategoryName2 || subcategoryChildName || 'No Subcategory Child Name'}
                                                     </Text>
                                                 </TouchableOpacity>
                                             );
                                         }}
                                         numColumns={2}
                                         keyExtractor={(item) => item?.url}
-                                        showsVerticalScrollIndicator={false} // Use a unique identifier for each nested tab
+                                        showsVerticalScrollIndicator={false}
                                     />
                                 )}
 
@@ -369,7 +445,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                             <AntDesign name={'closecircle'} size={25} color={colors.blackColor} />
                         </Pressable>
                     </View>
-                </Modal>
+                </Modal> */}
             </>
             <ChatButton onPress={handleChatButtonPress} />
         </ImageBackground>
@@ -377,13 +453,29 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
 };
 
 
-
 const ProductItem = ({ item, InventoryQuantities, ids, onPress, addToCartProduct }) => {
     const { isDarkMode } = useThemes();
     const colors = isDarkMode ? darkColors : lightColors;
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [shopCurrency, setShopCurrency] = useState('');
     const outOfStock = ids && ids[0]?.inventoryQty;
+    useEffect(() => {
+        const fetchCurrency = async () => {
+            try {
+                const shopCurrency = await AsyncStorage.getItem('shopCurrency');
+                if (shopCurrency) {
+                    setShopCurrency(shopCurrency);
+                }
+            } catch (error) {
+                console.error('Error fetching shop currency:', error);
+            }
+        };
+        fetchCurrency();
+    }, []);
+    const price = item?.variants?.edges ? item?.variants?.edges[0]?.node?.price : item?.variants?.nodes[0];
+    const priceAmount = price?.price ? price?.price : price?.amount;
+
     const incrementQuantity = () => {
         setQuantity(quantity + 1);
     };
@@ -404,6 +496,7 @@ const ProductItem = ({ item, InventoryQuantities, ids, onPress, addToCartProduct
         <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden, { backgroundColor: isDarkMode ? colors.grayColor : whiteColor }]} onPress={onPress}>
             <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} />
             <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor, paddingHorizontal: 8 }]}>{item?.title}</Text>
+            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8 }]}>{shopCurrency} {priceAmount}</Text>
             <View style={[styles.quantityContainer, borderWidth1, flexDirectionRow, alignJustifyCenter]}>
                 <TouchableOpacity onPress={decrementQuantity}>
                     <Text style={styles.quantityButton}>-</Text>
