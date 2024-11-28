@@ -14,7 +14,7 @@ import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
 import { useSelector } from 'react-redux';
 const { alignItemsCenter, alignJustifyCenter, flexDirectionRow, justifyContentSpaceBetween } = BaseStyle;
-const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
+const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory,trimtext }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
   const { totalQuantity } = useCart();
   const userLoggedIn = useSelector(state => state.auth.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false)
@@ -43,7 +43,7 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
   //   return text;
   // };
 
-  const trimcateText = (text, maxLength = 18) => {
+  const trimcateText = (text, maxLength = 20) => {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + '...';
     }
@@ -54,8 +54,8 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
     navigation.navigate('NotificationScreen', { navigation: navigation })
   }
   return (
-    <View >
-      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "99%" }]}>
+    <View>
+      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "99%", backgroundColor: whiteColor }]}>
         <View style={[flexDirectionRow, alignItemsCenter]}>
           {backIcon && <TouchableOpacity style={[alignJustifyCenter, { width: wp(10) }]} onPress={OnClickBackIcon}>
             <Ionicons name={"arrow-back"} size={25} color={colors.blackColor} />
@@ -66,7 +66,7 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
           {menuImage && <TouchableOpacity style={[alignJustifyCenter, { width: wp(10) }]} onPress={() => { setModalVisible(true), logEvent('Menu Button Clicked') }}>
             <Image source={isDarkMode ? WHITE_MENU_ICON : MENU_ICON} style={{ width: wp(6), height: hp(4), resizeMode: "contain", marginLeft: spacings.large }} />
           </TouchableOpacity>}
-          {text && <Text style={[styles.text, { color: colors.blackColor }]}>{trimcateText(text)}</Text>}
+          {text && <Text style={[styles.text, { color: colors.blackColor }]}>{trimtext ? trimcateText(text) : text}</Text>}
         </View>
         {image && <Image source={isDarkMode ? WARLEY_HEADER_LOGO_NEW : WARLEY_HEADER_LOGO_NEW} style={{ width: wp(34), height: hp(4.5), resizeMode: "contain", marginStart: Platform.OS === "android" ? menuImage ? userLoggedIn ? wp(12) : wp(1) : wp(1) : userLoggedIn ? wp(12) : wp(5) }} />}
         <View style={[flexDirectionRow, { width: "auto", marginRight: spacings.large }, justifyContentSpaceBetween, alignItemsCenter]}>
@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    marginLeft: spacings.normalx
+    marginLeft: spacings.normalx,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: "100%",

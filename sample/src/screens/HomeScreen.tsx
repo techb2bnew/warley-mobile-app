@@ -687,10 +687,21 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           ]}
           onPress={() => handleCategoryPress(item, index)}
         >
-          <Image
+          {/* <Image
             source={{ uri: imageUrl }}
-            style={[styles.categoryImage, { resizeMode: "contain", borderWidth: isDarkMode ? 1 : 1, borderColor: isDarkMode ? borderColor : borderColor, borderRadius: 50, width: "100%", height: "100%", backgroundColor: colors.whiteColor }]}
-          />
+            style={[styles.categoryImage, { resizeMode: "contain", borderWidth: isDarkMode ? 1 : 1, 
+              // borderColor: isDarkMode ? borderColor : borderColor, 
+              borderColor:redColor,
+              borderRadius: 50, width: "100%", height: "100%", backgroundColor: colors.whiteColor }]}
+          /> */}
+          <View style={[styles.categoryImage, {
+            borderWidth: isDarkMode ? 1 : 1,
+            // borderColor: isDarkMode ? borderColor : borderColor, 
+            borderColor: blackColor,
+            borderRadius: 50, width: "100%", height: "100%", backgroundColor: colors.whiteColor
+          }, alignJustifyCenter]}>
+            <Image source={{ uri: imageUrl }} style={[{ resizeMode: "contain", width: "100%", height: "85%" }]} />
+          </View>
         </Pressable>
         <Text style={[styles.collectionText, textAlign, { color: colors.blackColor }]}>
           {item.name}
@@ -769,7 +780,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       return null;
     }
   };
-  
+
   const handlePressBestDeal = async (item, index) => {
     console.log("Handling press for item:", item);
     try {
@@ -808,7 +819,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
 
   return (
-    <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[flex, { backgroundColor: colors.whiteColor }]} >
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, marginTop: 0 }}
@@ -841,7 +853,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           >
 
             <View style={[flex]}>
-              <Text style={{ color: isDarkMode ? whiteColor : "#808080" }}> Search here for anything you want...</Text>
+              <Text style={{ color: isDarkMode ? whiteColor : "#808080", fontFamily: 'Montserrat-BoldItalic' }}> Search here for anything you want...</Text>
             </View>
             <Image
               source={WARLEY_SEARCH}
@@ -884,50 +896,6 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           </SkeletonPlaceholder>
         ) : (
           <View style={[styles.container, flex]}>
-            <View style={[{ width: "100%", marginTop: 20, marginBottom: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
-              <Text style={[styles.text, { color: colors.blackColor }]}>Shop By <Text style={{ color: "#ff1111" }}>Brands</Text> </Text>
-              <Pressable onPress={onPressBrandSeeALL}>
-                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
-              </Pressable>
-            </View>
-            <View style={[{ width: wp(100), height: "auto", marginTop: 5 }, flexDirectionRow]}>
-              {brandcollectionData.length === 0 ? (
-                <SkeletonPlaceholder>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    {[...Array(5)].map((_, index) => (
-                      <View key={index} style={{ width: wp(22.8), height: hp(10), backgroundColor: '#e0e0e0', borderRadius: 5, margin: 5 }} />
-                    ))}
-                  </View>
-                </SkeletonPlaceholder>
-              ) : (<FlatList
-                data={brandcollectionData.filter(item => item?.name !== "NULL").slice(0, 5)}
-                renderItem={({ item, index }) => {
-                  // console.log("item:::",item)
-                  const borderColor = borderColors[index % borderColors.length];
-                  return (
-                    <View style={[{ width: wp(22.8), height: hp(10) },]}>
-                      <Pressable
-                        style={[styles.categoryCard, overflowHidden, alignJustifyCenter, { backgroundColor: colors.whiteColor, borderColor: isDarkMode ? borderColor : borderColor, borderWidth: isDarkMode ? 1 : 1 }]}
-                        onPress={() => onPressCollection(item?.id, item?.name)
-                        }
-                      >
-                        <Image
-                          source={
-                            { uri: item?.imageUrl }
-                          }
-                          style={
-                            [styles.categoryImage, { resizeMode: "contain" }]
-                          }
-                        />
-                      </Pressable>
-                    </View>
-                  );
-                }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item) => item?.id}
-              />)}
-            </View>
             <Carousal
               data={carouselData.slice(0, 3)}
               dostsShow={true}
@@ -939,7 +907,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Categories"}</Text>
               <Pressable onPress={onPressShopAll}>
-                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic' }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
               </Pressable>
             </View>
             <View style={[{ width: wp(100), height: "auto", marginTop: 10 }, flexDirectionRow]}>
@@ -964,6 +932,58 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                     ))}
                   </View>
                 </SkeletonPlaceholder>}
+            </View>
+
+            <View style={[{ width: "100%", marginTop: 20, marginBottom: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
+              <Text style={[styles.text, { color: colors.blackColor }]}>Shop By <Text style={{ color: "#ff1111" }}>Brands</Text></Text>
+              <Pressable onPress={onPressBrandSeeALL}>
+                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic' }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+              </Pressable>
+            </View>
+            <View style={[{ width: "100%", height: "auto", marginTop: 5 }, flexDirectionRow]}>
+              {brandcollectionData.length === 0 ? (
+                <SkeletonPlaceholder>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {[...Array(5)].map((_, index) => (
+                      <View key={index} style={{ width: wp(22.8), height: hp(10), backgroundColor: '#e0e0e0', borderRadius: 5, margin: 5 }} />
+                    ))}
+                  </View>
+                </SkeletonPlaceholder>
+              ) : (
+                <FlatList
+                  data={brandcollectionData.filter(item => item?.name !== "NULL").slice(0, 8)}
+                  renderItem={({ item, index }) => {
+                    // console.log("item:::",item)
+                    const borderColor = borderColors[index % borderColors.length];
+                    return (
+                      <View style={[{ width: wp(22), height: hp(10), margin: 5 },]}>
+                        <Pressable
+                          style={[styles.categoryCard, overflowHidden, alignJustifyCenter, {
+                            backgroundColor: colors.whiteColor,
+                            // borderColor: isDarkMode ? borderColor : borderColor, 
+                            borderColor: blackColor,
+                            borderWidth: isDarkMode ? 1 : 1
+                          }]}
+                          onPress={() => onPressCollection(item?.id, item?.name)
+                          }
+                        >
+                          <Image
+                            source={
+                              { uri: item?.imageUrl }
+                            }
+                            style={
+                              [styles.categoryImage, { resizeMode: "contain" }]
+                            }
+                          />
+                        </Pressable>
+                      </View>
+                    );
+                  }}
+                  showsHorizontalScrollIndicator={false}
+                  // horizontal
+                  numColumns={4}
+                  keyExtractor={(item) => item?.id}
+                />)}
             </View>
             <Text style={[styles.text, { color: colors.blackColor, marginVertical: 10 }]}>{"Best Deal"}</Text>
             <View style={[{ height: hp(26) }, alignJustifyCenter]}>
@@ -1094,7 +1114,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       </ScrollView>
       {showAgePopup && <AgeVerificationModal onVerify={handleAgeVerified} />}
       <ChatButton onPress={handleChatButtonPress} />
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 };
 
@@ -1107,7 +1128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', // Aligns modal at the bottom
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: dimmed background
   },
-  collectionText: { fontSize: 12, paddingVertical: 5 },
+  collectionText: { fontSize: 12, paddingVertical: 5, fontFamily: 'Montserrat-BoldItalic' },
   modalContainer: {
     height: screenHeight * 0.4, // 40% of screen height
     backgroundColor: 'white', // replace with your desired color
@@ -1147,7 +1168,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-    // fontFamily: 'GeneralSans-Variable'
+     fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: "95%",

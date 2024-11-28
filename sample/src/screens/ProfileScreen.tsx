@@ -191,7 +191,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   // const handleDelete = async () => {
   //   logEvent('Delete Button Clicked');
   //   setLoading(true);
-  
+
   //   try {
   //     // Retrieve the token from AsyncStorage
   //     const token = await AsyncStorage.getItem('authToken');
@@ -200,10 +200,10 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   //       setLoading(false);
   //       return;
   //     }
-  
+
   //     // Construct the DELETE request URL with the customer ID
   //     const requestUrl = `https://warley-thv5m.ondigitalocean.app/api/deleteCustomer/${customerId}`;
-  
+
   //     // Make the DELETE request using axios with Authorization header
   //     await axios.delete(requestUrl, {
   //       headers: {
@@ -211,16 +211,16 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   //         'Content-Type': 'application/json',
   //       },
   //     });
-  
+
   //     // Clear user-related data from AsyncStorage
   //     await AsyncStorage.multiRemove(['isUserLoggedIn', 'userImage', 'userDetails']);
-  
+
   //     // Update UI states and navigate
   //     setShowModal(false);
   //     setIsLoggedIn(false);
   //     dispatch(logout());
   //     navigation.navigate('HomeScreen');
-  
+
   //     logEvent('Delete Success');
   //   } catch (error) {
   //     console.error(`Error deleting customer:`, error);
@@ -229,20 +229,20 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   //     setLoading(false);
   //   }
   // };
-  
+
   const handleDelete = async () => {
     logEvent('Delete Button Clicked');
     setLoading(true);
-  
+
     try {
       // Check if the user logged in via social authentication
       const isSocialAuth = await AsyncStorage.getItem('isSocialAuth'); // Assuming you store this flag during social auth
-  
+
       let requestUrl = '';
       let headers = {
         'Content-Type': 'application/json',
       };
-  
+
       // Handle the deletion based on the login type (social auth or normal login)
       if (isSocialAuth === 'true') {
         // If the user logged in via social auth
@@ -257,23 +257,23 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
           setLoading(false);
           return;
         }
-  
+
         requestUrl = `https://warley-thv5m.ondigitalocean.app/api/deleteCustomer/${customerId}`;
         headers['Authorization'] = `Bearer ${token}`; // Add the normal API token
       }
-  
+
       // Make the DELETE request using axios with appropriate headers
       await axios.delete(requestUrl, { headers });
-  
+
       // Clear user-related data from AsyncStorage
       await AsyncStorage.multiRemove(['isUserLoggedIn', 'userImage', 'userDetails', 'isSocialAuth']);
-  
+
       // Update UI states and navigate
       setShowModal(false);
       setIsLoggedIn(false);
       dispatch(logout());
       navigation.navigate('HomeScreen');
-  
+
       logEvent('Delete Success');
     } catch (error) {
       console.error(`Error deleting customer:`, error);
@@ -282,7 +282,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       setLoading(false);
     }
   };
-  
+
 
   const capitalizeFirstLetter = (str) => {
     if (str.length === 0) return str;
@@ -305,12 +305,13 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]}>
       <View style={[{ width: "100%", height: hp(7) }, flexDirectionRow, alignItemsCenter]}>
         <TouchableOpacity style={[styles.backIcon, alignItemsCenter]} onPress={() => { logEvent(`Back Button Pressed from Profile`), navigation.goBack() }}>
           <Ionicons name={"arrow-back"} size={33} color={colors.blackColor} />
         </TouchableOpacity>
-        <Text style={[styles.text, { color: colors.blackColor }]}>{"Account"}</Text>
+        <Text style={[styles.text, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]}>{"Account"}</Text>
       </View>
       <View style={[styles.header, alignItemsCenter]}>
         <FallbackAvatar name={userName} />
@@ -391,7 +392,8 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         }
       </View>
       <ChatButton onPress={handleChatButtonPress} />
-    </ImageBackground >
+      {/* </ImageBackground > */}
+    </View>
   );
 };
 
@@ -418,6 +420,7 @@ const styles = StyleSheet.create({
     marginTop: spacings.large,
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   section: {
     marginTop: spacings.Large2x,
@@ -432,7 +435,8 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: style.fontSizeMedium.fontSize,
     paddingLeft: spacings.xLarge,
-    color: grayColor
+    color: grayColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   backIcon: {
     width: wp(10),

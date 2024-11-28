@@ -42,6 +42,7 @@ const ShopifyCheckOut = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"#fff"
   },
   webview: {
     flex: 1,
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     marginLeft: 10,
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

@@ -129,8 +129,8 @@ const ReviewForm = ({ productId, name, onClose }) => {
       <View style={{ borderBottomWidth: 1, borderBottomColor: "#E6E6E6", marginBottom: 20 }}>
         <Text style={styles.title}> Leave a Review</Text>
       </View>
-      <Text style={[styles.title, { fontSize: 16, textAlign: "justify", marginBottom: 5 }]}>How was your order?</Text>
-      <Text style={{ fontSize: 12, color: "#808080", marginBottom: 20, }}>Please give your rating and also your review.</Text>
+      <Text style={[styles.title, { fontSize: 16, textAlign: "justify", marginBottom: 5, fontFamily: 'Montserrat-BoldItalic' }]}>How was your order?</Text>
+      <Text style={{ fontSize: 12, color: "#808080", marginBottom: 20, fontFamily: 'Montserrat-BoldItalic' }}>Please give your rating and also your review.</Text>
       <View style={styles.starsContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <TouchableOpacity key={star} onPress={() => setRating(star)}>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 10,
     textAlign: "center",
-
+    fontFamily: 'Montserrat-BoldItalic'
   },
   starsContainer: {
     flexDirection: 'row',
@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    height: 50
+    height: 50,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   button: {
     backgroundColor: redColor,
@@ -193,6 +194,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

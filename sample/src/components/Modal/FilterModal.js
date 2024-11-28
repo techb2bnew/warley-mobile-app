@@ -227,11 +227,11 @@ const FilterModal = ({ applyFilters, onClose, visible, allProducts, vendor, onSe
               {showAvailibility && (
                 <View>
                   <TouchableOpacity style={[styles.Box, flexDirectionRow]} onPress={() => setShowInStock(!showInStock)}>
-                    <Text style={[styles.optionText, { color: colors.blackColor }]}>{INSTOCK}</Text>
+                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{INSTOCK}</Text>
                     {showInStock && <Ionicons name="checkmark" size={20} color={colors.blackColor} style={{ marginLeft: "auto", marginRight: spacings.xxxxLarge }} />}
                   </TouchableOpacity>
                   <TouchableOpacity style={[styles.Box, flexDirectionRow]} onPress={() => setShowInStock(false)}>
-                    <Text style={[styles.optionText, { color: colors.blackColor }]}>{OUT_OF_STOCK}</Text>
+                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{OUT_OF_STOCK}</Text>
                     {!showInStock && <Ionicons name="checkmark" size={20} color={colors.blackColor} style={{ marginLeft: "auto", marginRight: spacings.xxxxLarge }} />}
                   </TouchableOpacity>
                 </View>
@@ -267,7 +267,8 @@ const styles = StyleSheet.create({
   headertext: {
     fontSize: 18,
     fontWeight: '600',
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   backIconBox: {
     paddingHorizontal: 4
@@ -281,11 +282,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: '500',
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   graytext: {
     fontSize: 16,
-    color: mediumGray
+    color: mediumGray,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   vendorButton: {
     padding: 12,
@@ -308,7 +311,8 @@ const styles = StyleSheet.create({
     color: blackColor,
     width: "40%",
     borderRadius: 10,
-    height: 40
+    height: 40,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   sliderContainer: {
     height: 20,
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: wp(5),
     borderTopColor: grayColor,
-    bottom:hp(2)
+    bottom: hp(2)
   },
   resetButton: {
     backgroundColor: grayColor,
@@ -346,7 +350,8 @@ const styles = StyleSheet.create({
   },
   resetButtonText: {
     color: whiteColor,
-    fontWeight: '600'
+    fontWeight: '600',
+     fontFamily: 'Montserrat-BoldItalic'
   },
   applyButton: {
     backgroundColor: redColor,
@@ -361,7 +366,8 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     color: whiteColor,
-    fontWeight: '600'
+    fontWeight: '600',
+     fontFamily: 'Montserrat-BoldItalic'
   },
   optionButton: {
     padding: spacings[3],

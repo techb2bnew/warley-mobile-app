@@ -53,7 +53,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
   const [sessionId, setSessionId] = useState('');
-  const [confirmation, setConfirmation] = useState(null);
+  const [confirmationOtp, setConfirmationOtp] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -77,62 +77,63 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Validation
-    // if (!firstName) return Alert.alert("Please Enter Your First Name");
-    // if (!lastName) return Alert.alert("Please Enter Your Last Name");
-    // if (!phone) return Alert.alert("Please Enter Your Phone Number");
-    // if (phone.length < 10) return Alert.alert("Please Enter Your 10 Digit Phone Number");
-    // if (!emailPattern.test(email)) return setEmailError("Invalid email format");
-    // if (password.length < 8) return setPasswordError("Password must be at least 8 characters");
-    // if (password !== confirmPassword) return setConfirmPasswordError("Passwords do not match");
+    if (!firstName) return Alert.alert("Please Enter Your First Name");
+    if (!lastName) return Alert.alert("Please Enter Your Last Name");
+    if (!phone) return Alert.alert("Please Enter Your Phone Number");
+    if (phone.length < 10) return Alert.alert("Please Enter Your 10 Digit Phone Number");
+    if (!emailPattern.test(email)) return setEmailError("Invalid email format");
+    if (password.length < 8) return setPasswordError("Password must be at least 8 characters");
+    if (password !== confirmPassword) return setConfirmPasswordError("Passwords do not match");
 
     try {
       // Sign-up request
-      // const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     // 'X-Shopify-Access-Token': 'YOUR_ACCESS_TOKEN'
-      //   },
-      //   body: JSON.stringify({
-      //     first_name: firstName,
-      //     last_name: lastName,
-      //     email,
-      //     phone: `+44${phone}`,
-      //     addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
-      //     password,
-      //     password_confirmation: confirmPassword
-      //   })
-      // });
+      const response = await fetch('https://warley-thv5m.ondigitalocean.app/api/customers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'X-Shopify-Access-Token': 'YOUR_ACCESS_TOKEN'
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          phone: `+44${phone}`,
+          addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
+          password,
+          password_confirmation: confirmPassword
+        })
+      });
 
-      // const responseData = await response.json();
-      // console.log("responseData:::", responseData);
+      const responseData = await response.json();
+      console.log("responseData:::", responseData);
 
-      // if (responseData.message) {
-      //   setError(responseData.message);
-      //   setLoading(false);
-      //   return;
-      // }
+      if (responseData.message) {
+        setError(responseData.message);
+        setLoading(false);
+        return;
+      }
 
-      // // Save user details
-      // await AsyncStorage.setItem('userDetails', JSON.stringify(responseData));
+      // Save user details
+      await AsyncStorage.setItem('userDetails', JSON.stringify(responseData));
 
-      // // Login request to get token
-      // const loginResponse = await fetch("https://warley-thv5m.ondigitalocean.app/api/customerLogin", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify({ email, password }),
-      // });
+      // Login request to get token
+      const loginResponse = await fetch("https://warley-thv5m.ondigitalocean.app/api/customerLogin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // const loginData = await loginResponse.json();
-      // if (loginResponse.ok && loginData.token) {
-      //   // Store the token in AsyncStorage
-      //   await AsyncStorage.setItem('authToken', loginData.token);
+      const loginData = await loginResponse.json();
+      if (loginResponse.ok && loginData.token) {
+        // Store the token in AsyncStorage
+        await AsyncStorage.setItem('authToken', loginData.token);
 
 
-        const formattedPhoneNumber = `+91${phone}`;
-        const otp = Math.floor(100000 + Math.random() * 900000);
+        // const formattedPhoneNumber = `+91${phone}`;
+        const formattedPhoneNumber = `+41${phone}`;
+        const generateOtp = Math.floor(100000 + Math.random() * 900000);
         const encodedAuth = encodeBase64(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`);
         const fromNumber = formattedPhoneNumber.startsWith('+91') ? '+91 78891 01844' : '+44 7807 064256';
 
@@ -147,25 +148,26 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
           body: new URLSearchParams({
             To: formattedPhoneNumber,
             From: fromNumber,
-            Body: `Your OTP for registering on WARLEY is: ${otp}`,
+            Body: `Your OTP for registering on WARLEY is: ${generateOtp}`,
           }).toString(),
         });
 
         const responseData = await otpResponse.json();
         console.log('Twilio Response:', responseData);
-
+        setConfirmationOtp(generateOtp)
         if (responseData.ok) {
           console.log("OTP sent successfully");
-          setSessionId(otpResponse.data.Details);
+          // setSessionId(otpResponse.data.Details);
+
           // setSessionId(otpResponse.data.data.id); 
           setShowOTP(true); // Show OTP modal
         } else {
           setError('Failed to send OTP');
         }
-      // } 
-      // else {
-      //   setError("Login failed during signup. Please check your credentials.");
-      // }
+      }
+      else {
+        setError("Login failed during signup. Please check your credentials.");
+      }
     } catch (error) {
       console.error('Registration error:', error);
       setError(error.message || "An unexpected error occurred");
@@ -186,9 +188,11 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
       setLoading(true);
 
       // Verify OTP
-      const verifyResponse = await axios.get(`https://2factor.in/API/V1/2e98b3ba-9b7f-11ef-8b17-0200cd936042/SMS/VERIFY/${sessionId}/${otp}`);
+      // const verifyResponse = await axios.get(`https://2factor.in/API/V1/2e98b3ba-9b7f-11ef-8b17-0200cd936042/SMS/VERIFY/${sessionId}/${otp}`);
+      const verifyResponse = otp === confirmationOtp.toString()
 
-      if (verifyResponse.data.Status === 'Success') {
+      // if (verifyResponse.data.Status === 'Success') {
+      if (verifyResponse) {
         dispatch(loginSuccess({ email: "user.email", password: '' }));
         Toast.show("User Registered Successfully");
         setShowOTP(false);
@@ -452,7 +456,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     placeholderTextColor={colors.grayColor}
                     onChangeText={setFirstName}
                     value={firstName}
-                    style={{ color: colors.blackColor }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                   />
                 </View>
               </View>
@@ -469,7 +473,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     placeholderTextColor={colors.grayColor}
                     onChangeText={setLastName}
                     value={lastName}
-                    style={{ color: colors.blackColor }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                   />
                 </View>
               </View>
@@ -496,7 +500,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 onChangeText={setPhone}
                 value={phone}
                 keyboardType="phone-pad"
-                style={{ color: colors.blackColor }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                 maxLength={10}
               />
             </View>
@@ -514,7 +518,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 value={email}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{ color: colors.blackColor }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
               />
             </View>
           </View>
@@ -533,7 +537,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     onChangeText={setPassword}
                     value={password}
                     secureTextEntry={!showPassword}
-                    style={{ color: colors.blackColor }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowPassword}>
@@ -554,7 +558,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     onChangeText={setConfirmPassword}
                     value={confirmPassword}
                     secureTextEntry={!showConfirmPassword}
-                    style={{ color: colors.blackColor }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -571,7 +575,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
           <View style={[alignJustifyCenter, {}]}>
             <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginVertical: 10 }]}>
               <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
-              <Text style={[{ color: colors.blackColor, margin: spacings.small }, textAlign]}>{"Or"}</Text>
+              <Text style={[{ color: colors.blackColor, margin: spacings.small, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>{"Or"}</Text>
               <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
             </View>
             <View style={[styles.socialAuthBox, alignJustifyCenter, flexDirectionRow]}>
@@ -584,10 +588,10 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
             </View>
           </View>
           <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={onBackToLogin}>
-            <Text style={[{ marginTop: hp(3), color: colors.blackColor }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
+            <Text style={[{ marginTop: hp(3), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
           </Pressable>
           <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 0 : hp(10), width: "100%" }]}>
-            <Text style={[{ color: colors.blackColor }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
             <View style={[flexDirectionRow, { marginTop: 5, width: "100%" }, alignJustifyCenter]}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -596,7 +600,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Terms Of Services From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4 }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -605,7 +609,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Privacy Policy From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4 }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -627,7 +631,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
               tintColor={colors.blackColor}
               offTintColor={colors.mediumGray}
               containerStyle={styles.otpContainer}
-              textInputStyle={[styles.otpInput, { color: colors.blackColor }]} />
+              textInputStyle={[styles.otpInput, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]} />
             {otpError || error ? <Text style={styles.errorText}>{otpError || error}</Text> : null}
             <TouchableOpacity onPress={finalizeSignUp} style={[styles.button, alignItemsCenter, borderRadius5]}>
               <Text style={styles.buttonText}>Verify and Register</Text>
@@ -647,7 +651,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     width: wp(100),
-    height: hp(100)
+    height: hp(100),
+    backgroundColor: whiteColor
   },
   logoBox: {
     width: "100%",
@@ -658,13 +663,14 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge2x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    fontFamily: 'GeneralSans-Variable'
+    fontFamily: 'Montserrat-BoldItalic'
   },
   title: {
     fontSize: style.fontSizeLarge1x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     marginBottom: spacings.Large2x,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: '100%',
@@ -688,6 +694,7 @@ const styles = StyleSheet.create({
     color: whiteColor,
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   textInputBox: {
     width: "100%",
@@ -695,7 +702,8 @@ const styles = StyleSheet.create({
   },
 
   errorText: {
-    color: redColor
+    color: redColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   socialAuthBox: {
     width: '100%',
@@ -712,7 +720,8 @@ const styles = StyleSheet.create({
   textInputHeading: {
     fontSize: style.fontSizeNormal1x.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   image: {
     width: wp(70),
@@ -730,7 +739,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { backgroundColor: 'white', padding: 20, borderRadius: 10, width: '98%' },
-  modalTitle: { fontSize: 18, marginBottom: 20, textAlign: 'center' },
+  modalTitle: { fontSize: 18, marginBottom: 20, textAlign: 'center', fontFamily: 'Montserrat-BoldItalic' },
   closeButton: {
     position: 'absolute',
     top: 10,

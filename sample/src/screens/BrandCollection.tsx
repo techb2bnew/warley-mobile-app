@@ -6,7 +6,7 @@ import { spacings, style } from '../constants/Fonts';
 import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color';
 import Header from '../components/Header';
 import { BaseStyle } from '../constants/Style'; import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN,BrandsCollections } from '../constants/Constants'
+import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, BrandsCollections } from '../constants/Constants'
 import { DARK_BACKGROUND_IMAGE, BACKGROUND_IMAGE } from '../assests/images';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const borderColors = ['#33c1ff', '#ff5733', '#ff33f6', '#75ff33', '#f3ff33', '#ff9933', '#ffcc33', '#3366ff', '#cc33ff'];
@@ -130,7 +130,8 @@ export default function BrandCollection({ navigation }) {
         })
     }
     return (
-        <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+        // <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+        <View style={[{ flex: 1,backgroundColor:whiteColor }]} >
             <Header backIcon={true} text={"Brands"} navigation={navigation} />
             <View style={[{ width: "100%", height: "auto", marginTop: 5, padding: spacings.large }, flexDirectionRow]}>
                 {brandcollectionData.length === 0 ? (
@@ -182,7 +183,12 @@ export default function BrandCollection({ navigation }) {
                                 return (
                                     <View style={[{ width: wp(21), height: hp(10), margin: 5 },]}>
                                         <Pressable
-                                            style={[styles.categoryCard, overflowHidden, alignJustifyCenter, { backgroundColor:colors.whiteColor, borderColor: isDarkMode ? borderColor : borderColor, borderWidth: isDarkMode ? 1 : 1 }]}
+                                            style={[styles.categoryCard, overflowHidden, alignJustifyCenter, {
+                                                backgroundColor: colors.whiteColor,
+                                                // borderColor: isDarkMode ? borderColor : borderColor,
+                                                borderColor: blackColor,
+                                                borderWidth: isDarkMode ? 1 : 1
+                                            }]}
                                             onPress={() => onPressCollection(item?.id, item?.name)
                                             }
                                         >
@@ -205,7 +211,8 @@ export default function BrandCollection({ navigation }) {
                         />
                     </View>)}
             </View>
-        </ImageBackground>
+            {/* </ImageBackground> */}
+        </View>
     )
 }
 

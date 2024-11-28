@@ -11,7 +11,7 @@ import { FILTER_ICON, WHITE_FILTER_ICON, DARK_BACKGROUND_IMAGE, BACKGROUND_IMAGE
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, ADD_TO_CART, OUT_OF_STOCK } from '../constants/Constants'
 import { ShopifyProduct } from '../../@types';
-import { lightColors, darkColors } from '../constants/Color';
+import { lightColors, darkColors, lightGrayColor, verylightGrayColor } from '../constants/Color';
 import { logEvent } from '@amplitude/analytics-react-native';
 import { useCart } from '../context/Cart';
 import { scheduleNotification } from '../notifications';
@@ -216,7 +216,8 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
         setRouteName(result); // Set the result in state
     };
     return (
-        <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+        // <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+        <View style={[{ flex: 1, backgroundColor: whiteColor }]} >
             <>
                 <Header backIcon={true} text={routeName} navigation={navigation} />
                 <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
@@ -231,7 +232,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleSubcategorySelect(item)}
-                                            style={[styles.subCategoryButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                            style={[styles.subCategoryButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
                                         >
                                             <Text style={[styles.subCategoryText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {(item.CategoryName) || (mainCategoryName)}
@@ -240,7 +241,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     );
                                 }}
                                 keyExtractor={(item) => item?.id?.toString()}
-                                horizontal={true}  // This makes the FlatList horizontal
+                                horizontal={true}
                                 showsHorizontalScrollIndicator={false}
                             />
                         )}
@@ -254,7 +255,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleTabSelect(item)}
-                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
                                         >
                                             <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {(item.SubcategoryName1) || (subcategoryName)}
@@ -277,7 +278,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleNestedTabSelect(item)}
-                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
                                         >
                                             <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {item.SubcategoryName2 || subcategoryChildName || 'No Subcategory Child Name'}
@@ -448,7 +449,8 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                 </Modal> */}
             </>
             <ChatButton onPress={handleChatButtonPress} />
-        </ImageBackground>
+            {/* </ImageBackground> */}
+        </View>
     );
 };
 
@@ -496,7 +498,7 @@ const ProductItem = ({ item, InventoryQuantities, ids, onPress, addToCartProduct
         <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden, { backgroundColor: isDarkMode ? colors.grayColor : whiteColor }]} onPress={onPress}>
             <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} />
             <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor, paddingHorizontal: 8 }]}>{item?.title}</Text>
-            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8 }]}>{shopCurrency} {priceAmount}</Text>
+            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8,fontFamily: 'arrialnarrow' }]}>{shopCurrency} {priceAmount}</Text>
             <View style={[styles.quantityContainer, borderWidth1, flexDirectionRow, alignJustifyCenter]}>
                 <TouchableOpacity onPress={decrementQuantity}>
                     <Text style={styles.quantityButton}>-</Text>
@@ -575,7 +577,8 @@ const styles = StyleSheet.create({
     },
     subCategoryText: {
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 14,
+        fontFamily: 'Montserrat-BoldItalic'
     },
     tabButton: {
         flex: 1,
@@ -588,7 +591,8 @@ const styles = StyleSheet.create({
     },
     tabText: {
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 14,
+        fontFamily: 'Montserrat-BoldItalic'
     },
     closeModalButton: {
         position: 'absolute',
@@ -624,7 +628,8 @@ const styles = StyleSheet.create({
     },
     categoryName: {
         fontSize: 14,
-        color: blackColor
+        color: blackColor,
+        fontFamily: 'Montserrat-BoldItalic'
     },
     itemContainer: {
         width: wp(45.5),
@@ -662,6 +667,7 @@ const styles = StyleSheet.create({
         fontSize: style.fontSizeMedium1x.fontSize,
         fontWeight: style.fontWeightThin1x.fontWeight,
         color: blackColor,
+        fontFamily: 'Montserrat-BoldItalic'
     },
     addToCartButton: {
         borderRadius: 10,
@@ -676,6 +682,7 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         color: whiteColor,
         fontWeight: style.fontWeightThin1x.fontWeight,
+        fontFamily: 'Montserrat-BoldItalic'
     },
     emptyText: {
         textAlign: 'center',

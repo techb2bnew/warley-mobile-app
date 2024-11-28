@@ -177,7 +177,9 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
       style={[flex, { height: hp(100) }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? '' : BACKGROUND_IMAGE}>
+      <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]}>
+
+        {/* <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? '' : BACKGROUND_IMAGE}> */}
         <Header backIcon={true} text={"Search"} navigation={navigation} />
         <View style={{ paddingHorizontal: spacings.large }}>
           <View style={[positionRelative]}>
@@ -187,7 +189,7 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                 <TextInput
                   placeholder={"Search here for anything you want..."}
                   placeholderTextColor={isDarkMode ? whiteColor : grayColor}
-                  style={{ color: colors.blackColor }}
+                  style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
                   value={searchQuery}
                   onChangeText={async (text) => {
                     setSearchQuery(text);
@@ -219,11 +221,11 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                           await handleSearch();
                           setShowSuggestions(false);
                           setSuggestionClicked(true);
-                          console.log("searchResults",searchResults)
+                          console.log("searchResults", searchResults)
                           const selectedItemFromResults = searchResults.find(items =>
                             items?.node?.title === item?.title || items?.node?.images?.edges[0]?.node?.src === item?.imageSrc
                           );
-                          console.log("selectedItemFromResults",selectedItemFromResults)
+                          console.log("selectedItemFromResults", selectedItemFromResults)
                           navigation.navigate('ProductDetails', {
                             product: selectedItemFromResults?.node,
                             variant: getVariant(selectedItemFromResults?.node),
@@ -239,8 +241,8 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                       >
                         <Image source={{ uri: item?.imageSrc }} style={[{ width: wp(13), height: hp(10), marginRight: spacings.large }, resizeModeContain]} />
                         <View style={{ width: wp(55) }}>
-                          <Text style={{ color: colors.blackColor }}>{item?.title}</Text>
-                          <Text style={{ color: colors.mediumGray }}>{shopCurrency} {item?.price} </Text>
+                          <Text style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}>{item?.title}</Text>
+                          <Text style={{ color: colors.mediumGray,fontFamily: 'arialarrow' }}>{shopCurrency} {item?.price} </Text>
                         </View>
                         <View style={[{ width: "25%" }, alignJustifyCenter]}>
                           <Feather name="arrow-up-right" size={25} color={colors.blackColor} />
@@ -254,14 +256,14 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                     <View>
                       <Ionicons name="search" size={50} color={colors.grayColor} />
                     </View>
-                    <Text style={{ color: colors.blackColor, fontSize: style.fontSizeLarge.fontSize }}>No Results Found!</Text>
-                    <Text style={{ color: colors.mediumGray, textAlign: "center" }}>Try a similar word or something more general.</Text>
+                    <Text style={{ color: colors.blackColor, fontSize: style.fontSizeLarge.fontSize, fontFamily: 'Montserrat-BoldItalic' }}>No Results Found!</Text>
+                    <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: 'Montserrat-BoldItalic' }}>Try a similar word or something more general.</Text>
                   </View>
                 )}
               </Pressable>
             )}
           </View>
-          {!showSuggestions && <><Text style={[styles.text, { padding: 10, color: colors.blackColor }]}>{POPULAR}</Text>
+          {!showSuggestions && <><Text style={[styles.text, { padding: 10, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{POPULAR}</Text>
             <Pressable style={[borderRadius5, flexDirectionRow, justifyContentSpaceBetween, alignItemsCenter, { backgroundColor: colors.lightGrayOpacityColor, paddingRight: spacings.large, marginTop: spacings.large }]}
               onPress={() => {
                 fillTextInputWithHint(POPULAR_LIQUOR, POPULAR_PRODUCT_COLLECTION_ID)
@@ -279,7 +281,8 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
           </>}
         </View>
         <ChatButton onPress={handleChatButtonPress} />
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -297,7 +300,7 @@ const styles = StyleSheet.create({
     padding: spacings.large,
     color: grayColor,
     fontSize: style.fontSizeNormal2x.fontSize,
-
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: "100%",

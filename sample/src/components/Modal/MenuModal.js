@@ -80,7 +80,7 @@ const MenuModal = ({ modalVisible, setModalVisible, onPressCart, onPressSearch, 
             <Text style={[styles.menuText, { color: colors.blackColor }]}>{"Profile"}</Text>
             <Feather name={"chevron-right"} size={25} color={colors.blackColor} />
           </Pressable>}
-          <Pressable style={[styles.menuItem, flexDirectionRow, justifyContentSpaceBetween, alignItemsCenter]}
+          {/* <Pressable style={[styles.menuItem, flexDirectionRow, justifyContentSpaceBetween, alignItemsCenter]}
             onPress={changeTheme}
           >
             <Pressable onPress={changeTheme} style={[flexDirectionRow, alignItemsCenter]}>
@@ -93,7 +93,7 @@ const MenuModal = ({ modalVisible, setModalVisible, onPressCart, onPressSearch, 
                 color={isDarkMode ? '#81b0ff' : '#333333'}
               />
             </Pressable>
-          </Pressable>
+          </Pressable> */}
           {/* {!userLoggedIn && <Pressable style={[styles.menuItem, justifyContentSpaceBetween, flexDirectionRow, alignItemsCenter]} onPress={onPressSignUp}>
             <Text style={[styles.menuText, { color: colors.blackColor }]}>{SIGNUP}</Text>
             <Feather name={"chevron-right"} size={25} color={colors.blackColor} />
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   bottomContainer: {
     width: wp(100),

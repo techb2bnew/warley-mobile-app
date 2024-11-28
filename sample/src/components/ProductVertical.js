@@ -264,7 +264,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
             <View style={{ paddingLeft: 3 }}>
               {priceAmount && (
                 <Text style={[styles.productPrice, { color: colors.blackColor, marginTop: 10, paddingLeft: spacings.medium }]}>
-                 {currencyCode ? currencyCode ==="GBP" && "£": shopCurrency} {priceAmount} 
+                  {currencyCode ? currencyCode === "GBP" && "£" : shopCurrency} {priceAmount}
                 </Text>)}
             </View>
             <View style={[{}]}>
@@ -341,7 +341,9 @@ const styles = StyleSheet.create({
     marginBottom: spacings.large
   },
   productName: {
-    fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,
+    fontSize: style.fontSizeNormal.fontSize,
+    fontWeight: style.fontWeightThin1x.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   text: {
     color: "#006400",
@@ -350,8 +352,9 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: style.fontSizeSmall1x.fontSize,
-    fontWeight: style.fontWeightThin1x.fontWeight,
-    fontFamily: 'GeneralSans-Variable'
+    fontWeight: style.fontWeightMedium.fontWeight,
+    color:blackColor,
+    fontFamily: 'arialnarrow'
   },
   contentBox: {
     width: "100%",
@@ -379,24 +382,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
-    // width: wp(20),
     borderRadius: 10,
     fontSize: 8,
-    // position:"absolute",
-    // right:70
-    // borderWidth: 1,
-    // borderColor: redColor,
-    // backgroundColor: whiteColor,
-    // paddingVertical: 5,
   },
   addToCartButtonText: {
-    fontSize: 11,
+    fontSize: 10.5,
     lineHeight: 18,
     color: redColor,
-    fontWeight: '700',
+    fontWeight: '100',
     textAlign: 'center',
+    fontFamily: 'Montserrat-BoldItalic'
   },
   favButton: {
     width: wp(10),
@@ -404,7 +402,6 @@ const styles = StyleSheet.create({
     right: 0,
     // bottom: 20,
     zIndex: 10,
-
   },
   eyeButton: {
     width: wp(8),

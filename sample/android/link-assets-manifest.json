@@ -8,6 +8,14 @@
     {
       "path": "assets/fonts/GeneralSans-VariableItalic.ttf",
       "sha1": "f3d62b45179570481bf8c87eae0c917f16f2cb78"
+    },
+    {
+      "path": "assets/fonts/Montserrat-BoldItalic.ttf",
+      "sha1": "3e4f84f047452d1d3b262a4db5547b4baf390de8"
+    },
+    {
+      "path": "assets/fonts/arialnarrow.ttf",
+      "sha1": "d9fdae64204fe10917aff30aa1244ad521a2ab91"
     }
   ]
 }

@@ -128,11 +128,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   productPrice: {
     fontSize: style.fontSizeSmall1x.fontSize,
-    fontWeight: style.fontWeightThin1x.fontWeight,
-    fontFamily: 'GeneralSans-Variable'
+    fontWeight: style.fontWeightMedium.fontWeight,
+    color: blackColor,
+    fontFamily: 'arialnarrow'
   },
   contentBox: {
     width: "85%",
@@ -156,8 +158,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 2,
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
     borderRadius: 10,
@@ -170,8 +173,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: whiteColor,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

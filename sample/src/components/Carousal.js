@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, ScrollView, Dimensions, StyleSheet, Animated ,TouchableOpacity} from 'react-native';
+import { View, ScrollView, Dimensions, StyleSheet, Animated ,TouchableOpacity, Pressable} from 'react-native';
 import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
 
@@ -49,13 +49,13 @@ const Carousal = ({ data, renderItem, dostsShow, onBannerPress }) => {
           contentContainerStyle={{ paddingHorizontal: itemSpacing / 1 }}
         >
           {data?.map((item, index) => (
-            <TouchableOpacity
+            <Pressable
               key={index}
               style={{ width: itemWidth, alignItems: 'center', justifyContent: 'center', }}
               onPress={() => onBannerPress(index, item)}
               >
               {renderItem(item)}
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </ScrollView>
       </View>

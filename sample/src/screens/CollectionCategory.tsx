@@ -15,7 +15,7 @@ import Header from '../components/Header'
 import FilterModal from '../components/Modal/FilterModal'
 import { FILTER_ICON, WHITE_FILTER_ICON } from '../assests/images';
 import { logEvent } from '@amplitude/analytics-react-native';
-import { BACKGROUND_IMAGE,DARK_BACKGROUND_IMAGE } from '../assests/images';
+import { BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE } from '../assests/images';
 import { useSelector } from 'react-redux';
 import LoaderKit from 'react-native-loader-kit'
 import LoadingModal from '../components/Modal/LoadingModal';
@@ -50,7 +50,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
       let allProducts = []; // Store all fetched products
       let hasNextPage = true; // Track if more pages are available
       let endCursor = null; // Cursor for pagination
-    
+
       try {
         while (hasNextPage) {
           const graphql = JSON.stringify({
@@ -96,7 +96,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
             }`,
             variables: { cursor: endCursor }
           });
-    
+
           const requestOptions = {
             method: "POST",
             headers: {
@@ -106,35 +106,35 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
             body: graphql,
             redirect: "follow"
           };
-    
+
           const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
           const result = await response.json();
-    
+
           const fetchedProducts = result?.data?.collection?.products?.nodes || [];
           const pageInfo = result?.data?.collection?.products?.pageInfo || {};
-    
+
           // Accumulate fetched products
           allProducts = [...allProducts, ...fetchedProducts];
-    
+
           // Update pagination information
           hasNextPage = pageInfo.hasNextPage;
           endCursor = pageInfo.endCursor;
         }
-    
+
         // Set the accumulated products and other data in state
         setProducts(allProducts);
-    
+
         const inventoryQuantities = allProducts.map((product) =>
           product.variants.nodes.map((variant) => variant.inventoryQuantity)
         );
         setInventoryQuantities(inventoryQuantities);
-    
+
         const fetchedTags = allProducts.map((product) => product.tags);
         setTags(fetchedTags);
-    
+
         const fetchedOptions = allProducts.map((product) => product.options);
         setOptions(fetchedOptions);
-    
+
         const productVariantData = allProducts.map((product) =>
           product.variants.nodes.map((variant) => ({
             id: variant.id,
@@ -144,7 +144,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           }))
         );
         setProductVariantsIDS(productVariantData);
-    
+
         console.log("Total Products Fetched:", allProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -152,7 +152,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
         setLoading(false);
       }
     };
-    
+
     fetchproduct();
   }, [collectionId])
 
@@ -212,7 +212,8 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} >
       <Header backIcon={true} text={headingText} navigation={navigation} onPress={() => { logEvent('Back Button Clicked'), navigation.goBack() }} />
       <View style={{ paddingHorizontal: spacings.large }}>
         <View style={[flexDirectionRow]}>
@@ -221,7 +222,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           >
             <Ionicons name="search" size={25} color={isDarkMode ? whiteColor : grayColor} />
             <View style={[flex]}>
-              <Text style={{ color: isDarkMode ? whiteColor : blackColor }}> Search</Text>
+              <Text style={{ color: isDarkMode ? whiteColor : blackColor, fontFamily: 'Montserrat-BoldItalic' }}> Search</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={showFilterModal} style={[alignJustifyCenter, { width: "15%", height: hp(6), marginTop: spacings.large }]}>
@@ -295,14 +296,15 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
 
       {loading && <LoadingModal visible={loading} text={"Please wait while we load the products."} />}
 
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 }
 const ProductItem = ({ item, addToCartProduct, InventoryQuantities, ids, onPress }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const outOfStock = ids && ids[0].inventoryQty;
-  
+
   const incrementQuantity = () => {
     logEvent('Increase Product Quantity');
     setQuantity(quantity + 1);
@@ -320,7 +322,7 @@ const ProductItem = ({ item, addToCartProduct, InventoryQuantities, ids, onPress
     await addToCartProduct(item?.variants?.nodes[0]?.id, quantity);
     setLoading(false);
   };
-  
+
   return (
     <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden]} onPress={onPress}>
       <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} />
@@ -427,6 +429,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
     borderRadius: 10,
@@ -440,7 +443,8 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeNormal.fontSize,
     lineHeight: 20,
     color: whiteColor,
-    fontWeight: style.fontWeightThin1x.fontWeight,
+    // fontWeight: style.fontWeightThin1x.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   textinputBox: {
     width: "85%",

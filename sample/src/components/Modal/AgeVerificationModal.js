@@ -8,11 +8,11 @@ const AgeVerificationModal = ({ onVerify }) => {
   const colors = isDarkMode ? darkColors : lightColors;
 
   const handleYes = () => {
-    onVerify(); 
+    onVerify();
   };
 
   const handleNo = () => {
-    BackHandler.exitApp(); 
+    BackHandler.exitApp();
   };
 
   return (
@@ -23,8 +23,8 @@ const AgeVerificationModal = ({ onVerify }) => {
     >
       <View style={styles.overlay}>
         <View style={[styles.popup, { backgroundColor: colors.whiteColor }]}>
-          <Text style={[styles.title, { color: colors.blackColor }]}>Are you 18 or older?</Text>
-          <Text style={[styles.message, { color: colors.blackColor }]}>You must be 18+ to use this app.</Text>
+          <Text style={[styles.title, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Are you 18 or older?</Text>
+          <Text style={[styles.message, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>You must be 18+ to use this app.</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.buttonYes} onPress={handleYes}>
               <Text style={styles.buttonText}>Yes</Text>
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

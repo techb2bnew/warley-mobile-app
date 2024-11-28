@@ -28,14 +28,14 @@ const ConfirmationModal = ({ visible, onConfirm, onCancel, message }) => {
     >
       <View style={[styles.modalContainer, flex, alignJustifyCenter]}>
         <View style={[styles.modalContent, alignItemsCenter, borderRadius10, { backgroundColor: colors.whiteColor }]}>
-          <Text style={[styles.text, { color: colors.blackColor }]}>{"Confirmation"}</Text>
-          <Text style={{ color: colors.blackColor }}>{message}</Text>
+          <Text style={[styles.text, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{"Confirmation"}</Text>
+          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{message}</Text>
           <View style={[styles.buttonContainer, flexDirectionRow]}>
             <TouchableOpacity onPress={onConfirmClick} style={[styles.confirmButton, borderRadius5, alignJustifyCenter]}>
-              <Text style={[textAlign, { color: whiteColor }]}>Confirm</Text>
+              <Text style={[textAlign, { color: whiteColor, fontFamily: 'Montserrat-BoldItalic' }]}>Confirm</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onCancleClick} style={[styles.cancelButton, borderRadius5, alignJustifyCenter, borderWidth1]}>
-              <Text style={[textAlign, { color: colors.blackColor }]}>Cancel</Text>
+              <Text style={[textAlign, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>

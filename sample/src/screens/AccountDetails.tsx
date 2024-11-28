@@ -86,8 +86,8 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
           const phoneMatch = customer.phone.match(/^(\+\d{1,2})\s*(.*)/);
 
           if (phoneMatch) {
-            const extractedCountryCode = phoneMatch[1]; 
-            const phoneWithoutCountryCode = phoneMatch[2]; 
+            const extractedCountryCode = phoneMatch[1];
+            const phoneWithoutCountryCode = phoneMatch[2];
             // console.log(countryCode,phoneNumber)
             setCountryCode(extractedCountryCode);
             setPhoneNumber(phoneWithoutCountryCode);
@@ -171,7 +171,8 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} >
       <Header
         backIcon={true}
         text={"Account Details"}
@@ -187,7 +188,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
                 setFullName(text);
               }}
               value={fullName}
-              style={{ color: colors.blackColor }}
+              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
             />
           </View>
         </View>
@@ -195,7 +196,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor }]}
+              style={[styles.input, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}
               value={email}
               onChangeText={setEmail}
               placeholder="Email Address"
@@ -207,7 +208,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
 
         <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>Date of Birth</Text>
         <TouchableOpacity onPress={() => setShowDatePicker(true)} style={[styles.dateInput, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, justifyContentSpaceBetween]}>
-          <Text style={{ color: colors.blackColor }}>{dateOfBirth.toLocaleDateString()}</Text>
+          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{dateOfBirth.toLocaleDateString()}</Text>
           <Ionicons name="calendar" size={20} color={colors.blackColor} />
         </TouchableOpacity>
         {showDatePicker && (
@@ -221,15 +222,15 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         )}
         <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>Gender</Text>
         <TouchableOpacity onPress={() => setShowGenderPicker(true)} style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
-          <Text style={{ color: colors.blackColor }}>{gender || "Select Gender"}</Text>
+          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{gender || "Select Gender"}</Text>
         </TouchableOpacity>
         <Modal visible={showGenderPicker} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Select Gender</Text>
+              <Text style={[styles.modalTitle,{ fontFamily: 'Montserrat-BoldItalic'}]}>Select Gender</Text>
               {["Male", "Female", "Other"].map((item) => (
                 <Pressable key={item} onPress={() => handleGenderSelect(item)}>
-                  <Text style={styles.modalOption}>{item}</Text>
+                  <Text style={[styles.modalOption,{ fontFamily: 'Montserrat-BoldItalic'}]}>{item}</Text>
                 </Pressable>
               ))}
             </View>
@@ -239,7 +240,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor }]}
+              style={[styles.input, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               placeholder="Phone Number"
@@ -250,11 +251,12 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
         <Pressable style={[styles.submitButton, positionAbsolute, alignJustifyCenter]} onPress={() => handleSubmit(customerId)}>
-          <Text style={[styles.submitButtonText, { color: whiteColor }]}>Submit</Text>
+          <Text style={[styles.submitButtonText, { color: whiteColor, fontFamily: 'Montserrat-BoldItalic' }]}>Submit</Text>
         </Pressable>
       </View>
       <ChatButton onPress={handleChatButtonPress} bottom={60} />
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 };
 
@@ -308,7 +310,8 @@ const styles = StyleSheet.create({
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
     marginTop: spacings.xxxxLarge,
-    marginBottom: spacings.normal
+    marginBottom: spacings.normal,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { width: '80%', padding: 20, backgroundColor: whiteColor, borderRadius: 10 },

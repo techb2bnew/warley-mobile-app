@@ -54,10 +54,12 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge.fontSize,
     color: blackColor,
     marginTop: spacings.large,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   text: {
     fontSize: style.fontSizeNormal.fontSize,
     color: grayColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   closeButton: {
     top: spacings.small,
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: whiteColor,
     fontSize: style.fontSizeMedium.fontSize,
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

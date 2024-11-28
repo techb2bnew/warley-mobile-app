@@ -44,7 +44,7 @@
 //             </TouchableOpacity>
 //         </View>
 //     );
-    
+
 
 //     return (
 //         <ImageBackground style={[styles.container, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
@@ -139,7 +139,7 @@ const NotificationScreen = ({ navigation }) => {
     }, []);
 
     const removeNotification = (id) => {
-        PushNotification.removeDeliveredNotifications([id]); 
+        PushNotification.removeDeliveredNotifications([id]);
         setNotifications((prevNotifications) =>
             prevNotifications.filter((notification) => notification.identifier !== id)
         );
@@ -147,7 +147,7 @@ const NotificationScreen = ({ navigation }) => {
 
     const renderNotification = ({ item }) => (
         <Swipeable
-            onSwipeableRightOpen={() => removeNotification(item.identifier)} 
+            onSwipeableRightOpen={() => removeNotification(item.identifier)}
             renderRightActions={() => (
                 <View style={styles.swipeAction}>
                     <Icon name="close" size={24} color={colors.whiteColor} />
@@ -168,7 +168,8 @@ const NotificationScreen = ({ navigation }) => {
 
     return (
         <GestureHandlerRootView style={styles.container}>
-            <ImageBackground style={[styles.container, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+            {/* <ImageBackground style={[styles.container, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}> */}
+            <View style={[styles.container, { backgroundColor: colors.whiteColor }]} >
                 <Header backIcon={true} textinput={true} text={"Notifications"} navigation={navigation} />
                 <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
                 <View style={{ padding: spacings.large }}>
@@ -188,7 +189,8 @@ const NotificationScreen = ({ navigation }) => {
                         </View>
                     )}
                 </View>
-            </ImageBackground>
+                {/* </ImageBackground> */}
+            </View>
         </GestureHandlerRootView>
     );
 };
@@ -198,30 +200,37 @@ export default NotificationScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"#fff"
     },
     notificationItem: {
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
         elevation: 2,
+        borderColor: "#d9d9d9",
+        borderWidth: .5,
     },
     notificationTitle: {
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 4,
+         fontFamily: 'Montserrat-BoldItalic'
     },
     notificationMessage: {
         fontSize: 16,
         color: '#555',
+         fontFamily: 'Montserrat-BoldItalic'
     },
     emptyText: {
         textAlign: 'center',
         fontSize: 16,
         color: '#999',
+         fontFamily: 'Montserrat-BoldItalic'
     },
     subText: {
         textAlign: 'center',
         fontSize: 14,
+         fontFamily: 'Montserrat-BoldItalic'
     },
     swipeAction: {
         justifyContent: 'center',

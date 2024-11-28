@@ -322,7 +322,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     height: hp(6),
@@ -331,6 +332,7 @@ const styles = StyleSheet.create({
     marginBottom: spacings.large,
     paddingLeft: spacings.large,
     borderRadius: 5,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   closeButton: {
     top: spacings.small,
@@ -341,7 +343,8 @@ const styles = StyleSheet.create({
     height: hp(5),
     backgroundColor: redColor,
     marginTop: spacings.Large1x,
-    alignSelf: "center"
+    alignSelf: "center",
+    fontFamily: 'Montserrat-BoldItalic'
   }
 });
 

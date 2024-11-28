@@ -140,7 +140,7 @@ const UserDashboardScreen = () => {
 
   const handlePress = (item) => {
     // console.log(item)
-    
+
     logEvent(`removed from WishList ${item}`);
     dispatch(removeFromWishlist(item));
     if (customerWishList.length > 0) {
@@ -390,11 +390,11 @@ const UserDashboardScreen = () => {
         />
         <View style={{ width: "100%", height: hp(7), justifyContent: "center", marginTop: spacings.large }}>
           <View style={{ height: hp(5.5), width: wp(30) }}>
-            <Text style={[styles.wishListItemName, { color: colors.blackColor }]}>{trimcateText(item?.title)}</Text>
+            <Text style={[styles.wishListItemName, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]}>{trimcateText(item?.title)}</Text>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <View>
-              <Text style={[styles.wishListItemPrice, { color: colors.blackColor }]}> {itemCurrencyCode ? itemCurrencyCode === "GBP" && "£" : shopCurrency} <Text style={[styles.wishListItemPrice]}> {item.price?.[0] ? item.price?.[0] : itemPrice}</Text></Text>
+              <Text style={[styles.wishListItemPrice, { color: colors.blackColor,fontFamily: 'arialnarrow' }]}> {itemCurrencyCode ? itemCurrencyCode === "GBP" && "£" : shopCurrency} <Text style={[styles.wishListItemPrice]}> {item.price?.[0] ? item.price?.[0] : itemPrice}</Text></Text>
             </View>
             <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
               {inventoryQuantity > 0 ? (
@@ -437,108 +437,29 @@ const UserDashboardScreen = () => {
 
   //   console.log("Customer Wishlist:", customerWishList);
   // console.log("Wishlist:", wishList);
-const combinedWishList = [
-  ...customerWishList,
-  ...wishList.filter(
-    item => !customerWishList.some(existingItem => existingItem?.title?.trim() === item?.title?.trim())
-  ),
-];
+  const combinedWishList = [
+    ...customerWishList,
+    ...wishList.filter(
+      item => !customerWishList.some(existingItem => existingItem?.title?.trim() === item?.title?.trim())
+    ),
+  ];
   return (
     <KeyboardAvoidingView
       style={[flex]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ImageBackground style={[styles.container, flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+      {/* <ImageBackground style={[styles.container, flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}> */}
+      <View style={[styles.container, flex]} >
         <Header backIcon={true} textinput={true} text={route.params?.from} navigation={navigation} />
         <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
         {
           route.params?.from === ORDERS &&
           (ordersList && ordersList.length > 0 ?
             <View style={[styles.detailsBox]}>
-              {/* <FlatList
-                data={ordersList}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => {
-
-                  return (
-                    <View style={{ padding: spacings.large }}>
-                      {item?.line_items?.map((Item, index) => {
-                        console.log(item)
-                        return (
-                          <View key={index} style={{ marginVertical: 10, padding: spacings.large, borderWidth: 1, width: "100%", borderRadius: 10 }}>
-                            <View style={[flexDirectionRow]}>
-                              <View style={{ width: "25%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>Order ID</Text>
-                              </View>
-                              <View style={{ width: "10%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>:</Text>
-                              </View>
-                              <View style={{ width: "75%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>{item.id}</Text>
-                              </View>
-                            </View>
-                            <View style={[flexDirectionRow]}>
-                              <View style={{ width: "25%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>Name</Text>
-                              </View>
-                              <View style={{ width: "10%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>:</Text>
-                              </View>
-                              <View style={{ width: "65%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>{Item.title}</Text>
-                              </View>
-                            </View>
-                            {Item?.variant_title && <View style={[flexDirectionRow]}>
-                              <View style={{ width: "25%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>Variant</Text>
-                              </View>
-                              <View style={{ width: "10%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>:</Text>
-                              </View>
-                              <View style={{ width: "75%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>{Item?.variant_title}</Text>
-                              </View>
-                            </View>}
-                            <View style={[flexDirectionRow]}>
-                              <View style={{ width: "25%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>Quantity</Text>
-                              </View>
-                              <View style={{ width: "10%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>:</Text>
-                              </View>
-                              <View style={{ width: "75%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>{Item.quantity}</Text>
-                              </View>
-                            </View>
-                            <View style={[flexDirectionRow]}>
-                              <View style={{ width: "25%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>Price</Text>
-                              </View>
-                              <View style={{ width: "10%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>:</Text>
-                              </View>
-                              <View style={{ width: "75%" }}>
-                                <Text style={[styles.itemText, { color: colors.blackColor }]}>{Item.price} {shopCurrency}</Text>
-                              </View>
-                            </View>
-                            <TouchableOpacity
-                              style={[styles.button, alignItemsCenter, borderRadius5, { marginTop: spacings.medium }]}
-                              onPress={() => openReviewModal(item)}
-                            >
-                              <Text style={styles.buttonText}>Give a Review</Text>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
-                    </View>)
-                }}
-              /> */}
-
               <FlatList
                 data={ordersList}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-
                   <Pressable style={{ margin: 5, backgroundColor: colors.lightGrayOpacityColor, borderRadius: 12, padding: spacings.large, borderWidth: 1, borderColor: colors.lightShadeBlue }}
                     onPress={() => {
                       // Pass order details along with the pressed line item image to the OrderDetails screen
@@ -549,57 +470,9 @@ const combinedWishList = [
                       navigation.navigate('OrderDetails', { order: item, image: lineItemImage });
                     }}
                   >
-                    <Text style={[styles.orderTitle, { color: colors.blackColor, marginBottom: spacings.medium }]}>
+                    <Text style={[styles.orderTitle, { color: colors.blackColor, marginBottom: spacings.medium, fontFamily: 'Montserrat-BoldItalic' }]}>
                       Order Id : #{item.id}
                     </Text>
-
-                    {/* {item?.line_items?.map((lineItem, index) => {
-                      console.log("Line Item Data:", lineItem);
-                      const imageUrl = productImages[lineItem.product_id];
-                      return (
-                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, padding: spacings.medium, backgroundColor: colors.whiteColor, borderRadius: 8, shadowColor: colors.blackOpacity5, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
-                          {imageUrl ? (
-                            <Image
-                              source={{ uri: imageUrl }}
-                              style={{ width: wp(18), height: hp(12), borderRadius: 8, marginRight: 16 }}
-                              resizeMode="cover"
-                            />
-                          ) : (
-                            <View style={{ width: 60, height: 60, backgroundColor: '#D1D4D6', borderRadius: 8, marginRight: 16, justifyContent: 'center', alignItems: 'center' }}>
-                              <Text style={{ color: '#808080' }}>No Image</Text>
-                            </View>
-                          )}
-
-                         
-                          <View style={{ flex: 1 }}>
-                            <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                              <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Product:</Text>
-                              <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{trimcateText(lineItem.title)}</Text>
-                            </View>
-
-                            {lineItem?.variant_title && (
-                              <View style={[flexDirectionRow, { marginBottom: spacings.small }]}>
-                                <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Variant:</Text>
-                                <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{lineItem.variant_title}</Text>
-                              </View>
-                            )}
-
-                            <View style={[flexDirectionRow, { marginBottom: spacings.small }]}>
-                              <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Quantity:</Text>
-                              <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{lineItem.quantity}</Text>
-                            </View>
-
-                            <View style={flexDirectionRow}>
-                              <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Price:</Text>
-                              <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>
-                                {lineItem.price} {shopCurrency}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                      )
-                    }
-                    )} */}
                     {item?.line_items && item.line_items.length > 0 && (
                       <View style={{ flexDirection: 'row', alignItems: 'center', padding: spacings.medium, backgroundColor: colors.whiteColor, borderRadius: 8, shadowColor: colors.blackOpacity5, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
 
@@ -623,20 +496,20 @@ const combinedWishList = [
                               {/* Product Details */}
                               <View style={{ flex: 1 }}>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Date:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{new Date(item.created_at).toLocaleDateString()}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Date:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{new Date(item.created_at).toLocaleDateString()}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Total Price:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{item.total_price}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Total Price:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.total_price}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Total Number of  items:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{item.line_items.length}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Total Number of  items:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.line_items.length}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor }}>Currency:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor }}>{item.currency}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Currency:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.currency}</Text>
                                 </View>
 
                                 {/* <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
@@ -675,8 +548,8 @@ const combinedWishList = [
 
             </View> :
             <View style={[styles.centeredContainer, alignJustifyCenter]}>
-              <Text style={{ color: colors.blackColor }}>No orders placed.</Text>
-              <Text style={[textAlign, { color: colors.blackColor, margin: spacings.large }]}>Your all ordered will appear here. Currently its Empty</Text>
+              <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>No orders placed.</Text>
+              <Text style={[textAlign, { color: colors.blackColor, margin: spacings.large, fontFamily: 'Montserrat-BoldItalic' }]}>Your all ordered will appear here. Currently its Empty</Text>
               <Pressable style={styles.button} onPress={() => onPressContinueShopping(ORDERS)}>
                 <Text style={[styles.buttonText, textAlign]}>Continue Shopping</Text>
               </Pressable>
@@ -702,8 +575,8 @@ const combinedWishList = [
                   color={colors.mediumGray}
                 />
               </View>
-              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeLarge.fontSize }}>No Saved found.</Text>
-              <Text style={{ color: colors.mediumGray, textAlign: "center" }}>You don’t have any saved items. Go to home and add some.</Text>
+              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeLarge.fontSize,fontFamily: 'Montserrat-BoldItalic' }}>No Saved found.</Text>
+              <Text style={{ color: colors.mediumGray, textAlign: "center",fontFamily: 'Montserrat-BoldItalic' }}>You don’t have any saved items. Go to home and add some.</Text>
             </View>)
         }
         {
@@ -776,7 +649,7 @@ const combinedWishList = [
             </Pressable>
           </View> :
             <View style={[styles.centeredContainer, alignJustifyCenter]}>
-              <Text style={{ color: colors.blackColor }}>No address found.</Text>
+              <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>No address found.</Text>
               <Pressable style={styles.button} onPress={() => onPressContinueShopping(SHIPPING_ADDRESS)}>
                 <Text style={[styles.buttonText, textAlign]}>Continue Shopping</Text>
               </Pressable>
@@ -788,7 +661,8 @@ const combinedWishList = [
         {modalVisible && <AddAddressModal visible={modalVisible} onClose={() => setModalVisible(false)} />}
         {isModalVisible && <AddReviewModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} productId={productId} customerName={customerName} />}
         <ChatButton onPress={handleChatButtonPress} bottom={route.params?.from === SHIPPING_ADDRESS ? Platform.OS === "android" ? 2 : hp(10) : 0} />
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -838,7 +712,6 @@ const styles = StyleSheet.create({
     fontWeight: style.fontWeightThin1x.fontWeight,
     // fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    fontFamily: 'GeneralSans-Variable'
   },
   button: {
     marginTop: spacings.medium,
@@ -848,6 +721,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: whiteColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addAddressButtonRounded: {
     bottom: hp(15),
@@ -891,6 +765,7 @@ const styles = StyleSheet.create({
   additemText: {
     fontSize: style.fontSizeNormal.fontSize,
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
     // fontWeight: style.fontWeightThin1x.fontWeight,
   },
   // addToCartButtonText: {
@@ -921,6 +796,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
     borderRadius: 10,
@@ -936,6 +812,7 @@ const styles = StyleSheet.create({
     color: redColor,
     fontWeight: '700',
     textAlign: 'center',
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

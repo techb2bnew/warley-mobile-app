@@ -138,7 +138,23 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
   const handleLogin = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+          setEmailError(INVALID_EMAIL_FORMAT);
+          logEvent(INVALID_EMAIL_FORMAT);
+          setPasswordError('');
+          return;
+        }
+        if (password.length < 8) {
+          setEmailError('');
+          logEvent(PASSWORD_MUST_BE_AT);
+          setPasswordError(PASSWORD_MUST_BE_AT)
+          return;
+        }
+        if (!rememberMe) {
+          Toast.show('Please select the "Remember Me" checkbox');
+          return;
+        }
     const raw = JSON.stringify({
       email: email,
       password: password
@@ -415,7 +431,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               value={email}
               keyboardType="email-address"
               autoCapitalize="none"
-              style={{ color: colors.blackColor }}
+              style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
             />
           </View>
         </View>
@@ -437,7 +453,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               }}
               value={password}
               secureTextEntry={!showPassword}
-              style={{ color: colors.blackColor }}
+              style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
             />
           </View>
           <TouchableOpacity onPress={toggleShowPassword}>
@@ -451,12 +467,12 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               {rememberMe ? <Fontisto name="toggle-on" size={30} color={colors.redColor} />
                 : <Fontisto name="toggle-off" size={30} color={colors.grayColor} />}
             </TouchableOpacity>
-            <Text style={[{ color: colors.blackColor, padding: 4 }]}>{REMEMBER_ME}</Text>
+            <Text style={[{ color: colors.blackColor, paddingHorizontal: 4,fontFamily: 'Montserrat-BoldItalic' }]}>{REMEMBER_ME}</Text>
           </View >
           <TouchableOpacity
             onPress={() => { navigation.navigate("ForgetPasswordScreen"), onCloseModal() }}
           >
-            <Text style={[{ color: redColor }]}>{FORGET_PASSWORD}</Text>
+            <Text style={[{ color: redColor,fontFamily: 'Montserrat-BoldItalic' }]}>{FORGET_PASSWORD}</Text>
           </TouchableOpacity>
         </View>
         <Pressable style={[styles.button, alignItemsCenter, borderRadius5]} onPress={handleLogin}>
@@ -464,7 +480,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
         </Pressable>
         <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginTop: spacings.large }]}>
           <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
-          <Text style={[{ color: colors.blackColor, marginVertical: spacings.xxxxLarge, marginHorizontal: spacings.small }, textAlign]}>or</Text>
+          <Text style={[{ color: colors.blackColor, marginVertical: spacings.xxxxLarge, marginHorizontal: spacings.small ,fontFamily: 'Montserrat-BoldItalic'}, textAlign]}>or</Text>
           <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
         </View>
         <View style={[styles.socialAuthBox, alignJustifyCenter, flexDirectionRow]}>
@@ -476,10 +492,10 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
           </TouchableOpacity>}
         </View>
         <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={() => handleSignUpClick()}>
-          <Text style={[{ marginTop: spacings.Large1x, color: colors.blackColor }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
+          <Text style={[{ marginTop: spacings.Large1x, color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
         </Pressable>
         <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 0 : hp(10), width: "100%" }]}>
-          <Text style={[{ color: colors.blackColor }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+          <Text style={[{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
           <View style={[flexDirectionRow, { marginTop: spacings.large, width: "100%" }, alignJustifyCenter]}>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -488,7 +504,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Terms Of Services From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4 }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4,fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -497,7 +513,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Privacy Policy From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4 }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4,fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
             </TouchableOpacity>
 
           </View>
@@ -513,17 +529,19 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    backgroundColor:whiteColor
   },
   text: {
     fontSize: style.fontSizeLarge3x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    fontFamily: 'GeneralSans-Variable'
+    fontFamily: 'Montserrat-BoldItalic'
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal1x.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: '100%',
@@ -542,6 +560,7 @@ const styles = StyleSheet.create({
     color: whiteColor,
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   textInputBox: {
     width: "100%",
@@ -553,7 +572,8 @@ const styles = StyleSheet.create({
     // marginTop: spacings.Large1x
   },
   errorText: {
-    color: redColor
+    color: redColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   backIcon: {
     top: 15,

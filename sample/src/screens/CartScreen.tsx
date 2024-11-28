@@ -509,20 +509,23 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
 
   if (error) {
     return (
-      <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      // <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      <View style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
         <Text style={[styles.loadingText, { color: themecolors.blackColor }]}>
           {AN_ERROR_OCCURED}
         </Text>
         <Text style={[styles.loadingText, { color: themecolors.blackColor }]}>
           {error?.name} {error?.message}
         </Text>
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     );
   }
 
   if (loading) {
     return (
-      <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      // <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      <View style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
         <Header
           backIcon={true}
           navigation={navigation}
@@ -531,13 +534,15 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
           <ActivityIndicator size="small" />
           <Text style={styles.loadingText}>{LOADING_CART}</Text>
         </View>
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     );
   }
 
   if (!data || !data.cart || data?.cart?.lines?.edges?.length === 0 || !cartId) {
     return (
-      <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      // <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
+      <View style={[styles.loading, alignJustifyCenter, flex, { backgroundColor: themecolors.whiteColor }]}>
         <Header
           backIcon={true}
           navigation={navigation}
@@ -552,7 +557,8 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
             </Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     );
   }
 
@@ -628,7 +634,8 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
 
 
   return (
-    <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, flex, { backgroundColor: themecolors.whiteColor }]}>
+    // <ImageBackground source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE} style={[styles.loading, flex, { backgroundColor: themecolors.whiteColor }]}>
+    <View style={[styles.loading, flex, { backgroundColor: themecolors.whiteColor }]}>
       <SafeAreaView >
         <Header
           backIcon={true}
@@ -730,9 +737,8 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                 <Text>Loading Products...</Text>
               </View>} */}
           </ScrollView>
-          <ChatButton onPress={handleChatButtonPress} bottom={userLoggedIn ? Platform.OS == "android" ? hp(35) : hp(30) : hp(10)} />
+          <ChatButton onPress={handleChatButtonPress} bottom={userLoggedIn ? Platform.OS == "android" ? hp(35) : hp(33) : hp(10)} />
         </View>
-
         {userLoggedIn ?
           totalQuantity > 0 && (
             <View style={{ position: "absolute", bottom: 0, borderWidth: 1, borderBottomWidth: 0, borderColor: "#797979", borderRadius: 8, width: "100%", backgroundColor: themecolors.whiteColor }}>
@@ -763,6 +769,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                   fontWeight: style.fontWeightThin1x.fontWeight,
                   lineHeight: 20,
                   color: themecolors.blackColor,
+                  fontFamily: 'Montserrat-BoldItalic'
                 }}>Note : Shipping will be calculated at checkout.</Text>
 
               </View>
@@ -778,7 +785,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
           <View style={[flexDirectionRow, positionAbsolute, justifyContentSpaceBetween, { alignItems: "baseline", bottom: 0, width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(8) }]}>
             <View style={{ width: wp(50), justifyContent: "center", alignItems: "center", height: hp(10) }}>
               <View style={[styles.quantityContainer, alignJustifyCenter, { flexDirection: "column", width: wp(50) }]}>
-                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700" }}>Total: {getTotalAmount().currencyCode === "GBP" && "£"} {getTotalAmount().totalAmount} </Text>
+                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700", fontFamily: 'Montserrat-BoldItalic' }}>Total: {getTotalAmount().currencyCode === "GBP" && "£"} {getTotalAmount().totalAmount} </Text>
                 {/* <Text style={{ backgroundColor: "#dafbd5", paddingHorizontal: 4, marginTop: 8, borderRadius: 5, color: "#018726" }}><AntDesign
                   name={"tag"}
                   size={15}
@@ -787,12 +794,11 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
               </View>
             </View>
             <View style={[{ position: "absolute", bottom: 10, right: 10, }]}>
-
               <Pressable
                 style={[styles.addToCartButton, borderRadius10, { backgroundColor: "#018726" }]}
                 onPress={openModal}
               >
-                <Text style={[textAlign, { color: whiteColor, width: wp(12) }]}>
+                <Text style={[textAlign, { color: whiteColor, width: wp(12), fontFamily: 'Montserrat-BoldItalic' }]}>
                   Login
                 </Text>
               </Pressable>
@@ -804,7 +810,8 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
           <LoginModal modalVisible={modalVisible} closeModal={closeModal} slideAnim={slideAnim} />
         )}
       </SafeAreaView>
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 }
 
@@ -815,7 +822,7 @@ function price(value: { amount: string; currencyCode: string }) {
   const { amount, currencyCode } = value;
 
   // Return formatted price with GBP symbol if currencyCode is GBP
-  return currencyCode === "GBP" ?  `£ ${amount}` : `${amount} ${currencyCode}`;
+  return currencyCode === "GBP" ? `£ ${amount}` : `${amount} ${currencyCode}`;
 }
 ;
 
@@ -859,7 +866,7 @@ function CartItem({
 
     // Call addToCart with the variant ID and the new quantity to add
     addToCartitem(item.merchandise.id, 1); // Adds one more of the same item
-    Toast.show(`${ quantity } item${ quantity !== 1 ? 's' : '' } added to cart`);
+    Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
 
   };
 
@@ -935,6 +942,7 @@ function createStyles(colors: Colors) {
     loadingText: {
       marginVertical: spacings.Large2x,
       color: colors.text,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     scrollView: {
       paddingBottom: spacings.xLarge,
@@ -954,6 +962,7 @@ function createStyles(colors: Colors) {
       lineHeight: 20,
       color: colors.secondaryText,
       fontWeight: style.fontWeightThin1x.fontWeight,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     cartButtonTextSubtitle: {
       fontSize: style.fontSizeSmall2x.fontSize,
@@ -986,16 +995,19 @@ function createStyles(colors: Colors) {
       fontWeight: style.fontWeightThin1x.fontWeight,
       // lineHeight: 20,
       color: blackColor,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     productDescription: {
       fontSize: style.fontSizeNormal.fontSize,
       color: colors.textSubdued,
-      padding: spacings.xLarge
+      padding: spacings.xLarge,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     productPrice: {
       fontSize: style.fontSizeNormal.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
+      fontFamily: 'arialnarrow'
     },
     removeButton: {
       marginRight: spacings.xLarge,
@@ -1004,6 +1016,7 @@ function createStyles(colors: Colors) {
     },
     removeButtonText: {
       color: colors.textSubdued,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     productImage: {
       width: wp(20),
@@ -1025,11 +1038,13 @@ function createStyles(colors: Colors) {
     costBlockText: {
       fontSize: style.fontSizeNormal.fontSize,
       color: colors.textSubdued,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     costBlockTextStrong: {
       fontSize: style.fontSizeNormal2x.fontSize,
       color: colors.text,
       fontWeight: style.fontWeightThin1x.fontWeight,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     addToCartButton: {
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
@@ -1061,6 +1076,7 @@ function createStyles(colors: Colors) {
       fontSize: 16,
       fontWeight: 'bold',
       color: redColor,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     relatedProductsContainer: {
       width: "100%",
@@ -1084,12 +1100,12 @@ function createStyles(colors: Colors) {
       marginVertical: spacings.large,
     },
     relatedproductName: {
-      fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,
+      fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic'
     },
     relatedproductPrice: {
       fontSize: style.fontSizeSmall1x.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'GeneralSans-Variable'
+
     },
     relatedAddtocartButton: {
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
@@ -1116,8 +1132,8 @@ function createStyles(colors: Colors) {
     },
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
-      justifyContent: 'flex-end', // Align modal at the bottom
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'flex-end',
     },
     modalContent: {
       backgroundColor: 'white',

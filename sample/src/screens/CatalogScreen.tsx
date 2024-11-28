@@ -184,7 +184,8 @@ function CatalogScreen({ navigation }: Props) {
   };
 
   return (
-    <ImageBackground style={[flex, { backgroundColor: themecolors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[flex, { backgroundColor: themecolors.whiteColor }]} >
+      {/* <ImageBackground style={[flex, { backgroundColor: themecolors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}> */}
       <Header
         navigation={navigation}
         backIcon={true}
@@ -204,7 +205,10 @@ function CatalogScreen({ navigation }: Props) {
                 <View style={{ height: hp(14), paddingHorizontal: spacings.xLarge, paddingVertical: spacings.small, alignItems: "center", justifyContent: "center", }}>
                   <View style={{
                     backgroundColor: themecolors.whiteColor, borderWidth: 1,
-                    borderRadius: 50, height: Platform.OS === "android" ? hp(10) : hp(9.5), overflow: "hidden", borderColor: borderColor, width: wp(20)
+                    borderRadius: 50, height: Platform.OS === "android" ? hp(10) : hp(9.5), overflow: "hidden",
+                    // borderColor: borderColor
+                    borderColor: blackColor
+                    , width: wp(20)
                   }}>
                     <Image source={{ uri: imageUrl }} style={[resizeModeContain, styles.card]} />
                   </View>
@@ -233,7 +237,9 @@ function CatalogScreen({ navigation }: Props) {
           </SkeletonPlaceholder>}
       </View>
       <ChatButton onPress={handleChatButtonPress} />
-    </ImageBackground>
+
+      {/* </ImageBackground> */}
+    </View>
 
   );
 }
@@ -267,6 +273,7 @@ function createStyles() {
       color: blackColor,
       // marginVertical: spacings.small,
       fontWeight: style.fontWeightThin1x.fontWeight,
+       fontFamily: 'Montserrat-BoldItalic'
     },
     text: {
       fontSize: style.fontSizeLarge.fontSize,

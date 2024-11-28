@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
-    color: whiteColor
+    color: whiteColor,
+     fontFamily: 'Montserrat-BoldItalic'
   },
 });
 export default LoadingModal;

@@ -31,7 +31,8 @@ const LoginModal = ({ modalVisible, closeModal, slideAnim }) => {
     >
       <View style={styles.modalOverlay}>
         <Animated.View style={[styles.modalContent, { transform: [{ translateY: slideAnim }], backgroundColor: colors.whiteColor }]}>
-          <ImageBackground style={{ flex: 1 }} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+          {/* <ImageBackground style={{ flex: 1 }} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}> */}
+          <View style={{ flex: 1 ,backgroundColor:whiteColor}}>
             <Pressable onPress={closeModal} style={{ paddingHorizontal: 15, paddingTop: 10 }}>
               <AntDesign name={"close"} size={30} color={colors.blackColor} />
             </Pressable>
@@ -41,7 +42,8 @@ const LoginModal = ({ modalVisible, closeModal, slideAnim }) => {
             ) : (
               <LoginScreen handleSignUpClick={handleSignUpClick} onBackToLogin={handleBackToLogin} onCloseModal={closeModal} />
             )}
-          </ImageBackground>
+            {/* </ImageBackground> */}
+          </View>
         </Animated.View>
       </View>
     </Modal>

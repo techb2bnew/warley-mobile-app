@@ -139,7 +139,7 @@ const OrderDetailsScreen = ({ route, navigation }) => {
             </View>
           </View>
           <TouchableOpacity onPress={() => addToCartProduct(item.variant_id, 1)} style={[styles.buyAgainButton, { backgroundColor: colors.redColor }]}>
-            <Text style={{ color: colors.whiteColor }}>Buy Again</Text>
+            <Text style={{ color: colors.whiteColor, fontFamily: 'Montserrat-BoldItalic' }}>Buy Again</Text>
           </TouchableOpacity>
         </View>
 
@@ -148,7 +148,8 @@ const OrderDetailsScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ImageBackground style={[flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[flex, { backgroundColor: "#fff" }]} >
       <Header backIcon={true} text={"OrderDetails"} navigation={navigation} />
       <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
       <View style={[styles.container, flex]}>
@@ -185,7 +186,8 @@ const OrderDetailsScreen = ({ route, navigation }) => {
         </ScrollView>
         <ChatButton onPress={handleChatButtonPress} />
       </View>
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
 
   );
 };
@@ -207,10 +209,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: style.fontSizeSmall.fontSize,
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-BoldItalic'
   },
   value: {
     fontSize: style.fontSizeNormal2x.fontSize,
     marginTop: 5,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   itemContainer: {
     // padding: spacings.large,
@@ -239,20 +243,24 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: style.fontSizeNormal2x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   variantText: {
     fontSize: style.fontSizeNormal.fontSize,
     marginTop: 2,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   quantityText: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     marginTop: 5,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   priceText: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     marginTop: 5,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   statusContainer: {
     marginTop: spacings.Large2x,
@@ -262,9 +270,11 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: style.fontSizeNormal2x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addressTitle: {
     fontWeight: 'bold',
+    fontFamily: 'Montserrat-BoldItalic'
   },
   buyAgainButton: {
     marginTop: spacings.large,

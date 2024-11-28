@@ -752,7 +752,7 @@ function AppWithNavigation({ route }: { route: any }) {
         component={isLoggedIn || userLoggedIn ? HomeStack : HomeWithAuthStack}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route);
-          console.log(routeName)
+          // console.log(routeName)
           return {
             headerShown: false,
             tabBarStyle: { display: routeName === 'Search' || routeName === "AuthStack" || routeName === 'CartModal' || routeName === 'ShopifyCheckOut' ? 'none' : 'flex', backgroundColor: colors.whiteColor },
@@ -1031,6 +1031,7 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 12,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   tabStyle: {
     justifyContent: 'center',

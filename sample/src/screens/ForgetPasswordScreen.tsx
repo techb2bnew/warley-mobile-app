@@ -138,7 +138,8 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
       style={[flex]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ImageBackground style={[styles.container, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+      {/* <ImageBackground style={[styles.container, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}> */}
+      <View style={[styles.container, { backgroundColor: colors.whiteColor }]} >
         <View style={[{ width: "100%", height: hp(5) }, flexDirectionRow, alignItemsCenter]}>
           <TouchableOpacity style={[styles.backIcon, alignItemsCenter]} onPress={() => { logEvent(`Back Button Pressed from ForgetPasswordScreen`), navigation.goBack() }}>
             <Ionicons name={"arrow-back"} size={33} color={colors.blackColor} />
@@ -147,7 +148,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
         {currentStep === 'email' && (
           <View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
             <Text style={[styles.text, { color: colors.blackColor }]}>Forgot password</Text>
-            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
+            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
             <Text style={[styles.textInputHeading, { marginTop: spacings.large, color: colors.blackColor }]}>{EMAIL}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
               <View style={{ flex: 1 }}>
@@ -163,7 +164,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   value={email}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  style={{ color: colors.blackColor }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
                 />
               </View>
 
@@ -176,7 +177,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
         {currentStep === 'otp' && (
           <View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
             <Text style={[styles.text, { color: colors.blackColor }]}>Enter 6 Digit Code</Text>
-            <Text style={{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small }}>Enter 6 digit code that you received on your email
+            <Text style={{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }}>Enter 6 digit code that you received on your email
               <Text style={{ color: colors.blackColor }}> ({email}).</Text></Text>
             <View style={[{ width: "100%", height: hp(18) }, alignJustifyCenter]}>
               <OTPTextInput
@@ -194,7 +195,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
           </View>)}
         {currentStep === 'password' && (<View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
           <Text style={[styles.text, { color: colors.blackColor }]}>Reset password</Text>
-          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small }]}>Set the new password for your account so you can login and access all the features.</Text>
+          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }]}>Set the new password for your account so you can login and access all the features.</Text>
           <View style={[{ width: "100%", height: hp(18), marginTop: spacings.Large1x }]}>
             <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{PASSWORD}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
@@ -205,7 +206,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   onChangeText={setPassword}
                   value={password}
                   secureTextEntry={!showPassword}
-                  style={{ color: colors.blackColor }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowPassword}>
@@ -227,7 +228,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   }}
                   value={confirmPassword}
                   secureTextEntry={!showConfirmPassword}
-                  style={{ color: colors.blackColor }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -247,7 +248,8 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
           text={"You can now use your new password to login to your account."}
           onPressContinue={() => { navigation.goBack(), setSuccessModalVisible(false), logEvent('Click continue button in success modal '); }}
         />}
-      </ImageBackground>
+        {/* </ImageBackground> */}
+      </View>
     </KeyboardAvoidingView>
   )
 }
@@ -264,7 +266,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: style.fontSizeLarge2x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: '100%',
@@ -279,16 +282,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     top: hp(35),
     width: "100%",
-    alignSelf: 'center'
+    alignSelf: 'center',
+
   },
   buttonText: {
     fontSize: style.fontSizeNormal2x.fontSize,
-    fontWeight: style.fontWeightThin.fontWeight
+    fontWeight: style.fontWeightThin.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal2x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
-    color: blackColor
+    color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   otpContainer: {
     marginVertical: spacings.xLarge,
@@ -302,7 +308,8 @@ const styles = StyleSheet.create({
     width: "14%"
   },
   errorText: {
-    color: redColor
+    color: redColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
 })
 

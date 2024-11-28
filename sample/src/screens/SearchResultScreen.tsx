@@ -162,9 +162,9 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const fetchproduct = async () => {
       setLoading(true);
-      let allProducts = []; // Store all fetched products
-      let hasNextPage = true; // Track if more pages are available
-      let endCursor = null; // Cursor for pagination
+      let allProducts = []; 
+      let hasNextPage = true; 
+      let endCursor = null; 
 
       try {
         while (hasNextPage) {
@@ -295,7 +295,8 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[flex, { backgroundColor: colors.whiteColor }]} >
       <Header backIcon={true} text={route?.params?.title} navigation={navigation} />
       <View style={[styles.container, flex]}>
         {(title === BEST_DEALS_OF_THE_WEEK || title === POPULAR_LIQUOR) &&
@@ -337,7 +338,8 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
         {/* {loading && <LoadingModal visible={loading} text={"Please wait while we load the products."} />} */}
         <ChatButton onPress={handleChatButtonPress} bottom={Platform.OS === "android" ? hp(5) : hp(10)} />
       </View>
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 };
 
@@ -447,6 +449,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
     borderRadius: 10,
@@ -461,6 +464,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: whiteColor,
     fontWeight: style.fontWeightThin1x.fontWeight,
+    fontFamily: 'Montserrat-BoldItalic'
   },
   image: {
     width: 100,
@@ -470,6 +474,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 14,
     color: blackColor,
+    fontFamily: 'Montserrat-BoldItalic'
   },
 });
 

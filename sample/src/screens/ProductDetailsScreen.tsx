@@ -189,10 +189,12 @@ function ProductDetailsScreen({ navigation, route }: Props) {
   };
 
   return (
-    <ImageBackground style={[styles.container, { backgroundColor: themecolors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    // <ImageBackground style={[styles.container, { backgroundColor: themecolors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+    <View style={[styles.container, { backgroundColor: themecolors.whiteColor }]} >
       <Header
         backIcon={true} textinput={true} text={route?.params?.product?.title}
-        shoppingCart={true} share={true} navigation={navigation} productId={route?.params?.product.id} shareProduct={shareProduct} />
+        shoppingCart={true} share={true} navigation={navigation} productId={route?.params?.product.id}
+        shareProduct={shareProduct} trimtext={true} />
       <View style={{ width: "100%", height: 5, backgroundColor: themecolors.whiteColor }}></View>
 
       <ProductDetails
@@ -213,7 +215,8 @@ function ProductDetailsScreen({ navigation, route }: Props) {
         shareProduct={shareProduct}
       />
 
-    </ImageBackground>
+      {/* </ImageBackground> */}
+    </View>
   );
 }
 
@@ -255,7 +258,7 @@ function ProductDetails({
 }) {
   const { colors } = useTheme();
   const styles = createStyles(colors);
-//  console.log("product?.images",product?.images)
+  //  console.log("product?.images",product?.images)
   const image = (product?.images?.nodes) ? (product?.images?.nodes[0]?.src || product?.images?.nodes[0]?.url) : (product?.images?.edges) ? (product?.images?.edges[0]?.node) : (product?.image?.src);
   const variant = getVariant(product);
   const [quantity, setQuantity] = useState(1);
@@ -743,7 +746,7 @@ function ProductDetails({
   return (
     <View>
       <ScrollView
-        style={{ width: "100%", height: "93.8%" , paddingBottom: spacings.large }}
+        style={{ width: "100%", height: "93.8%", paddingBottom: spacings.large }}
         showsVerticalScrollIndicator={false}
       >
         <View key={product?.id} style={[styles.productItem, borderRadius10, { width: "100%", paddingBottom: hp(15) }]}>
@@ -777,7 +780,7 @@ function ProductDetails({
 
                 </Pressable>
               </View>
-              {product.description && <Text style={[styles.productPrice, { color: themecolors.blackColor, marginVertical: spacings.large }]}>About this product</Text>}
+              {product.description && <Text style={[styles.productPrice, { color: themecolors.blackColor, marginVertical: spacings.large, fontFamily: 'Montserrat-BoldItalic' }]}>About this product</Text>}
               {product.description && <Pressable onPress={toggleExpanded} style={{ marginBottom: spacings.large }}>
                 <Text style={[styles.productDescription, { color: "#808080" }]} numberOfLines={expanded ? null : 2}
                   ellipsizeMode="tail">{product.description}</Text>
@@ -881,7 +884,7 @@ function ProductDetails({
               onPress={handleWriteReview}
               style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
             >
-              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeNormal2x.fontSize, }, textAlign]}>
+              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeNormal2x.fontSize, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>
                 Write a Review
               </Text>
             </Pressable>}
@@ -1013,6 +1016,7 @@ function createStyles(colors: Colors) {
       lineHeight: 28,
       textAlign: 'left',
       color: blackColor,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     productDescription: {
       fontSize: style.fontSizeNormal.fontSize,
@@ -1021,11 +1025,13 @@ function createStyles(colors: Colors) {
       lineHeight: 15,
       textAlign: 'left',
       color: colors.text,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     productPrice: {
       fontSize: style.fontSizeLarge.fontSize,
       color: blackColor,
       fontWeight: style.fontWeightThin1x.fontWeight,
+      fontFamily: 'arialnarrow'
     },
     productImage: {
       width: '100%',
@@ -1051,6 +1057,7 @@ function createStyles(colors: Colors) {
       lineHeight: 20,
       color: whiteColor,
       fontWeight: style.fontWeightThin1x.fontWeight,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     quantityContainer: {
       marginBottom: spacings.large,
@@ -1088,11 +1095,12 @@ function createStyles(colors: Colors) {
       fontSize: style.fontSizeLarge.fontSize,
       fontWeight: style.fontWeightMedium.fontWeight,
       color: blackColor,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     relatedProductItem: {
       width: wp(40),
-      margin: spacings.small,
-      padding: spacings.large,
+      margin: spacings.medium,
+      // padding: spacings.large,
       borderRadius: 5
 
     },
@@ -1107,7 +1115,7 @@ function createStyles(colors: Colors) {
     },
     relatedAddtocartButton: {
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
-      width: "68%",
+      width: "70%",
       backgroundColor: redColor,
       padding: spacings.normal,
 
@@ -1131,6 +1139,7 @@ function createStyles(colors: Colors) {
     optionValue: {
       fontSize: style.fontSizeNormal.fontSize,
       color: blackColor,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     favButton: {
       width: wp(8),
@@ -1164,15 +1173,13 @@ function createStyles(colors: Colors) {
       borderRadius: 10,
     },
     relatedproductName: {
-
+      fontFamily: 'Montserrat-BoldItalic',
       fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,
     },
     relatedproductPrice: {
       fontSize: style.fontSizeSmall1x.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
-
-      fontFamily: 'GeneralSans-Variable'
-
+      fontFamily: 'arialnarrow'
     },
     fallbackAvatar: {
       width: 60,
@@ -1189,12 +1196,13 @@ function createStyles(colors: Colors) {
       fontSize: 30,
       color: '#fff',
       fontWeight: 'bold',
+
     },
     text: {
       fontSize: style.fontSizeMedium1x.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
-      fontFamily: 'GeneralSans-Variable'
+      fontFamily: 'Montserrat-BoldItalic'
     },
     flatList: {
       width: "100%",
@@ -1231,6 +1239,7 @@ function createStyles(colors: Colors) {
       fontWeight: 'bold',
       fontSize: style.fontSizeMedium.fontSize,
       marginBottom: spacings.small,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     ratingContainer: {
       flexDirection: 'row',
@@ -1239,9 +1248,11 @@ function createStyles(colors: Colors) {
     timeDescription: {
       fontSize: style.fontSizeSmall.fontSize,
       marginBottom: spacings.small,
+      fontFamily: 'Montserrat-BoldItalic'
     },
     reviewText: {
       fontSize: style.fontSizeSmall1x.fontSize,
+      fontFamily: 'Montserrat-BoldItalic'
     },
   });
 }
