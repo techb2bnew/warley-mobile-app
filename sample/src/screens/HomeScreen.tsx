@@ -202,10 +202,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       const graphql = JSON.stringify({
         query: `query MyQuery {
         collection(id: "gid://shopify/Collection/637662101850") {
-          products(first: 4) {
+          products(first: 6) {
             nodes {
               id
-              images(first: 4) {
+              images(first: 6) {
                 nodes {
                   src
                   url
@@ -214,12 +214,12 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
               title
               tags
               description
-              options(first:4){
+              options(first:6){
                 id
                 name
                 values
               }
-              variants(first: 4) {
+              variants(first: 6) {
                 nodes {
                   price
                   inventoryQuantity
@@ -913,7 +913,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             <View style={[{ width: wp(100), height: "auto", marginTop: 10 }, flexDirectionRow]}>
               {shopifycollectionData.length != 0 ?
                 <FlatList
-                  data={shopifycollectionData.slice(0, 8)}
+                  data={shopifycollectionData.slice(0, 12)}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={renderItem}
                   // horizontal
@@ -1053,10 +1053,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
             {/* our product */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
-              <Text style={[styles.text, { color: colors.blackColor }]}>{OUR_PRODUCT}</Text>
-              <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, OUR_PRODUCT)}>See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+              <Text style={[styles.text, { color: colors.blackColor }]}>{"Top Sellers"}</Text>
+              <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
             </View>
-            <View style={[{ height: hp(27) }, alignJustifyCenter]}>
+            <View style={[{ height: "auto",width:"100%",paddingHorizontal:spacings.large}, alignJustifyCenter]}>
               {products?.length > 0 ? <FlatList
                 data={products}
                 renderItem={({ item, index }) => {
@@ -1068,6 +1068,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                       inventoryQuantity={inventoryQuantities[index]}
                       option={options[index]}
                       ids={productVariantsIDS[index]}
+                      spaceTop={spacings.small}
+                      width={wp(43.5)}
                       onPress={() => {
                         navigation.navigate('ProductDetails', {
                           product: item,
@@ -1082,7 +1084,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                   );
                 }}
                 showsHorizontalScrollIndicator={false}
-                horizontal
+                // horizontal
+                numColumns={2}
+                style={{width:"100%"}}
               /> :
                 // <LoaderKit
                 //   style={{ width: 50, height: 50 }}
@@ -1168,7 +1172,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-     fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: "95%",

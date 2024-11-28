@@ -232,7 +232,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleSubcategorySelect(item)}
-                                            style={[styles.subCategoryButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
+                                            style={[styles.subCategoryButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
                                         >
                                             <Text style={[styles.subCategoryText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {(item.CategoryName) || (mainCategoryName)}
@@ -255,7 +255,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleTabSelect(item)}
-                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
                                         >
                                             <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {(item.SubcategoryName1) || (subcategoryName)}
@@ -278,7 +278,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={() => handleNestedTabSelect(item)}
-                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : verylightGrayColor }]}
+                                            style={[styles.tabButton, { backgroundColor: selectedItem === item.url ? redColor : whiteColor }]}
                                         >
                                             <Text style={[styles.tabText, { color: selectedItem === item.url ? whiteColor : blackColor }]}>
                                                 {item.SubcategoryName2 || subcategoryChildName || 'No Subcategory Child Name'}
@@ -559,7 +559,6 @@ const styles = StyleSheet.create({
     modalContainer: {
         height: screenHeight * 0.4,
         padding: 20,
-
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -3 },
         shadowOpacity: 0.1,
@@ -573,7 +572,9 @@ const styles = StyleSheet.create({
         backgroundColor: whiteColor,
         borderRadius: 5,
         alignItems: 'center',
-        justifyContent: "center"
+        justifyContent: "center",
+        borderWidth:1,
+        borderColor:blackColor
     },
     subCategoryText: {
         textAlign: 'center',
@@ -587,7 +588,9 @@ const styles = StyleSheet.create({
         backgroundColor: whiteColor,
         borderRadius: 5,
         alignItems: 'center',
-        justifyContent: "center"
+        justifyContent: "center",
+        borderWidth:1,
+        borderColor:blackColor
     },
     tabText: {
         textAlign: 'center',

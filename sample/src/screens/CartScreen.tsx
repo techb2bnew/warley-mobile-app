@@ -902,12 +902,10 @@ function CartItem({
       <View style={[styles.productText, flex, alignJustifyCenter, flexDirectionRow]}>
         <View style={[flex]}>
           <Text style={[styles.productTitle, { color: themecolors.blackColor }]}>
-            {trimcateText(item?.merchandise?.product?.title)}
+            {/* {trimcateText(item?.merchandise?.product?.title)} */}
+            {item?.merchandise?.product?.title}
           </Text>
-          <Text style={[{ color: themecolors.grayColor }]}>
-            {/* 2 x 16g */}
-          </Text>
-          <Text style={[styles.productPrice, { color: themecolors.blackColor }]}>
+          <Text style={[styles.productPrice, { color: themecolors.redColor }]}>
             {price(item?.merchandise?.price)}
           </Text>
         </View>
