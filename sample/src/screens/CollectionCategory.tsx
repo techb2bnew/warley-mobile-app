@@ -40,6 +40,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
   const [productVariantsIDS, setProductVariantsIDS] = useState([]);
   const route = useRoute();
   const collectionId = route.params?.id;
+  const productType = route.params?.productType;
   const headingText = route.params?.headingText
   const [loadingProductId, setLoadingProductId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -155,6 +156,118 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
 
     fetchproduct();
   }, [collectionId])
+
+  useEffect(() => {
+    const fetchProductsByType = async () => {
+      setLoading(true);
+      let allProducts = []; // Store all fetched products
+      let hasNextPage = true; // Track if more pages are available
+      let endCursor = null; // Cursor for pagination
+  
+      try {
+        while (hasNextPage) {
+          const graphql = JSON.stringify({
+            query: `
+            query($cursor: String) {
+              products(first: 250, after: $cursor, query: "product_type:${productType}") {
+                edges {
+                  node {
+                    id
+                    images(first: 250) {
+                      nodes {
+                        src
+                        url
+                      }
+                    }
+                    title
+                    description
+                    vendor
+                    tags
+                    options(first: 250) {
+                      id
+                      name
+                      values
+                    }
+                    variants(first: 250) {
+                      nodes {
+                        price
+                        inventoryQuantity
+                        id
+                        title
+                        image {
+                          originalSrc
+                        }
+                      }
+                    }
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }`,
+            variables: { cursor: endCursor }
+          });
+  
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Shopify-Access-Token": ADMINAPI_ACCESS_TOKEN
+            },
+            body: graphql,
+            redirect: "follow"
+          };
+  
+          const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
+          const result = await response.json();
+  
+          const fetchedProducts = result?.data?.products?.edges.map(edge => edge.node) || [];
+          const pageInfo = result?.data?.products?.pageInfo || {};
+  
+          // Accumulate fetched products
+          allProducts = [...allProducts, ...fetchedProducts];
+  
+          // Update pagination information
+          hasNextPage = pageInfo.hasNextPage;
+          endCursor = pageInfo.endCursor;
+        }
+  
+        // Set the accumulated products and other data in state
+        setProducts(allProducts);
+  
+        const inventoryQuantities = allProducts.map((product) =>
+          product.variants.nodes.map((variant) => variant.inventoryQuantity)
+        );
+        setInventoryQuantities(inventoryQuantities);
+  
+        const fetchedTags = allProducts.map((product) => product.tags);
+        setTags(fetchedTags);
+  
+        const fetchedOptions = allProducts.map((product) => product.options);
+        setOptions(fetchedOptions);
+  
+        const productVariantData = allProducts.map((product) =>
+          product.variants.nodes.map((variant) => ({
+            id: variant.id,
+            title: variant.title,
+            inventoryQty: variant.inventoryQuantity,
+            image: variant.image
+          }))
+        );
+        setProductVariantsIDS(productVariantData);
+  
+        console.log("Total Products Fetched:", allProducts.length);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchProductsByType();
+  }, [productType]);
 
   useEffect(() => {
     logEvent('Collections Category Screen Initialized');

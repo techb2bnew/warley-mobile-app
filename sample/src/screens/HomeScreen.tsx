@@ -11,8 +11,8 @@ import Product from '../components/ProductVertical';
 import ChatButton from '../components/ChatButton';
 import { WARLEY_SEARCH, BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE } from '../assests/images';
 import {
-  SEE_ALL, SHOP_BY_PRODUCT_CATAGORY, BEST_SELLING, OUR_PRODUCT, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, OUR_PRODUCT_COLLECTION_ID,
-  STOREFRONT_ACCESS_TOKEN, LOADER_NAME, fetchCollectionsData, BrandsCollections
+  BEST_SELLING, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, OUR_PRODUCT_COLLECTION_ID,
+  STOREFRONT_ACCESS_TOKEN, LOADER_NAME, BrandsCollections
 } from '../constants/Constants'
 import useShopify from '../hooks/useShopify';
 import { useCart } from '../context/Cart';
@@ -24,7 +24,6 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import LoaderKit from 'react-native-loader-kit';
 import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
 import { scheduleNotification } from '../notifications';
@@ -53,14 +52,12 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const [fetchCollections, { data: collectionData }] = queries.collections;
   const [fetchProducts, { data }] = queries.products;
   const [fetchCart, { data: cartdata }] = queries.cart;
-  const [menuItems, setMenuItems] = useState([]);
   const [shopifyCollection, setShopifyCollection] = useState([])
   const [collectionsFetched, setCollectionsFetched] = useState(false);
   const [skeletonLoading, setSkeletonLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [shopifycollectionData, setShopifyCollectionData] = useState([]);
-  const [brandcollectionData, setBrandCollectionData] = useState(BrandsCollections);
-
+  const [productTypecollectionData, setProductTypeCollection] = useState([]);
   const [showAgePopup, setShowAgePopup] = useState(false);
   const dispatch = useDispatch();
   const borderColors = ['#33c1ff', '#ff5733', '#ff33f6', '#75ff33', '#0e95e6', '#ff9933', '#ffcc33', '#3366ff', '#cc33ff'];
@@ -417,105 +414,105 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     navigation.navigate('BrandCollectionScreen')
   }
 
-  // const fetchAllCollectionsWithProductTypes = async () => {
-  //   console.log("Fetching all collections...");
-  //   let allCollections = [];
-  //   let productTypes = new Set(); // Unique product types
-  //   let matchingCollections = []; // To store collections with matching product types
-  //   let hasNextPage = true;
-  //   let endCursor = null;
+  const fetchAllCollectionsWithProductTypes = async () => {
+    console.log("Fetching all collections...");
+    let allCollections = [];
+    let productTypes = new Set();
+    let matchingCollections = [];
+    let hasNextPage = true;
+    let endCursor = null;
 
-  //   try {
-  //     while (hasNextPage) {
-  //       const graphql = JSON.stringify({
-  //         query: `
-  //               query($cursor: String) {
-  //                   collections(first: 250, after: $cursor) {
-  //                       edges {
-  //                           node {
-  //                               id
-  //                               title
-  //                               handle
-  //                               image {
-  //                                       id
-  //                                       src
-  //                                       url
-  //                                   }
-  //                               products(first: 250) {
-  //                                   nodes {
-  //                                       id
-  //                                       title
-  //                                       productType
-  //                                   }
-  //                               }
-  //                           }
-  //                       }
-  //                       pageInfo {
-  //                           hasNextPage
-  //                           endCursor
-  //                       }
-  //                   }
-  //               }`,
-  //         variables: { cursor: endCursor },
-  //       });
+    try {
+      while (hasNextPage) {
+        const graphql = JSON.stringify({
+          query: `
+                query($cursor: String) {
+                    collections(first: 250, after: $cursor) {
+                        edges {
+                            node {
+                                id
+                                title
+                                handle
+                                image {
+                                        id
+                                        src
+                                        url
+                                    }
+                                products(first: 250) {
+                                    nodes {
+                                        id
+                                        title
+                                        productType
+                                    }
+                                }
+                            }
+                        }
+                        pageInfo {
+                            hasNextPage
+                            endCursor
+                        }
+                    }
+                }`,
+          variables: { cursor: endCursor },
+        });
 
-  //       const requestOptions = {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
-  //         },
-  //         body: graphql,
-  //       };
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
+          },
+          body: graphql,
+        };
 
-  //       const response = await fetch(
-  //         `https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`,
-  //         requestOptions
-  //       );
+        const response = await fetch(
+          `https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`,
+          requestOptions
+        );
 
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-  //       const result = await response.json();
-  //       const fetchedCollections = result?.data?.collections?.edges.map(edge => edge.node) || [];
-  //       // Collect all product types from fetched products
-  //       fetchedCollections.forEach(collection => {
-  //         collection.products.nodes.forEach(product => {
-  //           if (product.productType) {
-  //             productTypes.add(product.productType); // Store unique product types
-  //           }
-  //         });
-  //       });
+        const result = await response.json();
+        const fetchedCollections = result?.data?.collections?.edges.map(edge => edge.node) || [];
+        // Collect all product types from fetched products
+        fetchedCollections.forEach(collection => {
+          collection.products.nodes.forEach(product => {
+            if (product.productType) {
+              productTypes.add(product.productType); // Store unique product types
+            }
+          });
+        });
 
-  //       allCollections = [...allCollections, ...fetchedCollections];
+        allCollections = [...allCollections, ...fetchedCollections];
 
-  //       const pageInfo = result?.data?.collections?.pageInfo || {};
-  //       hasNextPage = pageInfo.hasNextPage;
-  //       endCursor = pageInfo.endCursor;
-  //     }
+        const pageInfo = result?.data?.collections?.pageInfo || {};
+        hasNextPage = pageInfo.hasNextPage;
+        endCursor = pageInfo.endCursor;
+      }
 
-  //     // console.log("All Product Types:", Array.from(productTypes));
+      console.log("All Product Types:", Array.from(productTypes));
 
-  //     // Filter collections that match product types
-  //     allCollections.forEach(collection => {
-  //       const collectionName = collection.title;
-  //       if (productTypes.has(collectionName)) {
-  //         matchingCollections.push({
-  //           id: collection.id,
-  //           name: collectionName,
-  //           imageUrl: collection.image?.url || null,
-  //         });
-  //       }
-  //     });
+      // Filter collections that match product types
+      allCollections.forEach(collection => {
+        const collectionName = collection.title;
+        if (productTypes.has(collectionName)) {
+          matchingCollections.push({
+            id: collection.id,
+            name: collectionName,
+            imageUrl: collection.image?.url || null,
+          });
+        }
+      });
 
-  //     // console.log("Matching Collections:", matchingCollections);
-  //     setBrandCollectionData(matchingCollections)
-  //     // console.log("Total Collections Fetched:", allCollections.length);
-  //   } catch (error) {
-  //     console.error('Error fetching collections:', error);
-  //   }
-  // };
+      console.log("Matching Collections:", matchingCollections);
+      setProductTypeCollection(matchingCollections)
+      // console.log("Total Collections Fetched:", allCollections.length);
+    } catch (error) {
+      console.error('Error fetching collections:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchCollectionData = async () => {
@@ -568,7 +565,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         console.error('Error fetching data:', error);
       }
     };
-    // fetchAllCollectionsWithProductTypes();
+    fetchAllCollectionsWithProductTypes();
     fetchCollectionData();
   }, []);
 
@@ -896,6 +893,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           </SkeletonPlaceholder>
         ) : (
           <View style={[styles.container, flex]}>
+            {/* carousal */}
             <Carousal
               data={carouselData.slice(0, 3)}
               dostsShow={true}
@@ -904,6 +902,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
               )}
               onBannerPress={handleBannerPress}
             />
+
+            {/* catagories */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Categories"}</Text>
               <Pressable onPress={onPressShopAll}>
@@ -922,8 +922,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 />
 
                 : <SkeletonPlaceholder>
-                  <View style={{ width: wp(95), height: hp(23), padding: spacings.large }}>
-                    {Array(2).fill().map((_, rowIndex) => (
+                  <View style={{ width: wp(95), height: hp(33), padding: spacings.large }}>
+                    {Array(3).fill().map((_, rowIndex) => (
                       <View key={rowIndex} style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         {Array(4).fill().map((_, colIndex) => (
                           <View key={colIndex} style={{ width: wp(18), height: hp(8.5), borderRadius: 50, marginTop: 10 }} />
@@ -934,24 +934,30 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </SkeletonPlaceholder>}
             </View>
 
+            {/* PopularBrandsCollection */}
             <View style={[{ width: "100%", marginTop: 20, marginBottom: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
-              <Text style={[styles.text, { color: colors.blackColor }]}>Shop By <Text style={{ color: "#ff1111" }}>Brands</Text></Text>
+              <Text style={[styles.text, { color: colors.blackColor }]}>Popular <Text style={{ color: "#ff1111" }}>Brands</Text></Text>
               <Pressable onPress={onPressBrandSeeALL}>
                 <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic' }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
               </Pressable>
             </View>
             <View style={[{ width: "100%", height: "auto", marginTop: 5 }, flexDirectionRow]}>
-              {brandcollectionData.length === 0 ? (
+              {BrandsCollections.length === 0 ? (
                 <SkeletonPlaceholder>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    {[...Array(5)].map((_, index) => (
-                      <View key={index} style={{ width: wp(22.8), height: hp(10), backgroundColor: '#e0e0e0', borderRadius: 5, margin: 5 }} />
+                    {[...Array(4)].map((_, index) => (
+                      <View key={index} style={{ width: wp(20.8), height: hp(10), backgroundColor: '#e0e0e0', borderRadius: 5, margin: 5 }} />
+                    ))}
+                  </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {[...Array(4)].map((_, index) => (
+                      <View key={index} style={{ width: wp(20.8), height: hp(10), backgroundColor: '#e0e0e0', borderRadius: 5, margin: 5 }} />
                     ))}
                   </View>
                 </SkeletonPlaceholder>
               ) : (
                 <FlatList
-                  data={brandcollectionData.filter(item => item?.name !== "NULL").slice(0, 8)}
+                  data={BrandsCollections.filter(item => item?.name !== "NULL").slice(0, 12)}
                   renderItem={({ item, index }) => {
                     // console.log("item:::",item)
                     const borderColor = borderColors[index % borderColors.length];
@@ -985,6 +991,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                   keyExtractor={(item) => item?.id}
                 />)}
             </View>
+
+            {/* best deal */}
             <Text style={[styles.text, { color: colors.blackColor, marginVertical: 10 }]}>{"Best Deal"}</Text>
             <View style={[{ height: hp(26) }, alignJustifyCenter]}>
               {bestDealProducts?.length > 0 ? <FlatList
@@ -1029,7 +1037,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </SkeletonPlaceholder>
               }
             </View>
-            {/* best deal */}
+
+
+            {/* BEST_SELLING */}
             <View style={[{ width: "100%", marginBottom: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{BEST_SELLING}</Text>
             </View>
@@ -1050,13 +1060,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </View>
               ))}
             </ScrollView>
-
+            
             {/* our product */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Top Sellers"}</Text>
               <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
             </View>
-            <View style={[{ height: "auto",width:"100%",paddingHorizontal:spacings.large}, alignJustifyCenter]}>
+            <View style={[{ height: "auto", width: "100%", paddingHorizontal: spacings.large }, alignJustifyCenter]}>
               {products?.length > 0 ? <FlatList
                 data={products}
                 renderItem={({ item, index }) => {
@@ -1086,7 +1096,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 showsHorizontalScrollIndicator={false}
                 // horizontal
                 numColumns={2}
-                style={{width:"100%"}}
+                style={{ width: "100%" }}
               /> :
                 // <LoaderKit
                 //   style={{ width: 50, height: 50 }}
@@ -1103,6 +1113,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </SkeletonPlaceholder>
               }
             </View>
+
+            {/* carousal */}
             <Carousal
               data={carouselData.slice(3, 6)}
               dostsShow={true}
@@ -1129,17 +1141,16 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end', // Aligns modal at the bottom
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: dimmed background
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   collectionText: { fontSize: 12, paddingVertical: 5, fontFamily: 'Montserrat-BoldItalic' },
   modalContainer: {
-    height: screenHeight * 0.4, // 40% of screen height
-    backgroundColor: 'white', // replace with your desired color
+    height: screenHeight * 0.4,
+    backgroundColor: 'white',
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    // optional: add shadow for iOS
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -1147,7 +1158,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    // optional: add elevation for Android
     elevation: 5,
   },
   modalTitle: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
@@ -1167,7 +1177,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-  // subCategoryText: { fontSize: 18, marginVertical: 10, textAlign: "center" },
   text: {
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
@@ -1181,7 +1190,6 @@ const styles = StyleSheet.create({
     borderWidth: .1,
     borderRadius: 10,
     paddingHorizontal: spacings.large,
-    // marginVertical: spacings.small,
     marginHorizontal: 10,
     shadowOffset: {
       width: 0,
@@ -1190,7 +1198,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.75,
     shadowRadius: 10,
     elevation: 6,
-    // height: 40,
   },
   card: {
     width: wp(20),
