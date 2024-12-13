@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>126080336550-2v3pvnfe6mfo8q5rp8fble5npalldns4.apps.googleusercontent.com</string>
+	<string>126080336550-6ocsci0jbirbvqr7j41fg3nasc4jai2a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.126080336550-2v3pvnfe6mfo8q5rp8fble5npalldns4</string>
+	<string>com.googleusercontent.apps.126080336550-6ocsci0jbirbvqr7j41fg3nasc4jai2a</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>126080336550-13ho7pfv0qeou56i2eru5i3e70ak2s92.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.shopify.Warley</string>
+	<string>com.shopify.super.Warley</string>
 	<key>PROJECT_ID</key>
 	<string>warleystore-5a182</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:126080336550:ios:7f18225610d44dfd8faa67</string>
+	<string>1:126080336550:ios:66c90a2e702d20bf8faa67</string>
 </dict>
 </plist>

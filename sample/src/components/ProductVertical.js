@@ -115,7 +115,6 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
     }
   };
 
-
   const removeFromWishlistAPI = async (customerId, productId) => {
     try {
       // Retrieve the token from AsyncStorage
@@ -215,6 +214,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
     setModalVisible(true)
     logEvent(`Quick view modal open for  ${product.id}`)
   }
+  
   const handleAddToCart = () => {
     logEvent('Add to Cart');
     onAddToCart(product?.variants?.edges ? product?.variants?.edges[0]?.node?.id : product?.variants?.nodes[0]?.id, quantity);

@@ -52,7 +52,7 @@ const Carousal = ({ data, renderItem, dostsShow, onBannerPress }) => {
             <Pressable
               key={index}
               style={{ width: itemWidth, alignItems: 'center', justifyContent: 'center', }}
-              onPress={() => onBannerPress(index, item)}
+              // onPress={() => onBannerPress(index, item)}
               >
               {renderItem(item)}
             </Pressable>

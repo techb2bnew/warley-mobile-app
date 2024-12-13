@@ -13,13 +13,13 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D920EE30AC74483B3E00DFD /* GeneralSans-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83EBC65C65B540DDBE1B4F94 /* GeneralSans-Variable.ttf */; };
 		406B7DC53E794CD1ACA1B786 /* GeneralSans-VariableItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6C20AC6B407433D99C4EB0B /* GeneralSans-VariableItalic.ttf */; };
-		4E128A652CDA3178006A59A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E128A642CDA3177006A59A9 /* GoogleService-Info.plist */; };
+		4EA964302D09C107007CE923 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA9642F2D09C107007CE923 /* GoogleService-Info.plist */; };
 		6A1F48E72B16900600BA591C /* ShopifyCheckoutSheetKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1F48E62B16900600BA591C /* ShopifyCheckoutSheetKitTests.swift */; };
 		6AFAD2D22BA9DEF8001F9644 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6AFAD2D12BA9DEF8001F9644 /* Localizable.xcstrings */; };
+		75955B14093F44D497AE427A /* arialnarrow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B73FED71A624755B705D784 /* arialnarrow.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A7CA3C1F40C35C538682617A /* libPods-ReactNative-ReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C155D76CCB2E42C0EBB1841 /* libPods-ReactNative-ReactNativeTests.a */; };
 		B93CCC88F1344C5DB6726B32 /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B17DD8955F134FA8BD8095E8 /* Montserrat-BoldItalic.ttf */; };
-		75955B14093F44D497AE427A /* arialnarrow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B73FED71A624755B705D784 /* arialnarrow.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +42,9 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ReactNative/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ReactNative/main.m; sourceTree = "<group>"; };
 		37CC8B061A2B311F01B6F050 /* Pods-ReactNative-ReactNativeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNative-ReactNativeTests.release.xcconfig"; path = "Target Support Files/Pods-ReactNative-ReactNativeTests/Pods-ReactNative-ReactNativeTests.release.xcconfig"; sourceTree = "<group>"; };
-		4E128A642CDA3177006A59A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4EA9642F2D09C107007CE923 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "ReactNative/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4EF1B8B6CA16C991C5BEE2F2 /* Pods-ReactNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNative.release.xcconfig"; path = "Target Support Files/Pods-ReactNative/Pods-ReactNative.release.xcconfig"; sourceTree = "<group>"; };
+		5B73FED71A624755B705D784 /* arialnarrow.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = arialnarrow.ttf; path = ../assets/fonts/arialnarrow.ttf; sourceTree = "<group>"; };
 		60F69E354AE684FD856C51A6 /* Pods-ReactNative-ReactNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNative-ReactNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactNative-ReactNativeTests/Pods-ReactNative-ReactNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A1F48E62B16900600BA591C /* ShopifyCheckoutSheetKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopifyCheckoutSheetKitTests.swift; sourceTree = "<group>"; };
 		6A8D64CF2AF25C1200FE4E4A /* ReactNative.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ReactNative.entitlements; path = ReactNative/ReactNative.entitlements; sourceTree = "<group>"; };
@@ -56,10 +57,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ReactNative/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83EBC65C65B540DDBE1B4F94 /* GeneralSans-Variable.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GeneralSans-Variable.ttf"; path = "../assets/fonts/GeneralSans-Variable.ttf"; sourceTree = "<group>"; };
 		9E0AC43398437CA0E3D05DDF /* libPods-ReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B17DD8955F134FA8BD8095E8 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BoldItalic.ttf"; path = "../assets/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
 		ED728EF8BB9B5E9BA9D50EBE /* Pods-ReactNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNative.debug.xcconfig"; path = "Target Support Files/Pods-ReactNative/Pods-ReactNative.debug.xcconfig"; sourceTree = "<group>"; };
 		F6C20AC6B407433D99C4EB0B /* GeneralSans-VariableItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GeneralSans-VariableItalic.ttf"; path = "../assets/fonts/GeneralSans-VariableItalic.ttf"; sourceTree = "<group>"; };
-		B17DD8955F134FA8BD8095E8 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BoldItalic.ttf"; path = "../assets/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5B73FED71A624755B705D784 /* arialnarrow.ttf */ = {isa = PBXFileReference; name = "arialnarrow.ttf"; path = "../assets/fonts/arialnarrow.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +144,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				4E128A642CDA3177006A59A9 /* GoogleService-Info.plist */,
+				4EA9642F2D09C107007CE923 /* GoogleService-Info.plist */,
 				6AB7C68F2AF197BE000DB11B /* Packages */,
 				13B07FAE1A68108700A75B9A /* ReactNative */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -287,11 +287,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				4EA964302D09C107007CE923 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				6AFAD2D22BA9DEF8001F9644 /* Localizable.xcstrings in Resources */,
 				2D920EE30AC74483B3E00DFD /* GeneralSans-Variable.ttf in Resources */,
 				406B7DC53E794CD1ACA1B786 /* GeneralSans-VariableItalic.ttf in Resources */,
-				4E128A652CDA3178006A59A9 /* GoogleService-Info.plist in Resources */,
 				B93CCC88F1344C5DB6726B32 /* Montserrat-BoldItalic.ttf in Resources */,
 				75955B14093F44D497AE427A /* arialnarrow.ttf in Resources */,
 			);
@@ -720,7 +720,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 63P56L88DA;
+				DEVELOPMENT_TEAM = 98T9Q27628;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -796,7 +796,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shopify.Warley;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shopify.super.Warley;
 				PRODUCT_NAME = ReactNative;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -819,7 +819,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 63P56L88DA;
+				DEVELOPMENT_TEAM = 98T9Q27628;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -894,7 +894,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shopify.Warley;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shopify.super.Warley;
 				PRODUCT_NAME = ReactNative;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
