@@ -217,13 +217,37 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Validation
-    if (!firstName) return Alert.alert("Please Enter Your First Name");
-    if (!lastName) return Alert.alert("Please Enter Your Last Name");
-    if (!phone) return Alert.alert("Please Enter Your Phone Number");
-    if (phone.length < 10) return Alert.alert("Please Enter Your 10 Digit Phone Number");
-    if (!emailPattern.test(email)) return setEmailError("Invalid email format");
-    if (password.length < 8) return setPasswordError("Password must be at least 8 characters");
-    if (password !== confirmPassword) return setConfirmPasswordError("Passwords do not match");
+    if (!firstName) {
+      setLoading(false);
+      return Alert.alert("Validation Error", "Please Enter Your First Name");
+    }
+    if (!lastName) {
+      setLoading(false);
+      return Alert.alert("Validation Error", "Please Enter Your Last Name");
+    }
+    if (!phone) {
+      setLoading(false);
+      return Alert.alert("Validation Error", "Please Enter Your Phone Number");
+    }
+    if (phone.length < 10) {
+      setLoading(false);
+      return Alert.alert("Validation Error", "Please Enter Your 10 Digit Phone Number");
+    }
+    if (!emailPattern.test(email)) {
+      setEmailError("Invalid email format");
+      setLoading(false);
+      return;
+    }
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
       // Sign-up request

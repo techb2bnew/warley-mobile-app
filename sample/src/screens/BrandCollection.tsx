@@ -5,8 +5,9 @@ import { lightColors, darkColors } from '../constants/Color';
 import { spacings, style } from '../constants/Fonts';
 import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color';
 import Header from '../components/Header';
-import { BaseStyle } from '../constants/Style'; import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, BrandsCollections, STOREFRONT_ACCESS_TOKEN } from '../constants/Constants'
+import { BaseStyle } from '../constants/Style'; 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
+import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, BrandsCollections, STOREFRONT_ACCESS_TOKEN,productType } from '../constants/Constants'
 import { DARK_BACKGROUND_IMAGE, BACKGROUND_IMAGE } from '../assests/images';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import axios from 'axios';
@@ -15,115 +16,114 @@ const { flex, alignJustifyCenter, flexDirectionRow, resizeModeCover, justifyCont
     textAlign, overflowHidden } = BaseStyle;
 
 export default function BrandCollection({ navigation }) {
-    const [productTypecollectionData, setProductTypeCollection] = useState([]);
+    const [productTypecollectionData, setProductTypeCollection] = useState(productType);
     const { isDarkMode } = useThemes();
     const colors = isDarkMode ? darkColors : lightColors;
 
+    // useEffect(() => {
+    //     fetchAllCollectionsWithProductTypes();
+    // }, []);
 
-    useEffect(() => {
-        fetchAllCollectionsWithProductTypes();
-    }, []);
+    // const fetchAllCollectionsWithProductTypes = async () => {
+    //     // console.log("Fetching all collections...");
+    //     let allCollections = [];
+    //     let productTypes = new Set();
+    //     let matchingCollections = [];
+    //     let hasNextPage = true;
+    //     let endCursor = null;
 
-    const fetchAllCollectionsWithProductTypes = async () => {
-        // console.log("Fetching all collections...");
-        let allCollections = [];
-        let productTypes = new Set();
-        let matchingCollections = [];
-        let hasNextPage = true;
-        let endCursor = null;
+    //     try {
+    //         while (hasNextPage) {
+    //             const graphql = JSON.stringify({
+    //                 query: `
+    //                 query($cursor: String) {
+    //                     collections(first: 250, after: $cursor) {
+    //                         edges {
+    //                             node {
+    //                                 id
+    //                                 title
+    //                                 handle
+    //                                 image {
+    //                                     id
+    //                                     src
+    //                                     url
+    //                                 }
+    //                                 products(first: 250) {
+    //                                     nodes {
+    //                                         id
+    //                                         title
+    //                                         productType
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
+    //                         pageInfo {
+    //                             hasNextPage
+    //                             endCursor
+    //                         }
+    //                     }
+    //                 }`,
+    //                 variables: { cursor: endCursor },
+    //             });
 
-        try {
-            while (hasNextPage) {
-                const graphql = JSON.stringify({
-                    query: `
-                    query($cursor: String) {
-                        collections(first: 250, after: $cursor) {
-                            edges {
-                                node {
-                                    id
-                                    title
-                                    handle
-                                    image {
-                                        id
-                                        src
-                                        url
-                                    }
-                                    products(first: 250) {
-                                        nodes {
-                                            id
-                                            title
-                                            productType
-                                        }
-                                    }
-                                }
-                            }
-                            pageInfo {
-                                hasNextPage
-                                endCursor
-                            }
-                        }
-                    }`,
-                    variables: { cursor: endCursor },
-                });
+    //             const requestOptions = {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
+    //                 },
+    //                 body: graphql,
+    //             };
 
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
-                    },
-                    body: graphql,
-                };
+    //             const response = await fetch(
+    //                 `https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`,
+    //                 requestOptions
+    //             );
 
-                const response = await fetch(
-                    `https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`,
-                    requestOptions
-                );
+    //             if (!response.ok) {
+    //                 throw new Error(`HTTP error! Status: ${response.status}`);
+    //             }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+    //             const result = await response.json();
+    //             const fetchedCollections = result?.data?.collections?.edges.map(edge => edge.node) || [];
 
-                const result = await response.json();
-                const fetchedCollections = result?.data?.collections?.edges.map(edge => edge.node) || [];
+    //             // Collect all product types from fetched products
+    //             fetchedCollections.forEach(collection => {
+    //                 collection.products.nodes.forEach(product => {
+    //                     if (product.productType) {
+    //                         productTypes.add(product.productType); // Store unique product types
+    //                     }
+    //                 });
+    //             });
 
-                // Collect all product types from fetched products
-                fetchedCollections.forEach(collection => {
-                    collection.products.nodes.forEach(product => {
-                        if (product.productType) {
-                            productTypes.add(product.productType); // Store unique product types
-                        }
-                    });
-                });
+    //             allCollections = [...allCollections, ...fetchedCollections];
 
-                allCollections = [...allCollections, ...fetchedCollections];
+    //             const pageInfo = result?.data?.collections?.pageInfo || {};
+    //             hasNextPage = pageInfo.hasNextPage;
+    //             endCursor = pageInfo.endCursor;
+    //         }
 
-                const pageInfo = result?.data?.collections?.pageInfo || {};
-                hasNextPage = pageInfo.hasNextPage;
-                endCursor = pageInfo.endCursor;
-            }
+    //         // console.log("All Product Types:", Array.from(productTypes));
 
-            // console.log("All Product Types:", Array.from(productTypes));
+    //         // Filter collections that match product types
+    //         allCollections.forEach(collection => {
+    //             const collectionName = collection.title;
+    //             if (productTypes.has(collectionName)) {
+    //                 matchingCollections.push({
+    //                     id: collection.id,
+    //                     name: collectionName,
+    //                     imageUrl: collection.image?.url || null,
+    //                 });
+    //             }
+    //         });
 
-            // Filter collections that match product types
-            allCollections.forEach(collection => {
-                const collectionName = collection.title;
-                if (productTypes.has(collectionName)) {
-                    matchingCollections.push({
-                        id: collection.id,
-                        name: collectionName,
-                        imageUrl: collection.image?.url || null,
-                    });
-                }
-            });
-
-            // console.log("Matching Collections:", matchingCollections);
-            setProductTypeCollection(Array.from(productTypes))
-            // console.log("Total Collections Fetched:", allCollections.length);
-        } catch (error) {
-            console.error('Error fetching collections:', error);
-        }
-    };
+    //         // console.log("Matching Collections:", matchingCollections);
+    //         setProductTypeCollection(Array.from(productTypes))
+    //         // console.log("Total Collections Fetched:", allCollections.length);
+    //     } catch (error) {
+    //         console.error('Error fetching collections:', error);
+    //     }
+    // };
 
     const onPressCollection = (id: any, heading: any) => {
         // logEvent(`See All our product Collection Button Pressed from HomeScreenElectronics CollectionID: ${id} CollectionName: ${heading}`);

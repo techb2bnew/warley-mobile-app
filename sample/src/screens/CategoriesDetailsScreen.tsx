@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, Dimensions, Pressable, Image, ImageBackground, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, Dimensions, Pressable, Image, ImageBackground, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import { useThemes } from '../context/ThemeContext';
 import { spacings, style } from '../constants/Fonts';
@@ -438,7 +438,7 @@ export default CategoriesDetailsScreen;
 const styles = StyleSheet.create({
     productDetailBox: {
         width: wp(100),
-        height: hp(88),
+        height: Platform.OS === "android" ? hp(78) : hp(72),
         paddingTop: spacings.large,
         paddingBottom: spacings.xxxxLarge,
     },

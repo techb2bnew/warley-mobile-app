@@ -162,7 +162,7 @@ const OrderDetailsScreen = ({ route, navigation }) => {
             <Text style={[styles.label, { color: colors.blackColor }]}>Order Created</Text>
             <Text style={[styles.value, { color: colors.blackColor }]}>{new Date(order.created_at).toLocaleDateString()}</Text>
           </View>
-          <View style={[styles.sectionContainer, { backgroundColor: colors.whiteColor }]}>
+          {order.shipping_address && <View style={[styles.sectionContainer, { backgroundColor: colors.whiteColor }]}>
             <Text style={[styles.label, { color: colors.blackColor }]}>Delivery Address</Text>
             <Text style={[styles.value, { color: colors.blackColor }]}>
               {order.shipping_address.name}, {order.shipping_address.address1},
@@ -170,7 +170,7 @@ const OrderDetailsScreen = ({ route, navigation }) => {
               {order.shipping_address.city}, {order.shipping_address.province} -
               {order.shipping_address.zip}, {order.shipping_address.country}
             </Text>
-          </View>
+          </View>}
           {/* <Text style={[{ color: colors.blackColor }]}>Status: {order.status}</Text> */}
           <FlatList
             data={order.line_items}

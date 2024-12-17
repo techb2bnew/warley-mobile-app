@@ -214,7 +214,7 @@ function CatalogScreen({ navigation }: Props) {
                   </View>
 
                 </View>
-                <Text style={[styles.categoryName, textAlign, { color: themecolors.blackColor, paddingHorizontal: spacings.medium, fontSize: 13 }]}>{item.name}</Text>
+                <Text style={[styles.categoryName, textAlign, { color: themecolors.blackColor, paddingHorizontal: spacings.normal, fontSize: 13 }]}>{item.name}</Text>
               </Pressable>
             )
           }
