@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '.././../utils';
 import { blackColor, redColor, whiteColor, blackOpacity5 } from '../../constants/Color';
 import { getAdminAccessToken, getStoreDomain, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN } from '../../constants/Constants';
@@ -161,101 +161,105 @@ const AddAddressModal = ({ visible, onClose }) => {
 
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
-      <Pressable style={[styles.modalContainer, flex, { justifyContent: "flex-end" }]} onPress={onClose}>
+      <Pressable style={[styles.modalContainer, flex, { justifyContent: "flex-end" }]} >
         <View style={[styles.modalContent, alignJustifyCenter, { backgroundColor: colors.whiteColor }]}>
           <TouchableOpacity onPress={onClose} style={[styles.closeButton, positionAbsolute]}>
             <Ionicons name="close" size={28} color={colors.blackColor} />
           </TouchableOpacity>
           <Text style={[styles.title, textAlign, { marginBottom: spacings.Large1x, color: colors.blackColor }]}>Add Address</Text>
-          <ScrollView style={{ width: "100%", height: hp(40) }}>
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: firstNameError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="First Name*"
-              placeholderTextColor={firstNameError ? colors.redColor : colors.blackColor}
-              value={firstName}
-              onChangeText={text => {
-                setFirstName(text);
-                setFirstNameError(!text);
-              }}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: lastNameError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Last Name*"
-              placeholderTextColor={lastNameError ? colors.redColor : colors.blackColor}
-              value={lastName}
-              onChangeText={text => {
-                setLastName(text);
-                setLastNameError(!text);
-              }}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: address1Error ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Address 1*"
-              placeholderTextColor={address1Error ? colors.redColor : colors.blackColor}
-              value={address1}
-              onChangeText={text => {
-                setAddress1(text);
-                setAddress1Error(!text);
-              }}
-            />
-            <TextInput
-              style={[styles.input,
-              { borderBottomColor: colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Address 2"
-              placeholderTextColor={colors.blackColor}
-              value={address2}
-              onChangeText={setAddress2}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: countryError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Country*"
-              placeholderTextColor={countryError ? colors.redColor : colors.blackColor}
-              value={country}
-              onChangeText={text => {
-                setCountry(text);
-                setCountryError(!text);
-              }}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: stateError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="State*"
-              placeholderTextColor={stateError ? colors.redColor : colors.blackColor}
-              value={state}
-              onChangeText={text => {
-                setState(text);
-                setStateError(!text);
-              }}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: cityError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="City*"
-              placeholderTextColor={cityError ? colors.redColor : colors.blackColor}
-              value={city}
-              onChangeText={text => {
-                setCity(text);
-                setCityError(!text);
-              }}
-            />
-            {/* <TextInput
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={{ flex: 1,}}
+          >
+            <ScrollView style={{ width: "100%",marginBottom:hp(10)}} >
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: firstNameError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="First Name*"
+                placeholderTextColor={firstNameError ? colors.redColor : colors.blackColor}
+                value={firstName}
+                onChangeText={text => {
+                  setFirstName(text);
+                  setFirstNameError(!text);
+                }}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: lastNameError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Last Name*"
+                placeholderTextColor={lastNameError ? colors.redColor : colors.blackColor}
+                value={lastName}
+                onChangeText={text => {
+                  setLastName(text);
+                  setLastNameError(!text);
+                }}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: address1Error ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Address 1*"
+                placeholderTextColor={address1Error ? colors.redColor : colors.blackColor}
+                value={address1}
+                onChangeText={text => {
+                  setAddress1(text);
+                  setAddress1Error(!text);
+                }}
+              />
+              <TextInput
+                style={[styles.input,
+                { borderBottomColor: colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Address 2"
+                placeholderTextColor={colors.blackColor}
+                value={address2}
+                onChangeText={setAddress2}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: countryError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Country*"
+                placeholderTextColor={countryError ? colors.redColor : colors.blackColor}
+                value={country}
+                onChangeText={text => {
+                  setCountry(text);
+                  setCountryError(!text);
+                }}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: stateError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="State*"
+                placeholderTextColor={stateError ? colors.redColor : colors.blackColor}
+                value={state}
+                onChangeText={text => {
+                  setState(text);
+                  setStateError(!text);
+                }}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: cityError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="City*"
+                placeholderTextColor={cityError ? colors.redColor : colors.blackColor}
+                value={city}
+                onChangeText={text => {
+                  setCity(text);
+                  setCityError(!text);
+                }}
+              />
+              {/* <TextInput
               style={[
                 styles.input,
                 { borderBottomColor: companyError ? colors.redColor : colors.blackColor, color: colors.blackColor }
@@ -268,37 +272,38 @@ const AddAddressModal = ({ visible, onClose }) => {
                 setCompanyError(!text);
               }}
             /> */}
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: phoneError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Phone*"
-              placeholderTextColor={phoneError ? colors.redColor : colors.blackColor}
-              value={phone}
-              onChangeText={text => {
-                setPhone(text);
-                setPhoneError(!text);
-              }}
-              keyboardType="phone-pad"
-              maxLength={10}
-            />
-            <TextInput
-              style={[
-                styles.input,
-                { borderBottomColor: zipError ? colors.redColor : colors.blackColor, color: colors.blackColor }
-              ]}
-              placeholder="Zip Code*"
-              placeholderTextColor={zipError ? colors.redColor : colors.blackColor}
-              value={zip}
-              onChangeText={text => {
-                setZip(text);
-                setZipError(!text);
-              }}
-              keyboardType="number-pad"
-              maxLength={10}
-            />
-          </ScrollView>
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: phoneError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Phone*"
+                placeholderTextColor={phoneError ? colors.redColor : colors.blackColor}
+                value={phone}
+                onChangeText={text => {
+                  setPhone(text);
+                  setPhoneError(!text);
+                }}
+                keyboardType="phone-pad"
+                maxLength={10}
+              />
+              <TextInput
+                style={[
+                  styles.input,
+                  { borderBottomColor: zipError ? colors.redColor : colors.blackColor, color: colors.blackColor }
+                ]}
+                placeholder="Zip Code*"
+                placeholderTextColor={zipError ? colors.redColor : colors.blackColor}
+                value={zip}
+                onChangeText={text => {
+                  setZip(text);
+                  setZipError(!text);
+                }}
+                // keyboardType="number-pad"
+                maxLength={10}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
           <Pressable onPress={handleSubmit} style={[styles.submitButton, alignJustifyCenter, borderRadius10]}>
             <Text style={[styles.title, textAlign, { color: whiteColor }]}>Submit</Text>
           </Pressable>
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: wp(100),
-    height: hp(60),
+    height: hp(90),
     paddingHorizontal: spacings.Large1x,
     paddingVertical: spacings.large,
     backgroundColor: whiteColor,
@@ -327,7 +332,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: hp(6),
-    width: "100%",
+    width: wp(90),
     borderBottomWidth: 1,
     marginBottom: spacings.large,
     paddingLeft: spacings.large,
@@ -343,6 +348,7 @@ const styles = StyleSheet.create({
     height: hp(5),
     backgroundColor: redColor,
     marginTop: spacings.Large1x,
+    marginBottom: 10,
     alignSelf: "center",
     fontFamily: 'Montserrat-BoldItalic'
   }

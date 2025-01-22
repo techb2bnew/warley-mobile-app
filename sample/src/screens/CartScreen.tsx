@@ -18,7 +18,7 @@ import {
 import { logEvent } from '@amplitude/analytics-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeProductFromCart, removeProductInCart } from '../redux/actions/cartActions';
-import { BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE } from '../assests/images'
+import { BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE, COMING_SOON_IMG } from '../assests/images'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import Header from '../components/Header';
 import { useThemes } from '../context/ThemeContext';
@@ -795,7 +795,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
             </View>
             <View style={[{ position: "absolute", bottom: 10, right: 10, }]}>
               <Pressable
-                style={[styles.addToCartButton, borderRadius10, { backgroundColor: "#018726" }]}
+                style={[styles.addToCartButton, borderRadius10, { backgroundColor: redColor }]}
                 onPress={openModal}
               >
                 <Text style={[textAlign, { color: whiteColor, width: wp(12), fontFamily: 'Montserrat-BoldItalic' }]}>
@@ -884,49 +884,138 @@ function CartItem({
 
 
   return (
+    // <View
+    //   key={item?.id}
+    //   style={{
+    //     ...styles.productItem,
+    //     ...(loading ? styles.productItemLoading : {}),
+    //     borderWidth: 1, borderColor: "#797979", backgroundColor: isDarkMode ? grayColor : whiteColor
+    //   }}>
+    //   <View style={{ borderWidth: 1, borderRadius: 10, overflow: "hidden", borderColor: grayColor }}>
+    //     <Image
+    //       resizeMethod="resize"
+    //       style={[styles.productImage, resizeModeCover, borderRadius5]}
+    //       alt={item?.merchandise?.image?.altText}
+    //       source={{ uri: item?.merchandise?.image?.url }}
+    //     />
+    //   </View>
+    //   <View style={[styles.productText, flex, alignJustifyCenter, flexDirectionRow]}>
+    //     <View style={[flex]}>
+    //       <Text style={[styles.productTitle, { color: themecolors.blackColor }]}>
+    //         {/* {trimcateText(item?.merchandise?.product?.title)} */}
+    //         {item?.merchandise?.product?.title}
+    //       </Text>
+    //       <Text style={[styles.productPrice, { color: themecolors.redColor }]}>
+    //         {price(item?.merchandise?.price)}
+    //       </Text>
+    //     </View>
+    //     <View>
+    //       <View style={[styles.quantityContainer, flexDirectionRow, { marginTop: 30 }]}>
+    //         <TouchableOpacity onPress={decrementQuantity} >
+    //           <AntDesign
+    //             name={"minuscircle"}
+    //             size={25}
+    //             color={"#eb4335"}
+    //           />
+    //         </TouchableOpacity>
+    //         <Text style={[styles.quantity, { color: themecolors.blackColor }]}>{quantity}</Text>
+    //         <TouchableOpacity onPress={incrementQuantity} >
+    //           <AntDesign
+    //             name={"pluscircle"}
+    //             size={25}
+    //             color={"#eb4335"}
+    //           />
+    //         </TouchableOpacity>
+    //       </View>
+    //     </View>
+    //   </View>
+    // </View >
     <View
       key={item?.id}
       style={{
         ...styles.productItem,
         ...(loading ? styles.productItemLoading : {}),
-        borderWidth: 1, borderColor: "#797979", backgroundColor: isDarkMode ? grayColor : whiteColor
+        backgroundColor: whiteColor,
+        shadowColor: "#000", // Shadow color
+        shadowOffset: { width: 0, height: 2 }, // Offset for shadow
+        shadowOpacity: 0.2, // Opacity of shadow
+        shadowRadius: 4, // Blur radius for shadow
+        elevation: 5,
+        padding: 5,
       }}>
-      <View style={{ borderWidth: 1, borderRadius: 10, overflow: "hidden", borderColor: grayColor }}>
-        <Image
+      {/* <>
+      <View style={[styles.quantityContainer]}>
+        <TouchableOpacity onPress={decrementQuantity} >
+          <AntDesign
+            name={"minuscircle"}
+            size={25}
+            color={"#399918"}
+          />
+        </TouchableOpacity>
+        <Text style={[styles.quantity, { color: themecolors.blackColor }]}>{quantity}</Text>
+        <TouchableOpacity onPress={incrementQuantity} >
+          <AntDesign
+            name={"pluscircle"}
+            size={25}
+            color={"#399918"}
+          />
+        </TouchableOpacity>
+      </View>
+    </> */}
+      <View
+        style={{
+          alignSelf: "center",
+          width: wp(20)
+        }}
+      >
+        {(item?.merchandise?.image?.url) ? (<Image
           resizeMethod="resize"
           style={[styles.productImage, resizeModeCover, borderRadius5]}
           alt={item?.merchandise?.image?.altText}
           source={{ uri: item?.merchandise?.image?.url }}
-        />
+        />) : (<Image
+          resizeMethod="resize"
+          source={COMING_SOON_IMG}
+          style={[styles.productImage, resizeModeCover, borderRadius5]}
+        />)}
       </View>
-      <View style={[styles.productText, flex, alignJustifyCenter, flexDirectionRow]}>
-        <View style={[flex]}>
-          <Text style={[styles.productTitle, { color: themecolors.blackColor }]}>
-            {/* {trimcateText(item?.merchandise?.product?.title)} */}
-            {item?.merchandise?.product?.title}
-          </Text>
+      <View style={[styles.productText, flex, flexDirectionRow, { paddingHorizontal: spacings.large }]}>
+        <View style={[{ width: "85%" }]}>
+
           <Text style={[styles.productPrice, { color: themecolors.redColor }]}>
             {price(item?.merchandise?.price)}
           </Text>
-        </View>
-        <View>
-          <View style={[styles.quantityContainer, flexDirectionRow, { marginTop: 30 }]}>
+
+          <Text style={[styles.productTitle, { color: themecolors.blackColor }]}>
+            {item?.merchandise?.product?.title}
+          </Text>
+
+          <View style={[styles.quantityContainer]}>
             <TouchableOpacity onPress={decrementQuantity} >
               <AntDesign
-                name={"minuscircle"}
+                name={"minuscircleo"}
                 size={25}
-                color={"#eb4335"}
+                color={blackColor}
               />
             </TouchableOpacity>
             <Text style={[styles.quantity, { color: themecolors.blackColor }]}>{quantity}</Text>
             <TouchableOpacity onPress={incrementQuantity} >
               <AntDesign
-                name={"pluscircle"}
+                name={"pluscircleo"}
                 size={25}
-                color={"#eb4335"}
+                color={blackColor}
               />
             </TouchableOpacity>
           </View>
+        </View>
+        <View style={[alignJustifyCenter, { width: "15%" }]}>
+          <TouchableOpacity onPress={() => onRemove(item.id)} >
+            <AntDesign
+              name={"delete"}
+              size={18}
+              color={redColor}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View >
@@ -988,12 +1077,11 @@ function createStyles(colors: Colors) {
       color: colors.textSubdued
     },
     productTitle: {
-      fontSize: style.fontSizeNormal1x.fontSize,
-      // marginBottom: spacings.small2x,
+      fontSize: style.fontSizeExtraSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      // lineHeight: 20,
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: 'Montserrat-BoldItalic',
+      marginTop: 5
     },
     productDescription: {
       fontSize: style.fontSizeNormal.fontSize,
@@ -1002,10 +1090,11 @@ function createStyles(colors: Colors) {
       fontFamily: 'Montserrat-BoldItalic'
     },
     productPrice: {
-      fontSize: style.fontSizeNormal.fontSize,
+      fontSize: style.fontSizeSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
-      fontFamily: 'arialnarrow'
+      fontFamily: 'arialnarrow',
+      marginTop: 5
     },
     removeButton: {
       marginRight: spacings.xLarge,
@@ -1051,15 +1140,9 @@ function createStyles(colors: Colors) {
       paddingHorizontal: spacings.xxxxLarge
     },
     quantityContainer: {
+      paddingVertical: spacings.large,
       flexDirection: 'row',
-      alignItems: 'center',
-      width: wp(22),
-      // backgroundColor: whiteColor,
-      paddingHorizontal: 9,
-      paddingVertical: 2,
-      justifyContent: "center",
-      borderRadius: 5,
-      borderColor: redColor,
+      width: wp(20)
     },
     quantityButton: {
       paddingHorizontal: 8,

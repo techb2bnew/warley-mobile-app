@@ -201,20 +201,20 @@ function CatalogScreen({ navigation }: Props) {
             const borderColor = borderColors[index % borderColors.length];
             const imageUrl = collectionImages[item.url];
             return (
-              <Pressable style={{ width: wp(22.5), height: hp(16), margin: 5 }} onPress={() => handleCategoryPress(item, index)}>
-                <View style={{ height: hp(14), paddingHorizontal: spacings.xLarge, paddingVertical: spacings.small, alignItems: "center", justifyContent: "center", }}>
+              <Pressable style={{ width: wp(24.5), height: Platform.OS === "android" ? hp(16) : hp(14) }} onPress={() => handleCategoryPress(item, index)}>
+                <View style={{ height: hp(12), paddingHorizontal: spacings.xLarge, paddingVertical: spacings.small, alignItems: "center", justifyContent: "center", }}>
                   <View style={{
                     backgroundColor: themecolors.whiteColor, borderWidth: 1,
-                    borderRadius: 50, height: Platform.OS === "android" ? hp(10) : hp(9.5), overflow: "hidden",
+                    borderRadius: 50, height: Platform.OS === "android" ? hp(10) : hp(9.3), overflow: "hidden",
                     // borderColor: borderColor
-                    borderColor: blackColor
-                    , width: wp(20)
+                    borderColor: blackColor,
+                    width: wp(20)
                   }}>
                     <Image source={{ uri: imageUrl }} style={[resizeModeContain, styles.card]} />
                   </View>
 
                 </View>
-                <Text style={[styles.categoryName, textAlign, { color: themecolors.blackColor, paddingHorizontal: spacings.normal, fontSize: 13 }]}>{item.name}</Text>
+                <Text style={[styles.categoryName, textAlign, { color: themecolors.blackColor, paddingHorizontal: spacings.normal, fontSize: 10 }]}>{item.name}</Text>
               </Pressable>
             )
           }
@@ -266,14 +266,14 @@ function createStyles() {
     },
     card: {
       width: "100%",
-      height: "80%",
+      height: "90%",
     },
     categoryName: {
       fontSize: style.fontSizeNormal.fontSize,
       color: blackColor,
       // marginVertical: spacings.small,
       fontWeight: style.fontWeightThin1x.fontWeight,
-       fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: 'Montserrat-BoldItalic'
     },
     text: {
       fontSize: style.fontSizeLarge.fontSize,

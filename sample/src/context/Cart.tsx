@@ -368,7 +368,7 @@ export const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
           console.log(`Removed line ${lineId} from the cart`);
         }
-
+        setTotalQuantity(prevQuantity => prevQuantity - 1);
         // Fetch the updated cart to reflect the changes in the UI
         await fetchCart({ variables: { cartId: id, first: 10 } });
       } catch (error) {

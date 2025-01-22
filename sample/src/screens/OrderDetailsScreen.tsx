@@ -11,7 +11,8 @@ import { BACKGROUND_IMAGE, ADD_TO_CART_IMG, DARK_BACKGROUND_IMAGE } from '../ass
 import ChatButton from '../components/ChatButton';
 import { logEvent } from '@amplitude/analytics-react-native';
 import { useDispatch } from 'react-redux';
-
+import Toast from 'react-native-simple-toast';
+import LoadingModal from '../components/Modal/LoadingModal';
 import { scheduleNotification } from '../notifications';
 import { useCart } from '../context/Cart';
 const { flex, flexDirectionRow, } = BaseStyle;
@@ -19,6 +20,7 @@ const OrderDetailsScreen = ({ route, navigation }) => {
   const { order } = route.params;
   const { isDarkMode } = useThemes();
   const [productImages, setProductImages] = useState({});
+  const [loading, setLoading] = useState(false);
   const colors = isDarkMode ? darkColors : lightColors;
   const { addToCart, addingToCart, clearCart } = useCart();
 
@@ -62,52 +64,18 @@ const OrderDetailsScreen = ({ route, navigation }) => {
 
 
   const addToCartProduct = async (variantId: any, quantity: any) => {
+    setLoading(true);
     const id = `gid://shopify/ProductVariant/${variantId}`
     logEvent(`Add To Cart Pressed variantId:${variantId} Qty:${quantity}`);
     await addToCart(id, quantity);
     navigation.navigate('Cart')
+    setLoading(false)
     Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
     scheduleNotification();
+   
   };
-  // const renderItem = ({ item }) => {
-  //   console.log("render item", item)
-  //   const totalPrice = item.price * item.quantity;
-  //   return (
-  //     <View style={[styles.itemContainer, flexDirectionRow]}>
-  //       <View style={[styles.detailsContainer, flexDirectionRow, { backgroundColor: colors.lightGrayOpacityColor }]}>
-  //         <View style={{ width: "25%", height: "100%", alignItems: "center", justifyContent: "center" }}>
-  //           {/* {image ? (
-  //             <Image
-  //               source={{ uri: image }}
-  //               style={styles.productImage}
-  //               resizeMode="contain"
-  //             />
-  //           ) : (
-  //             <View style={[styles.productImage, { backgroundColor: '#D1D4D6' }]}>
-  //               <Text>No Image</Text>
-  //             </View>
-  //           )} */}
-  //         </View>
-  //         <View style={{ width: "75%" }}>
-  //           <Text style={[styles.productTitle, { color: colors.blackColor }]}>{trimcateText(item.title)}</Text>
-  //           {item.variant_title && (
-  //             <Text style={[styles.variantText, { color: colors.blackColor }]}>Variant: {item.variant_title}</Text>
-  //           )}
-  //           <Text style={[styles.quantityText, { color: colors.blackColor }]}>Quantity: {item.quantity}</Text>
-  //           <Text style={[styles.priceText, { color: colors.blackColor }]}>
-  //             Price : {item.price} {order.currency}
-  //           </Text>
-  //           <Text style={[styles.priceText, { color: colors.blackColor }]}>
-  //             Total Price : {totalPrice} {order.currency}
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
+  
   const renderItem = ({ item }) => {
-    // console.log(item)
     const totalPrice = item.price * item.quantity;
     const productImage = productImages[item.product_id];
     return (
@@ -133,8 +101,8 @@ const OrderDetailsScreen = ({ route, navigation }) => {
                 <Text style={[styles.variantText, { color: colors.blackColor }]}>Variant: {item.variant_title}</Text>
               )}
               <Text style={[styles.quantityText, { color: colors.blackColor }]}>Quantity: {item.quantity}</Text>
-              <Text style={[styles.priceText, { color: colors.blackColor }]}>Price: {order.currency === "GBP" && "£"} {item.price} </Text>
-              <Text style={[styles.priceText, { color: colors.blackColor }]}>Total Price: {order.currency === "GBP" && "£"}{totalPrice} </Text>
+              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Price: {order.currency === "GBP" && "£"} {item.price} </Text>
+              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Total Price: {order.currency === "GBP" && "£"}{totalPrice} </Text>
 
             </View>
           </View>
@@ -148,8 +116,7 @@ const OrderDetailsScreen = ({ route, navigation }) => {
   };
 
   return (
-    // <ImageBackground style={[flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
-    <View style={[flex, { backgroundColor: "#fff" }]} >
+    <ImageBackground style={[flex]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
       <Header backIcon={true} text={"OrderDetails"} navigation={navigation} />
       <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
       <View style={[styles.container, flex]}>
@@ -171,23 +138,16 @@ const OrderDetailsScreen = ({ route, navigation }) => {
               {order.shipping_address.zip}, {order.shipping_address.country}
             </Text>
           </View>}
-          {/* <Text style={[{ color: colors.blackColor }]}>Status: {order.status}</Text> */}
           <FlatList
             data={order.line_items}
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
-          // style={{ marginTop: 20 }}
           />
-
-          {/* Order Status */}
-          {/* <View style={styles.statusContainer}>
-            <Text style={styles.statusText}>Order Status: {order.status}</Text>
-          </View> */}
+           {loading && <LoadingModal visible={loading} />}
         </ScrollView>
         <ChatButton onPress={handleChatButtonPress} />
       </View>
-      {/* </ImageBackground> */}
-    </View>
+    </ImageBackground>
 
   );
 };
@@ -207,23 +167,22 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   label: {
-    fontSize: style.fontSizeSmall.fontSize,
+    fontSize: style.fontSizeExtraSmall.fontSize,
     fontWeight: 'bold',
     fontFamily: 'Montserrat-BoldItalic'
   },
   value: {
-    fontSize: style.fontSizeNormal2x.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     marginTop: 5,
     fontFamily: 'Montserrat-BoldItalic'
   },
   itemContainer: {
-    // padding: spacings.large,
     marginVertical: 5,
     borderRadius: 8,
   },
   productImage: {
     width: wp(20),
-    height: hp(14),
+    height: hp(10),
     borderRadius: 8,
     marginRight: spacings.large,
     justifyContent: 'center',
@@ -241,26 +200,25 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   productTitle: {
-    fontSize: style.fontSizeNormal2x.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     fontFamily: 'Montserrat-BoldItalic'
   },
   variantText: {
-    fontSize: style.fontSizeNormal.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     marginTop: 2,
     fontFamily: 'Montserrat-BoldItalic'
   },
   quantityText: {
-    fontSize: style.fontSizeNormal.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     marginTop: 5,
     fontFamily: 'Montserrat-BoldItalic'
   },
   priceText: {
-    fontSize: style.fontSizeNormal.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     marginTop: 5,
-    fontFamily: 'Montserrat-BoldItalic'
   },
   statusContainer: {
     marginTop: spacings.Large2x,
@@ -278,7 +236,6 @@ const styles = StyleSheet.create({
   },
   buyAgainButton: {
     marginTop: spacings.large,
-    // backgroundColor: '#FFA928',
     paddingVertical: spacings.large,
     paddingHorizontal: 16,
     borderRadius: 5,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
-import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView, ActivityIndicator, TextInput, ImageBackground, Modal, Button, Dimensions, Alert } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView, ActivityIndicator, TextInput, ImageBackground, Modal, Button, Dimensions, Alert, Platform } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { whiteColor, blackColor, grayColor, redColor, lightGrayOpacityColor } from '../constants/Color'
 import { spacings, style } from '../constants/Fonts';
@@ -674,7 +674,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     const borderColor = shopifycollectionborderColors[index % shopifycollectionborderColors.length];
     // console.log("Rendering item:", item.name, "Image URL:", imageUrl);
     return (
-      <View style={[{ width: wp(24), height: hp(15) }, alignItemsCenter,]}>
+      <View style={[{ width: wp(24), height: Platform.OS === "android" ? hp(15) : hp(13) }, alignItemsCenter]}>
+
         <Pressable
           style={[
             styles.categoryCard,
@@ -697,7 +698,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             borderColor: blackColor,
             borderRadius: 50, width: "100%", height: "100%", backgroundColor: colors.whiteColor
           }, alignJustifyCenter]}>
-            <Image source={{ uri: imageUrl }} style={[{ resizeMode: "contain", width: "100%", height: "85%" }]} />
+            <Image source={{ uri: imageUrl }} style={[{ resizeMode: "contain", width: "100%", height: "100%" }]} />
           </View>
         </Pressable>
         <Text style={[styles.collectionText, textAlign, { color: colors.blackColor }]}>
@@ -850,7 +851,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           >
 
             <View style={[flex]}>
-              <Text style={{ color: isDarkMode ? whiteColor : "#808080", fontFamily: 'Montserrat-BoldItalic' }}> Search here for anything you want...</Text>
+              <Text style={{ color: isDarkMode ? whiteColor : "#808080", fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize, }}> Search here for anything you want...</Text>
             </View>
             <Image
               source={WARLEY_SEARCH}
@@ -1006,6 +1007,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                       inventoryQuantity={bestDealInventoryQuantities[index]}
                       option={bestDealoptions[index]}
                       ids={bestDealProductVariantsIDS[index]}
+                      width={wp(28)}
                       onPress={() => {
                         navigation.navigate('ProductDetails', {
                           product: item,
@@ -1028,11 +1030,11 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 //   color={colors.blackColor}
                 // />
                 <SkeletonPlaceholder>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
+                  <View style={{ flexDirection: 'row',  }}>
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                   </View>
                 </SkeletonPlaceholder>
               }
@@ -1060,7 +1062,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </View>
               ))}
             </ScrollView>
-            
+
             {/* our product */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Top Sellers"}</Text>
@@ -1079,7 +1081,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                       option={options[index]}
                       ids={productVariantsIDS[index]}
                       spaceTop={spacings.small}
-                      width={wp(43.5)}
+                      width={wp(27.5)}
                       onPress={() => {
                         navigation.navigate('ProductDetails', {
                           product: item,
@@ -1095,20 +1097,19 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 }}
                 showsHorizontalScrollIndicator={false}
                 // horizontal
-                numColumns={2}
+                numColumns={3}
                 style={{ width: "100%" }}
               /> :
-                // <LoaderKit
-                //   style={{ width: 50, height: 50 }}
-                //   name={LOADER_NAME}
-                //   color={blackColor}
-                // />
                 <SkeletonPlaceholder>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
-                    <View style={{ width: wp(43), height: hp(24), borderRadius: 10, marginRight: 10 }} />
+                  <View style={{ flexDirection: 'row'}}>
+                  <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
+                  </View>
+                  <View style={{ flexDirection: 'row'}}>
+                  <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
                   </View>
                 </SkeletonPlaceholder>
               }
@@ -1144,7 +1145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  collectionText: { fontSize: 12, paddingVertical: 5, fontFamily: 'Montserrat-BoldItalic' },
+  collectionText: { fontSize: 9, paddingVertical: 5, fontFamily: 'Montserrat-BoldItalic' },
   modalContainer: {
     height: screenHeight * 0.4,
     backgroundColor: 'white',
@@ -1178,14 +1179,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   text: {
-    fontSize: style.fontSizeMedium1x.fontSize,
+    fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
     fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: "95%",
-    height: hp(4.8),
+    height: hp(4),
     borderColor: 'transparent',
     borderWidth: .1,
     borderRadius: 10,

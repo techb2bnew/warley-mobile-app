@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Pressable, ImageBackground, Platform } from 'react-native';
 import { blackColor, grayColor, whiteColor, redColor } from '../constants/Color'
 import {
-  ADD_TO_CART, OUT_OF_STOCK, BEST_DEALS_OF_THE_WEEK, POPULAR_LIQUOR, BEER, CAN, NON_LOW_ALCOHOL, getAdminAccessToken, getStoreDomain,
-  STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, LOADER_NAME
+  ADD_TO_CART, OUT_OF_STOCK, BEST_DEALS_OF_THE_WEEK, POPULAR_LIQUOR, 
+  STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, 
 } from '../constants/Constants'
 import { BaseStyle } from '../constants/Style';
 import { spacings, style } from '../constants/Fonts';
@@ -20,6 +20,7 @@ import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
 import ChatButton from '../components/ChatButton';
 import { scheduleNotification } from '../notifications';
+import Product from '../components/ProductVertical';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 const { alignJustifyCenter, flexDirectionRow, flex, borderRadius10, overflowHidden, textAlign, borderWidth1, resizeModeContain } = BaseStyle;
@@ -162,9 +163,9 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const fetchproduct = async () => {
       setLoading(true);
-      let allProducts = []; 
-      let hasNextPage = true; 
-      let endCursor = null; 
+      let allProducts = [];
+      let hasNextPage = true;
+      let endCursor = null;
 
       try {
         while (hasNextPage) {
@@ -299,10 +300,29 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
     <View style={[flex, { backgroundColor: colors.whiteColor }]} >
       <Header backIcon={true} text={route?.params?.title} navigation={navigation} />
       <View style={[styles.container, flex]}>
+        {loading && <SkeletonPlaceholder>
+          <View style={{ width: wp(100), height: "auto", flexDirection: 'row', marginVertical: 5 }}>
+            {Array(3).fill().map((_, index) => (
+              <View key={index} style={{ width: wp(29.5), height: hp(25), marginHorizontal: 5, borderRadius: 10 }} />
+            ))}
+          </View>
+          <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
+            {Array(3).fill().map((_, index) => (
+              <View key={index} style={{ width: wp(29.5), height: hp(25), marginHorizontal: 5, borderRadius: 10 }} />
+            ))}
+          </View>
+          <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
+            {Array(3).fill().map((_, index) => (
+              <View key={index} style={{ width: wp(29.5), height: hp(25), marginHorizontal: 5, borderRadius: 10 }} />
+            ))}
+          </View>
+        </SkeletonPlaceholder>}
         {(title === BEST_DEALS_OF_THE_WEEK || title === POPULAR_LIQUOR) &&
           <FlatList
             data={products}
-            renderItem={({ item, index }) => <ProductItem item={item} addToCartProduct={addToCartProduct} BestDealInventoryQuantities={bestDealInventoryQuantities[index]} BestDealsids={bestDealProductVariantsIDS[index]}
+            renderItem={({ item, index }) => <Product product={item} onAddToCart={addToCartProduct} inventoryQuantity={bestDealInventoryQuantities[index]} option={bestDealoptions[index]} ids={bestDealProductVariantsIDS[index]}
+              spaceTop={spacings.small}
+              width={wp(29.5)}
               onPress={() => {
                 navigation.navigate('ProductDetails', {
                   product: item,
@@ -313,28 +333,12 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
                   ids: bestDealProductVariantsIDS[index]
                 });
               }} />}
-            numColumns={2}
+            numColumns={3}
             keyExtractor={(item) => item?.id.toString()}
             showsVerticalScrollIndicator={false}
           />
         }
-        {loading && <SkeletonPlaceholder>
-          <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-            {Array(2).fill().map((_, index) => (
-              <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10 }} />
-            ))}
-          </View>
-          <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-            {Array(2).fill().map((_, index) => (
-              <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10 }} />
-            ))}
-          </View>
-          <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-            {Array(2).fill().map((_, index) => (
-              <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10 }} />
-            ))}
-          </View>
-        </SkeletonPlaceholder>}
+
         {/* {loading && <LoadingModal visible={loading} text={"Please wait while we load the products."} />} */}
         <ChatButton onPress={handleChatButtonPress} bottom={Platform.OS === "android" ? hp(5) : hp(10)} />
       </View>

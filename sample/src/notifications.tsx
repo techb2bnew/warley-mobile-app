@@ -89,7 +89,7 @@ export const scheduleNotification = async () => {
       PushNotification.localNotificationSchedule({
         channelId: "default-channel-id",
         id: "1", // Ensure this ID is unique and valid
-        title: "Reminder",
+        title: "Warley Super Store",
         message: "You still have items in your cart! Don't forget to check out.",
         // date: new Date(Date.now() + 20 * 1000), // 20 seconds from now
         date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 day from now

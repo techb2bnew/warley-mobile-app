@@ -28,7 +28,7 @@ export const LOGOUT_IMAGE = require('./Logout.png');
 export const USER_IMAGE = require('./user.png');
 export const SHOPPINGBUCKET_ICON = require('./shoppingbucket.png');
 export const SEARCH_ICON = require('./search.png');
-export const WARLEY_SEARCH =require('./warley/Search.png')
+export const WARLEY_SEARCH = require('./warley/Search.png')
 export const WHITE_MENU_ICON = require('./whiteMenu.png');
 export const WHITE_SHOPPINGBUCKET_ICON = require('./whiteShoppingBucket.png');
 export const WHITE_SEARCH_ICON = require('./whiteSearch.png');
@@ -47,18 +47,21 @@ export const APP_CARTIFY_HEADER_LOGO = require('./appCartifyHeaderLogo.png');
 export const WARLEY_HEADER_LOGO_NEW = require('./warley/warley.png');
 export const DARK_MODE_APP_CARTIFY_HEADER_LOGO_NEW = require('./darkModeAppLogo.png');
 
-export const NOTIFICTION_IMG =require('./warley/notification.png')
-export const ADD_TO_CART_IMG =require('./warley/AddToCart.png')
+export const NOTIFICTION_IMG = require('./warley/notification.png')
+export const ADD_TO_CART_IMG = require('./warley/AddToCart.png')
 
 export const DARK_BACKGROUND_IMAGE = require('./warley/darkBackground.png');
 
-export const ICON_ADDCART =require('./warley/addToCart_icon.png')
-export const SHARE =require('./warley/share.png')
+export const ICON_ADDCART = require('./warley/addToCart_icon.png')
+export const SHARE = require('./warley/share.png')
 
-export const SHARE_WHITE =require('./warley/whiteShare.png')
-export const NOTIFICTION_IMG_WHITE =require('./warley/whiteNotification.png')
-export const ADD_TO_CART_IMG_WHITE =require('./warley/whiteaddtocart.png')
+export const SHARE_WHITE = require('./warley/whiteShare.png')
+export const NOTIFICTION_IMG_WHITE = require('./warley/whiteNotification.png')
+export const ADD_TO_CART_IMG_WHITE = require('./warley/whiteaddtocart.png')
 
-export const NO_NOTIFICTION_IMG =require('./warley/noNotification.png');
-export const NO_PRODUCT_IMG =require('./warley/noProductTrolly.png');
-export const NOTIFICTION_APP_IMG =require('./warley/notificationAppIcon.png');
+export const NO_NOTIFICTION_IMG = require('./warley/noNotification.png');
+export const NO_PRODUCT_IMG = require('./warley/noProductTrolly.png');
+export const NOTIFICTION_APP_IMG = require('./warley/notificationAppIcon.png');
+
+
+export const COMING_SOON_IMG = require('./warley/comingSoon.png');

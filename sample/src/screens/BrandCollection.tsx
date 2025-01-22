@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     },
     categoryText:{
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: 11,
         fontFamily: 'Montserrat-BoldItalic',
         color:blackColor
     }

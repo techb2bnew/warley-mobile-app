@@ -163,7 +163,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
       let allProducts = []; // Store all fetched products
       let hasNextPage = true; // Track if more pages are available
       let endCursor = null; // Cursor for pagination
-  
+
       try {
         while (hasNextPage) {
           const graphql = JSON.stringify({
@@ -209,7 +209,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
             }`,
             variables: { cursor: endCursor }
           });
-  
+
           const requestOptions = {
             method: "POST",
             headers: {
@@ -219,35 +219,35 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
             body: graphql,
             redirect: "follow"
           };
-  
+
           const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
           const result = await response.json();
-  
+
           const fetchedProducts = result?.data?.products?.edges.map(edge => edge.node) || [];
           const pageInfo = result?.data?.products?.pageInfo || {};
-  
+
           // Accumulate fetched products
           allProducts = [...allProducts, ...fetchedProducts];
-  
+
           // Update pagination information
           hasNextPage = pageInfo.hasNextPage;
           endCursor = pageInfo.endCursor;
         }
-  
+
         // Set the accumulated products and other data in state
         setProducts(allProducts);
-  
+
         const inventoryQuantities = allProducts.map((product) =>
           product.variants.nodes.map((variant) => variant.inventoryQuantity)
         );
         setInventoryQuantities(inventoryQuantities);
-  
+
         const fetchedTags = allProducts.map((product) => product.tags);
         setTags(fetchedTags);
-  
+
         const fetchedOptions = allProducts.map((product) => product.options);
         setOptions(fetchedOptions);
-  
+
         const productVariantData = allProducts.map((product) =>
           product.variants.nodes.map((variant) => ({
             id: variant.id,
@@ -257,7 +257,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           }))
         );
         setProductVariantsIDS(productVariantData);
-  
+
         console.log("Total Products Fetched:", allProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -265,7 +265,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
         setLoading(false);
       }
     };
-  
+
     fetchProductsByType();
   }, [productType]);
 
@@ -329,7 +329,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
     <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} >
       <Header backIcon={true} text={headingText} navigation={navigation} onPress={() => { logEvent('Back Button Clicked'), navigation.goBack() }} />
       <View style={{ paddingHorizontal: spacings.large }}>
-        <View style={[flexDirectionRow]}>
+        {/* <View style={[flexDirectionRow]}>
           <TouchableOpacity style={[styles.textinputBox, flexDirectionRow, alignItemsCenter, { backgroundColor: isDarkMode ? grayColor : whiteColor }]}
             onPress={onPressSeacrchBar}
           >
@@ -341,7 +341,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           <TouchableOpacity onPress={showFilterModal} style={[alignJustifyCenter, { width: "15%", height: hp(6), marginTop: spacings.large }]}>
             <Image source={isDarkMode ? WHITE_FILTER_ICON : FILTER_ICON} style={[{ width: 25, height: 25 }, resizeModeContain]} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         {route?.params?.from ?
           <View style={[styles.productDetailBox]}>
             {products?.length > 0 ?
@@ -372,19 +372,21 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
             }
           </View>
           : <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 110 }}>
-            {(filteredProducts.length > 0 ? filteredProducts : products)?.map((node, index) => {
-              return (
+            <FlatList
+              data={filteredProducts.length > 0 ? filteredProducts : products} // Use the data source
+              keyExtractor={(item) => item?.id.toString()} // Key for each item
+              renderItem={({ item, index }) => (
                 <Product
-                  key={node?.id}
-                  product={node}
+                  key={item?.id}
+                  product={item}
                   onAddToCart={addToCartProduct}
                   inventoryQuantity={inventoryQuantities[index]}
                   ids={productVariantsIDS[index]}
-                  loading={loadingProductId === node?.variants?.nodes[0]?.id}
+                  loading={loadingProductId === item?.variants?.nodes[0]?.id}
                   onPress={() => {
                     navigation.navigate('ProductDetails', {
-                      product: node,
-                      variant: getVariant(node),
+                      product: item,
+                      variant: getVariant(item),
                       inventoryQuantity: inventoryQuantities[index],
                       tags: tags[index],
                       option: options[index],
@@ -392,8 +394,21 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
                     });
                   }}
                 />
-              );
-            })}
+              )}
+              numColumns={3}
+              extraData={{ inventoryQuantities, productVariantsIDS, tags, options }}
+              contentContainerStyle={{ paddingBottom: 20 }}
+              ListEmptyComponent={
+                !loading ? (
+                  <View style={{ alignItems: "center", justifyContent: "center", height: hp(80), width: wp(95) }}>
+                    <Text style={[styles.emptyText, { color: colors.blackColor }]}>No Product available.</Text>
+                    <Text style={[styles.subText, { color: colors.blackColor, marginTop: 8 }]}>
+                      Check back soon for updates.
+                    </Text>
+                  </View>
+                ) : null
+              }
+            />
           </ScrollView>}
       </View>
       <ChatButton onPress={handleChatButtonPress} />
@@ -576,6 +591,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 1.5,
-  }
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#999',
+  },
+  subText: {
+    textAlign: 'center',
+    fontSize: 14,
+  },
 });
 

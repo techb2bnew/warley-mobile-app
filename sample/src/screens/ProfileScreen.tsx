@@ -259,7 +259,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         }
 
         requestUrl = `https://warley-thv5m.ondigitalocean.app/api/deleteCustomer/${customerId}`;
-        headers['Authorization'] = `Bearer ${token}`; // Add the normal API token
+        headers['Authorization'] = `Bearer ${token}`; 
       }
 
       // Make the DELETE request using axios with appropriate headers

@@ -14,7 +14,7 @@ import AddAddressModal from '../components/Modal/AddAddressModal';
 import { removeFromWishlist } from '../redux/actions/wishListActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { logEvent } from '@amplitude/analytics-react-native';
-import { BACKGROUND_IMAGE, ADD_TO_CART_IMG, DARK_BACKGROUND_IMAGE } from '../assests/images';
+import { BACKGROUND_IMAGE, ADD_TO_CART_IMG, DARK_BACKGROUND_IMAGE, COMING_SOON_IMG } from '../assests/images';
 import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, OUT_OF_STOCK, STOREFRONT_ACCESS_TOKEN } from '../constants/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCart } from '../context/Cart';
@@ -139,8 +139,7 @@ const UserDashboardScreen = () => {
   };
 
   const handlePress = (item) => {
-    // console.log(item)
-
+    console.log("item::", item)
     logEvent(`removed from WishList ${item}`);
     dispatch(removeFromWishlist(item));
     if (customerWishList.length > 0) {
@@ -344,9 +343,7 @@ const UserDashboardScreen = () => {
       logEvent('Increase Product Quantity');
       const newQuantity = productquantity + 1;
       setProductQuantity(newQuantity);
-      // Call addToCart with the variant ID and the new quantity to add
-      addToCart(item?.variants?.nodes[0]?.id, 1); // Adds one more of the same item
-      // Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
+      addToCart(item?.variants?.nodes[0]?.id, 1); 
     };
 
     const decrementQuantity = () => {
@@ -381,53 +378,84 @@ const UserDashboardScreen = () => {
           <AntDesign
             name={"heart"}
             size={20}
-            color={colors.redColor}
+            color={"#eb4345"}
           />
         </Pressable>
-        <Image
-          source={{ uri: imageUrl }}
-          style={[styles.productImage, resizeModeContain]}
-        />
-        <View style={{ width: "100%", height: hp(7), justifyContent: "center", marginTop: spacings.large }}>
-          <View style={{ height: hp(5.5), width: wp(30) }}>
-            <Text style={[styles.wishListItemName, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]}>{trimcateText(item?.title)}</Text>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <View>
-              <Text style={[styles.wishListItemPrice, { color: colors.blackColor,fontFamily: 'arialnarrow' }]}> {itemCurrencyCode ? itemCurrencyCode === "GBP" && "£" : shopCurrency} <Text style={[styles.wishListItemPrice]}> {item.price?.[0] ? item.price?.[0] : itemPrice}</Text></Text>
-            </View>
-            <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
-              {inventoryQuantity > 0 ? (
-                productQuantity > 0 ? (
-                  // If product is in the cart with quantity > 0, show increment/decrement buttons
-                  <View key={cartItem.node.id} style={[styles.quantityContainer]}>
-                    <TouchableOpacity onPress={() => decrementQuantity(variantId)}>
-                      <AntDesign name={"minuscircle"} size={25} color={"#eb4335"} />
-                    </TouchableOpacity>
-                    <Text style={styles.quantity}>{productQuantity}</Text>
-                    <TouchableOpacity onPress={() => incrementQuantity(variantId)}>
-                      <AntDesign name={"pluscircle"} size={25} color={"#eb4335"} />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  // If product is not in the cart (quantity 0), show Add to Cart button
-                  <Pressable
-                    style={styles.addToCartButton}
-                    onPress={() => addToCartProduct(item, 1)}
-                  >
-                    <Image
+        <>
+          {inventoryQuantity > 0 && item.price?.[0] != 0 && itemPrice != 0 ? (
+            productQuantity > 0 ? (
+              // If product is in the cart with quantity > 0, show increment/decrement buttons
+              <View key={cartItem.node.id} style={[styles.quantityContainer]}>
+                <TouchableOpacity onPress={() => incrementQuantity(variantId)}>
+                  <AntDesign name={"pluscircle"} size={25} color={"#399918"} />
+                </TouchableOpacity>
+                <Text style={styles.quantity}>{productQuantity}</Text>
+                <TouchableOpacity onPress={() => decrementQuantity(variantId)}>
+                  <AntDesign name={"minuscircle"} size={25} color={"#399918"} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              // If product is not in the cart (quantity 0), show Add to Cart button
+              <Pressable
+                style={styles.addToCartButton}
+                onPress={() => addToCartProduct(item, 1)}
+              >
+                {/* <Image
                       source={ADD_TO_CART_IMG}
                       style={{ height: 35, width: 35, resizeMode: "contain" }}
-                    />
-                  </Pressable>
-                )
+                    /> */}
+                <Text style={[styles.quantityButton, { color: colors.blackColor }]}>+</Text>
+              </Pressable>
+            )
+          ) : (
+            // If inventory quantity is 0 or less, show Out of Stock message
+            <View style={[{
+              borderRadius: 10,
+              position: "absolute",
+              right: -5,
+              top: 1,
+              zIndex: 1000,
+              width: wp(9),
+              backgroundColor: redColor,
+              alignItems: "center",
+              justifyContent: 'center',
+              padding: 3
+            }]}>
+              <Text style={[{
+                fontSize: 9,
+                color: whiteColor,
+                fontFamily: 'Montserrat-BoldItalic'
+              }]}>Sold Out</Text>
+            </View>
+          )}
+        </>
+        {imageUrl ? (
+          <Image
+            source={{ uri: imageUrl }}
+            style={[styles.productImage, resizeModeContain]}
+          />
+        ) : (
+          <Image
+            source={COMING_SOON_IMG}
+            style={[styles.productImage, resizeModeContain]}
+          />)}
+        <View style={{ width: "100%", height: hp(7), justifyContent: "center", marginTop: spacings.large }}>
+          <View style={{ width: "100%" }}>
+            <Text style={[styles.wishListItemName, { color: colors.blackColor }]}>{trimcateText(item?.title)}</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}>
+
+            <View>
+              {item.price?.[0] > 0 || itemPrice > 0 ? (
+                <Text style={[styles.wishListItemPrice, { color: redColor }]}>
+                  {itemCurrencyCode ? (itemCurrencyCode === "GBP" && "£") : shopCurrency}
+                  <Text style={[styles.wishListItemPrice]}> {item.price?.[0] || itemPrice}</Text>
+                </Text>
               ) : (
-                // If inventory quantity is 0 or less, show Out of Stock message
-                <View style={[{ width: isDarkMode ? wp(21) : wp(22) }]}>
-                  <Text style={[styles.addToCartButtonText, { marginTop: spacings.large }]}>{OUT_OF_STOCK}</Text>
-                </View>
+                <Text style={[styles.wishListItemPrice]}>Coming Soon</Text>
               )}
             </View>
+
           </View>
         </View>
       </Pressable>
@@ -563,11 +591,11 @@ const UserDashboardScreen = () => {
                 data={combinedWishList}
                 // data={customerWishList ? customerWishList : wishList}
                 keyExtractor={(item) => item?.id?.toString()}
-                numColumns={2}
+                numColumns={3}
                 renderItem={renderProductItem}
               />
             </View> :
-            <View style={[styles.centeredContainer, alignJustifyCenter, { width: wp(80), alignSelf: "center" }]}>
+            <View style={[styles.centeredContainer, alignJustifyCenter, { width: wp(80),height:hp(80), alignSelf: "center" }]}>
               <View>
                 <AntDesign
                   name={"hearto"}
@@ -575,8 +603,8 @@ const UserDashboardScreen = () => {
                   color={colors.mediumGray}
                 />
               </View>
-              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeLarge.fontSize,fontFamily: 'Montserrat-BoldItalic' }}>No Saved found.</Text>
-              <Text style={{ color: colors.mediumGray, textAlign: "center",fontFamily: 'Montserrat-BoldItalic' }}>You don’t have any saved items. Go to home and add some.</Text>
+              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontFamily: 'Montserrat-BoldItalic' }}>No Saved found.</Text>
+              <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: 'Montserrat-BoldItalic' }}>You don’t have any saved items. Go to home and add some.</Text>
             </View>)
         }
         {
@@ -682,8 +710,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacings.large,
     paddingBottom: 15,
     margin: 5,
-    width: wp(45),
-    height: hp(24.4),
+    width: wp(28.5),
+    height: hp(23),
     borderColor: 'transparent',
     backgroundColor: whiteColor,
     borderWidth: .1,
@@ -704,14 +732,15 @@ const styles = StyleSheet.create({
   },
   wishListItemName: {
     color: blackColor,
-    fontSize: style.fontSizeSmall1x.fontSize,
+    fontSize: style.fontSizeExtraExtraSmall.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
+
   },
   wishListItemPrice: {
-    fontSize: style.fontSizeSmall1x.fontSize,
+    fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
-    // fontWeight: style.fontWeightMedium1x.fontWeight,
-    color: blackColor,
+    color: redColor,
+
   },
   button: {
     marginTop: spacings.medium,
@@ -757,7 +786,7 @@ const styles = StyleSheet.create({
     width: wp(8),
     height: wp(8),
     right: 2,
-    top: 110,
+    top: hp(13),
     zIndex: 10,
     // backgroundColor:whiteColor,
     borderRadius: 5
@@ -775,12 +804,27 @@ const styles = StyleSheet.create({
   //   fontWeight: style.fontWeightThin1x.fontWeight,
   // },
   quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: wp(20),
-    paddingVertical: 4,
-    marginBottom: 10,
-    justifyContent: "center",
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // width: wp(20),
+    // paddingVertical: 4,
+    // marginBottom: 10,
+    // justifyContent: "center",
+    position: "absolute",
+    top: 1,
+    right: 1,
+    height: hp(12),
+    width: wp(9),
+    backgroundColor: whiteColor,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    zIndex: 999
   },
   quantityButton: {
     paddingHorizontal: 8,
@@ -799,12 +843,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-BoldItalic'
   },
   addToCartButton: {
-    borderRadius: 10,
-    fontSize: 8,
+    // borderRadius: 10,
+    // fontSize: 8,
+    // position: "absolute",
+    // right: -9,
+    // bottom: Platform.OS === "android" ? -27 : -32,
+    // paddingVertical: 5,
     position: "absolute",
-    right: -9,
-    bottom: Platform.OS === "android" ? -25 : -32,
-    paddingVertical: 5,
+    top: .5,
+    right: 1,
+    height: hp(4),
+    width: wp(8),
+    backgroundColor: whiteColor,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    zIndex: 999
   },
   addToCartButtonText: {
     fontSize: 11,

@@ -6,9 +6,9 @@ export const addToWishlist = (productId) => ({
   payload: { productId },
 });
 
-export const removeFromWishlist = (productId) => ({
+export const removeFromWishlist = (product) => ({
   type: REMOVE_FROM_WISHLIST,
-  payload: { productId },
+  payload: { productId: product.id },
 });
 
 

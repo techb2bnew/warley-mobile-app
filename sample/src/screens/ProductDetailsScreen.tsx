@@ -452,13 +452,13 @@ function ProductDetails({
     });
   };
 
-  const trimcateText = (text) => {
-    const words = text.split(' ');
-    if (words.length > 3) {
-      return words.slice(0, 3).join(' ') + '...';
+  const trimcateText = (text, maxLength = 25) => {
+    if (text?.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
     }
     return text;
   };
+
 
   useEffect(() => {
     const fetchproduct = () => {
@@ -765,14 +765,32 @@ function ProductDetails({
           </TouchableOpacity>
           <View style={[styles.productText, justifyContentSpaceBetween]}>
             <View>
-              <View style={[flexDirectionRow, { width: "100%", justifyContent: "space-between", alignItems: "center" }]}>
-                <View>
-                  <Text style={[styles.productTitle, { color: themecolors.blackColor, fontSize: 24 }]}>{product.title}</Text>
+            <View style={[flexDirectionRow, { width: "100%", justifyContent: "space-between", alignItems: "center" }]}>
+                <View style={{width:"70%"}}>
+                  <Text style={[styles.productTitle, { color: themecolors.blackColor, fontSize: 16 }]}>{product.title}</Text>
                 </View>
+
+               {(variant?.price?.amount || variant?.price) > 0 && <View style={[styles.quantityContainer, flexDirectionRow,alignJustifyCenter]}>
+                  <TouchableOpacity onPress={decrementQuantity} >
+                    <AntDesign
+                      name={"minuscircleo"}
+                      size={25}
+                      color={blackColor}
+                    />
+                  </TouchableOpacity>
+                  <Text style={[styles.quantity, { color: themecolors.blackColor }]}>{quantity}</Text>
+                  <TouchableOpacity onPress={incrementQuantity} >
+                    <AntDesign
+                      name={"pluscircleo"}
+                      size={25}
+                      color={blackColor}
+                    />
+                  </TouchableOpacity>
+                </View>}
               </View>
               <View style={[flexDirectionRow, { width: "100%" }]}>
                 {(variant?.price?.amount || variant?.price) && (
-                  <Text style={[styles.productPrice, { color: "#eb4335", fontSize: 20 }]}>
+                  <Text style={[styles.productPrice, { color: "#eb4335", fontSize: 16 }]}>
                     {(variant?.price?.currencyCode) ? variant.price.currencyCode === "GBP" && "£" : shopCurrency} {(variant?.price?.amount) ? variant.price.amount : variant.price}
                   </Text>
                 )}
@@ -825,52 +843,8 @@ function ProductDetails({
               </View>
 
             </View>
-            {/* <View style={{ marginBottom: spacings.large }}>
-              <Text style={[styles.relatedProductsTitle, { color: themecolors.blackColor, fontSize: 20 }]}>{RATING_REVIEWS}</Text>
-              <View style={[styles.reviewSection, flexDirectionRow, alignItemsCenter]}>
-                <View style={[{ width: wp(30) }, justifyContentSpaceBetween, flexDirectionRow]}>
-                  {Array.from({ length: 5 }).map((_, index) => {
-                    const currentRating = rating !== null && rating !== undefined ? Math.round(rating) : 4; // Default to 4 stars if no rating is provided
-                    return (
-                      <FontAwesome
-                        key={index}
-                        name={index < currentRating ? "star" : "star-o"}
-                        size={17}
-                        color={themecolors.goldColor}
-                      />
-                    );
-                  })}
-                </View>
-                <Text style={[styles.optionValue, { marginLeft: spacings.large, backgroundColor: lightGrayOpacityColor, paddingHorizontal: spacings.large, borderRadius: 5 }]}>
-                  {rating ? `${rating}/5` : '4/5'}
-                </Text>
-              </View>
-              <View style={[flexDirectionRow, alignItemsCenter]}>
-                <View style={[{ width: wp(20), height: hp(10) }, alignItemsCenter]}>
-                  {customerName != "" ? <FallbackAvatar name={customerName} /> : <Image source={LADY_DONALD_RICE} style={[resizeModeContain, { width: wp(13), height: wp(13) }]} />}
-                </View>
-                <View style={{ width: "75%" }}>
-                  <Text style={[styles.productPrice, { padding: spacings.small, color: themecolors.blackColor }]}>{customerName ? capitalizeFirstLetter(customerName) : "Donald Rice"}</Text>
-                  <View style={[{ width: wp(30), height: hp(3), paddingLeft: spacings.normal }, justifyContentSpaceBetween, flexDirectionRow]}>
-                    {Array.from({ length: 5 }).map((_, index) => {
-                      const currentRating = rating !== null && rating !== undefined ? Math.round(rating) : 4; // Default to 4 stars if no rating is provided
-                      return (
-                        <FontAwesome
-                          key={index}
-                          name={index < currentRating ? "star" : "star-o"}
-                          size={17}
-                          color={themecolors.goldColor}
-                        />
-                      );
-                    })}
-                  </View>
-                  <Text style={[styles.productDescription, { fontSize: style.fontSizeSmall1x.fontSize, color: themecolors.blackColor }]}>
-                    {reviewDescription || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed ...'}
-                  </Text>
-                </View>
-              </View>
-            </View> */}
-            {shuffledReviews.length > 0 && <Text style={[styles.relatedProductsTitle, { color: themecolors.blackColor, fontSize: 20 }]}>{RATING_REVIEWS}</Text>}
+
+            {shuffledReviews.length > 0 && <Text style={[styles.relatedProductsTitle, { color: themecolors.blackColor, fontSize: 16 }]}>{RATING_REVIEWS}</Text>}
             <FlatList
               // data={allReviews}
               data={shuffledReviews}
@@ -882,14 +856,14 @@ function ProductDetails({
             />
             {shuffledReviews.length > 0 && <Pressable
               onPress={handleWriteReview}
-              style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
+              style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(4.5), padding: spacings.large }]}
             >
-              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeNormal2x.fontSize, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>
+              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeSmall2x.fontSize, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>
                 Write a Review
               </Text>
             </Pressable>}
           </View>
-          {relatedProducts?.length != 0 && <View style={styles.relatedProductsContainer}>
+          {/* {relatedProducts?.length != 0 && <View style={styles.relatedProductsContainer}>
             <Text style={[styles.relatedProductsTitle, { color: themecolors.blackColor }]}>{YOU_MIGHT_LIKE}</Text>
             <FlatList
               data={relatedProducts}
@@ -908,7 +882,7 @@ function ProductDetails({
                     </View>
                     <View style={[{ width: "100%", height: hp(9) }]}>
                       <Text style={[styles.relatedproductName, { color: themecolors.blackColor }]}>{trimcateText(item.title)}</Text>
-                      <Text style={[styles.relatedproductPrice, { paddingHorizontal: spacings.small, color: themecolors.blackColor }]}>{shopCurrency} {item?.variants[0]?.price}
+                      <Text style={[styles.relatedproductPrice, { paddingHorizontal: spacings.small, color: redColor }]}>{shopCurrency} {item?.variants[0]?.price}
                       </Text>
                     </View>
                     <View style={[{ width: "100%", flexDirection: "row" }, justifyContentSpaceBetween, alignItemsCenter]}>
@@ -945,11 +919,11 @@ function ProductDetails({
               keyExtractor={(index) => index?.toString()}
               showsHorizontalScrollIndicator={false}
             />
-          </View>}
+          </View>} */}
           {shareProductloading && <LoadingModal visible={shareProductloading} />}
         </View>
       </ScrollView>
-      <ChatButton onPress={handleChatButtonPress} bottom={Platform.OS === "android" ? hp(15) : hp(20)} />
+      <ChatButton onPress={handleChatButtonPress} bottom={ hp(15) } />
       <View style={[flexDirectionRow, positionAbsolute, alignJustifyCenter, {
         // alignItems: "baseline",
         top: Platform.OS === "android" ? hp(77.6) : !(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? hp(68) : hp(68),
@@ -1009,7 +983,7 @@ function createStyles(colors: Colors) {
       color: colors.textSubdued,
     },
     productTitle: {
-      fontSize: style.fontSizeLarge.fontSize,
+      fontSize: style.fontSizeNormal.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       marginTop: spacings.large,
       marginBottom: spacings.normal,
@@ -1019,7 +993,7 @@ function createStyles(colors: Colors) {
       fontFamily: 'Montserrat-BoldItalic'
     },
     productDescription: {
-      fontSize: style.fontSizeNormal.fontSize,
+      fontSize: 10,
       fontWeight: "400",
       // marginHorizontal: spacings.normal,
       lineHeight: 15,
@@ -1028,7 +1002,7 @@ function createStyles(colors: Colors) {
       fontFamily: 'Montserrat-BoldItalic'
     },
     productPrice: {
-      fontSize: style.fontSizeLarge.fontSize,
+      fontSize: 10,
       color: blackColor,
       fontWeight: style.fontWeightThin1x.fontWeight,
       fontFamily: 'arialnarrow'
@@ -1092,7 +1066,7 @@ function createStyles(colors: Colors) {
       marginTop: spacings.xLarge,
     },
     relatedProductsTitle: {
-      fontSize: style.fontSizeLarge.fontSize,
+      fontSize: 16,
       fontWeight: style.fontWeightMedium.fontWeight,
       color: blackColor,
       fontFamily: 'Montserrat-BoldItalic'
@@ -1108,10 +1082,6 @@ function createStyles(colors: Colors) {
       width: wp(30),
       height: wp(30),
       marginVertical: spacings.large,
-    },
-    relatedProductTitle: {
-      fontSize: style.fontSizeNormal.fontSize,
-      fontWeight: style.fontWeightThin1x.fontWeight,
     },
     relatedAddtocartButton: {
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
@@ -1174,12 +1144,14 @@ function createStyles(colors: Colors) {
     },
     relatedproductName: {
       fontFamily: 'Montserrat-BoldItalic',
-      fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,
+      fontSize: style.fontSizeSmall.fontSize,
+      fontWeight: style.fontWeightThin1x.fontWeight,
     },
     relatedproductPrice: {
-      fontSize: style.fontSizeSmall1x.fontSize,
+      fontSize: style.fontSizeSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'arialnarrow'
+      fontFamily: 'arialnarrow',
+      color: redColor
     },
     fallbackAvatar: {
       width: 60,
@@ -1251,7 +1223,7 @@ function createStyles(colors: Colors) {
       fontFamily: 'Montserrat-BoldItalic'
     },
     reviewText: {
-      fontSize: style.fontSizeSmall1x.fontSize,
+      fontSize: style.fontSizeSmall.fontSize,
       fontFamily: 'Montserrat-BoldItalic'
     },
   });

@@ -18,6 +18,7 @@ import { scheduleNotification } from '../notifications';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import ChatButton from '../components/ChatButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Product from '../components/Product'
 const { height: screenHeight } = Dimensions.get('window');
 const { resizeModeContain, textAlign, alignJustifyCenter, borderRadius10, overflowHidden, borderWidth1, flexDirectionRow } = BaseStyle;
 
@@ -27,7 +28,6 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     const [modalView, setModalView] = useState('subcategory');
     const [modalVisible, setModalVisible] = useState(false);
     const { tabss, category } = route.params;
-    // console.log("category", category,":::::::",tabss);
     const [activeTab, setActiveTab] = useState(tabss[0]);
     const [nestedTabs, setNestedTabs] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -41,11 +41,15 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     const [inventoryQuantities, setInventoryQuantities] = useState('');
     const { addToCart, addingToCart } = useCart();
     const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedHandle, setSelectedHandle] = useState("");
+    const [hasNextPage, setHasNextPage] = useState(true);
+    const [endCursor, setEndCursor] = useState(null);
+    const [activityloading, setActivityLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
         // console.log(category.items)
-        fetchProductsByHandle(route.params.url);
+        // fetchProductsByHandle(route.params.url);
+        fetchInitialProducts(route.params.url)
         // console.log("route.params.url",route.params.url)
     }, [route.params.url]);
 
@@ -53,36 +57,140 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
         return node?.variants?.nodes;
     }
 
-    const fetchProductsByHandle = async (handle) => {
-        capitalizeFirstLetter(handle)
-        setLoading(true);
-        let allProducts = [];
-        let hasNextPage = true;
-        let endCursor = null;
+    // const fetchProductsByHandle = async (handle) => {
+    //     capitalizeFirstLetter(handle)
+    //     setLoading(true);
+    //     let allProducts = [];
+    //     let hasNextPage = true;
+    //     let endCursor = null;
+    //     try {
+    //         while (hasNextPage) {
+    //             const graphql = JSON.stringify({
+    //                 query: `
+    //                 query($handle: String!, $cursor: String) {
+    //                     collectionByHandle(handle: $handle) {
+    //                         id
+    //                         title
+    //                         products(first: 250, after: $cursor) {
+    //                             nodes {
+    //                                 id
+    //                                 tags
+    //                                 title
+    //                                 description
+    //                                 options(first: 250) {
+    //                                     id
+    //                                     name
+    //                                     values
+    //                                 }
+    //                                 images(first: 250) {
+    //                                     nodes {
+    //                                         url
+    //                                     }
+    //                                 }
+    //                                 variants(first: 250) {
+    //                                     nodes {
+    //                                         id
+    //                                         title
+    //                                         price
+    //                                         inventoryQuantity
+    //                                         image {
+    //                                             originalSrc
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }
+    //                             pageInfo {
+    //                                 hasNextPage
+    //                                 endCursor
+    //                             }
+    //                         }
+    //                     }
+    //                 }`,
+    //                 variables: { handle, cursor: endCursor },
+    //             });
+
+    //             const requestOptions = {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
+    //                 },
+    //                 body: graphql,
+    //             };
+
+    //             const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
+    //             const result = await response.json();
+
+    //             const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
+    //             // console.log(fetchedProducts)
+    //             const pageInfo = result?.data?.collectionByHandle?.products?.pageInfo || {};
+
+    //             // Accumulate fetched products
+    //             allProducts = [...allProducts, ...fetchedProducts];
+
+    //             // Check if there are more products to fetch
+    //             hasNextPage = pageInfo.hasNextPage;
+    //             endCursor = pageInfo.endCursor;
+    //         }
+
+    //         // Set final products and other data
+    //         setProducts(allProducts);
+
+    //         const inventoryQuantities = allProducts.map((product) =>
+    //             product.variants.nodes.map((variant) => variant.inventoryQuantity)
+    //         );
+    //         setInventoryQuantities(inventoryQuantities);
+
+    //         const fetchedTags = allProducts.map((product) => product.tags);
+    //         setTags(fetchedTags);
+
+    //         const fetchedOptions = allProducts.map((product) => product.options);
+    //         setOptions(fetchedOptions);
+
+    //         const productVariantData = allProducts.map((product) =>
+    //             product.variants.nodes.map((variant) => ({
+    //                 id: variant.id,
+    //                 title: variant.title,
+    //                 inventoryQty: variant.inventoryQuantity,
+    //                 image: variant.image,
+    //             }))
+    //         );
+    //         setProductVariantsIDS(productVariantData);
+
+    //         // console.log("Total Products Fetched:", allProducts.length);
+    //     } catch (error) {
+    //         console.error('Error fetching products:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const fetchProductsByHandle = async (handle, cursor = null) => {
+
+        capitalizeFirstLetter(handle); // Capitalize the handle (optional)
+        setActivityLoading(true); // Start loading indicator
+
         try {
-            while (hasNextPage) {
-                const graphql = JSON.stringify({
-                    query: `
+            const graphql = JSON.stringify({
+                query: `
                     query($handle: String!, $cursor: String) {
                         collectionByHandle(handle: $handle) {
-                            id
-                            title
                             products(first: 250, after: $cursor) {
                                 nodes {
                                     id
-                                    tags
                                     title
                                     description
+                                    tags
                                     options(first: 250) {
                                         id
                                         name
                                         values
                                     }
-                                    images(first: 250) {
+                                         images(first: 250) {
                                         nodes {
                                             url
                                         }
-                                    }
+                                     }
                                     variants(first: 250) {
                                         nodes {
                                             id
@@ -102,97 +210,106 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                             }
                         }
                     }`,
-                    variables: { handle, cursor: endCursor },
-                });
+                variables: { handle, cursor },
+            });
 
-                const requestOptions = {
+            const response = await fetch(
+                `https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`,
+                {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
                     },
                     body: graphql,
-                };
-
-                const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
-                const result = await response.json();
-
-                const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
-                // console.log(fetchedProducts)
-                const pageInfo = result?.data?.collectionByHandle?.products?.pageInfo || {};
-
-                // Accumulate fetched products
-                allProducts = [...allProducts, ...fetchedProducts];
-
-                // Check if there are more products to fetch
-                hasNextPage = pageInfo.hasNextPage;
-                endCursor = pageInfo.endCursor;
-            }
-
-            // Set final products and other data
-            setProducts(allProducts);
-
-            const inventoryQuantities = allProducts.map((product) =>
-                product.variants.nodes.map((variant) => variant.inventoryQuantity)
+                }
             );
-            setInventoryQuantities(inventoryQuantities);
 
-            const fetchedTags = allProducts.map((product) => product.tags);
-            setTags(fetchedTags);
+            const result = await response.json();
+            const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
+            const pageInfo = result?.data?.collectionByHandle?.products?.pageInfo || {};
 
-            const fetchedOptions = allProducts.map((product) => product.options);
-            setOptions(fetchedOptions);
+            // Process only the newly fetched products
+            processFetchedData(fetchedProducts);
 
-            const productVariantData = allProducts.map((product) =>
+            // Return pagination info
+            return { hasNextPage: pageInfo.hasNextPage, endCursor: pageInfo.endCursor };
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            return { hasNextPage: false, endCursor: null };
+        } finally {
+            setActivityLoading(false); // Stop loading indicator
+        }
+    };
+
+    const processFetchedData = (newProducts) => {
+        // Append new products to the existing list
+        setProducts((prev) => [...prev, ...newProducts]);
+
+        // Append inventory quantities incrementally
+        setInventoryQuantities((prev) => [
+            ...prev,
+            ...newProducts.map((product) =>
+                product.variants.nodes.map((variant) => variant.inventoryQuantity)
+            ),
+        ]);
+
+        // Append tags incrementally
+        setTags((prev) => [...prev, ...newProducts.map((product) => product.tags)]);
+
+        // Append options incrementally
+        setOptions((prev) => [...prev, ...newProducts.map((product) => product.options)]);
+
+        // Append product variants incrementally
+        setProductVariantsIDS((prev) => [
+            ...prev,
+            ...newProducts.map((product) =>
                 product.variants.nodes.map((variant) => ({
                     id: variant.id,
                     title: variant.title,
                     inventoryQty: variant.inventoryQuantity,
-                    image: variant.image,
+                    image: variant.image?.originalSrc,
                 }))
-            );
-            setProductVariantsIDS(productVariantData);
-
-            // console.log("Total Products Fetched:", allProducts.length);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        } finally {
-            setLoading(false);
-        }
+            ),
+        ]);
     };
+
 
     const handleSubcategorySelect = (item) => {
         setSelectedItem(item.url)
         // console.log("itemm:::::", item.url)
+        setProducts([])
         if (item.subcategories && item.subcategories.length > 0) {
             setSelectedCategories((prev) => [...prev, item.title]);
             setTab(item.subcategories)
             setActiveTab(item);
             setNestedTabs([]);
-            fetchProductsByHandle(item.url);
+            fetchInitialProducts(item.url);
             setModalView('tab');
         } else {
             setModalVisible(false);
-            fetchProductsByHandle(item.url);
+            fetchInitialProducts(item.url);
         }
     };
 
     const handleTabSelect = (tab) => {
         setActiveTab(tab);
         setSelectedItem(tab.url)
+        setProducts([])
         if (tab.subcategories && tab.subcategories.length > 0) {
             setNestedTabs(tab.subcategories);
-            fetchProductsByHandle(tab.url);
+            fetchInitialProducts(tab.url);
             setModalView('nestedTab');
         } else {
             setModalVisible(false);
-            fetchProductsByHandle(tab.url);
+            fetchInitialProducts(tab.url);
         }
     };
 
     const handleNestedTabSelect = (nestedTab) => {
+        setProducts([])
         setSelectedItem(nestedTab.url)
-        fetchProductsByHandle(nestedTab.url);
+        fetchInitialProducts(nestedTab.url);
         setModalVisible(false);
     };
 
@@ -215,9 +332,26 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
             .join(' ');
         setRouteName(result); // Set the result in state
     };
+
+    const fetchInitialProducts = async (handle) => {
+        setLoading(true)
+        const result = await fetchProductsByHandle(handle);
+        setSelectedHandle(handle)
+        setLoading(false)
+        setHasNextPage(result.hasNextPage);
+        setEndCursor(result.endCursor);
+    };
+
+    const fetchMoreProducts = async () => {
+        if (loading || !hasNextPage) return; // Prevent multiple fetches
+        const result = await fetchProductsByHandle(selectedHandle, endCursor);
+        setSelectedHandle('')
+        setHasNextPage(result.hasNextPage);
+        setEndCursor(result.endCursor);
+    };
     return (
-        // <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
-        <View style={[{ flex: 1, backgroundColor: whiteColor }]} >
+        <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
+        {/* // <View style={[{ flex: 1, backgroundColor: whiteColor }]} > */}
             <>
                 <Header backIcon={true} text={routeName} navigation={navigation} />
                 <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
@@ -296,18 +430,23 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                     {loading && (
                         <SkeletonPlaceholder>
                             <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-                                {Array(2).fill().map((_, index) => (
-                                    <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10, backgroundColor: colors.grayColor }} />
+                                {Array(3).fill().map((_, index) => (
+                                    <View key={index} style={{ width: wp(29), height: hp(20), marginHorizontal: 5, borderRadius: 10, backgroundColor: colors.grayColor }} />
                                 ))}
                             </View>
                             <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-                                {Array(2).fill().map((_, index) => (
-                                    <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10, backgroundColor: colors.grayColor }} />
+                                {Array(3).fill().map((_, index) => (
+                                    <View key={index} style={{ width: wp(29), height: hp(20), marginHorizontal: 5, borderRadius: 10, backgroundColor: colors.grayColor }} />
                                 ))}
                             </View>
                             <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
-                                {Array(2).fill().map((_, index) => (
-                                    <View key={index} style={{ width: wp(43), height: hp(30), marginHorizontal: 10, borderRadius: 10, backgroundColor: colors.grayColor }} />
+                                {Array(3).fill().map((_, index) => (
+                                    <View key={index} style={{ width: wp(29), height: hp(20), marginHorizontal: 5, borderRadius: 10, backgroundColor: colors.grayColor }} />
+                                ))}
+                            </View>
+                            <View style={{ width: wp(100), height: 'auto', flexDirection: 'row', marginVertical: 5 }}>
+                                {Array(3).fill().map((_, index) => (
+                                    <View key={index} style={{ width: wp(29), height: hp(20), marginHorizontal: 5, borderRadius: 10, backgroundColor: colors.grayColor }} />
                                 ))}
                             </View>
                         </SkeletonPlaceholder>
@@ -315,29 +454,54 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
 
                     <View style={[styles.productDetailBox]}>
                         {!loading && (
-                            products.length !== 0 ? < FlatList
-                                data={products}
-                                renderItem={({ item, index }) => (
-                                    <ProductItem
-                                        item={item}
-                                        addToCartProduct={addToCartProduct}
-                                        InventoryQuantities={inventoryQuantities[index]}
-                                        ids={productVariantsIDS[index]}
-                                        onPress={() => {
-                                            navigation.navigate('ProductDetails', {
-                                                product: item,
-                                                variant: getVariant(item),
-                                                inventoryQuantity: inventoryQuantities[index],
-                                                tags: tags[index],
-                                                option: options[index],
-                                                ids: productVariantsIDS[index],
-                                            });
-                                        }}
-                                    />
-                                )}
-                                numColumns={2}
-                                keyExtractor={(item) => item?.id?.toString()}
-                            /> :
+                            products.length !== 0 ?
+                                < FlatList
+                                    data={products}
+                                    renderItem={({ item, index }) => (
+                                        // <ProductItem
+                                        //     item={item}
+                                        //     addToCartProduct={addToCartProduct}
+                                        //     InventoryQuantities={inventoryQuantities[index]}
+                                        //     ids={productVariantsIDS[index]}
+                                        //     onPress={() => {
+                                        //         navigation.navigate('ProductDetails', {
+                                        //             product: item,
+                                        //             variant: getVariant(item),
+                                        //             inventoryQuantity: inventoryQuantities[index],
+                                        //             tags: tags[index],
+                                        //             option: options[index],
+                                        //             ids: productVariantsIDS[index],
+                                        //         });
+                                        //     }}
+                                        // />
+                                        <Product
+                                            product={item}
+                                            onAddToCart={addToCartProduct}
+                                            loading={addingToCart?.has(getVariant(item)?.id ?? '')}
+                                            inventoryQuantity={inventoryQuantities[index]}
+                                            option={options[index]}
+                                            ids={productVariantsIDS[index]}
+                                            onPress={() => {
+                                                navigation.navigate('ProductDetails', {
+                                                    product: item,
+                                                    variant: getVariant(item),
+                                                    inventoryQuantity: inventoryQuantities[index],
+                                                    tags: tags[index],
+                                                    option: options[index],
+                                                    ids: productVariantsIDS[index]
+                                                });
+                                            }}
+                                        />
+                                    )}
+                                    numColumns={3}
+                                    keyExtractor={(item) => item?.id?.toString()}
+                                    onEndReached={fetchMoreProducts} // Trigger fetch on end
+                                    onEndReachedThreshold={0.5} // Fetch when the user scrolls 50% from the bottom
+                                    ListFooterComponent={
+                                        activityloading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+                                    }
+                                />
+                                :
                                 <View style={{ alignItems: "center", justifyContent: "center", height: "60%", width: wp(95) }}>
                                     <Image source={NO_PRODUCT_IMG} style={{ width: wp(20), height: hp(12), resizeMode: "contain" }} />
                                     <Text style={[styles.emptyText, { color: colors.blackColor }]}>No Product available.</Text>
@@ -352,8 +516,8 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
 
             </>
             <ChatButton onPress={handleChatButtonPress} />
-            {/* </ImageBackground> */}
-        </View>
+            </ImageBackground>
+        
     );
 };
 
@@ -401,7 +565,7 @@ const ProductItem = ({ item, InventoryQuantities, ids, onPress, addToCartProduct
         <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden, { backgroundColor: isDarkMode ? colors.grayColor : whiteColor }]} onPress={onPress}>
             <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} />
             <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor, paddingHorizontal: 8 }]}>{item?.title}</Text>
-            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8,fontFamily: 'arrialnarrow' }]}>{shopCurrency} {priceAmount}</Text>
+            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8, fontFamily: 'arrialnarrow' }]}>{shopCurrency} {priceAmount}</Text>
             <View style={[styles.quantityContainer, borderWidth1, flexDirectionRow, alignJustifyCenter]}>
                 <TouchableOpacity onPress={decrementQuantity}>
                     <Text style={styles.quantityButton}>-</Text>
@@ -476,12 +640,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: "center",
-        borderWidth:1,
-        borderColor:blackColor
+        borderWidth: 1,
+        borderColor: blackColor
     },
     subCategoryText: {
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: style.fontSizeSmall.fontSize,
         fontFamily: 'Montserrat-BoldItalic'
     },
     tabButton: {
@@ -492,12 +656,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: "center",
-        borderWidth:1,
-        borderColor:blackColor
+        borderWidth: 1,
+        borderColor: blackColor
     },
     tabText: {
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: style.fontSizeSmall.fontSize,
         fontFamily: 'Montserrat-BoldItalic'
     },
     closeModalButton: {

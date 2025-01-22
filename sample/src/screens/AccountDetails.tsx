@@ -44,7 +44,6 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
       const userDetails = await AsyncStorage.getItem('userDetails')
       if (userDetails) {
         const userDetailsObject = JSON.parse(userDetails);
-
         const userId = userDetailsObject.customer ? userDetailsObject.customer.id : userDetailsObject.id;
         setCustomerId(userId)
       }
@@ -76,23 +75,18 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         if (customer.gender) {
           setGender(customer.gender);
         }
-
-        // if (customer.phone) {
-        //   const phoneWithoutCountryCode = customer.phone.replace(/^\+91\s*/, '');
-        //   setPhoneNumber(phoneWithoutCountryCode);
-        // }
         if (customer.phone) {
-          // Match the country code (e.g., "+91") and the rest of the phone number
+          
           const phoneMatch = customer.phone.match(/^(\+\d{1,2})\s*(.*)/);
 
           if (phoneMatch) {
-            const extractedCountryCode = phoneMatch[1];
-            const phoneWithoutCountryCode = phoneMatch[2];
-            // console.log(countryCode,phoneNumber)
+            const extractedCountryCode = phoneMatch[1]; 
+            const phoneWithoutCountryCode = phoneMatch[2]; 
+           
             setCountryCode(extractedCountryCode);
             setPhoneNumber(phoneWithoutCountryCode);
           } else {
-            // If no country code is detected, assume it's just a phone number
+            
             setPhoneNumber(customer.phone);
           }
         }
@@ -116,12 +110,10 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
           email: email,
           first_name: firstName,
           last_name: lastName,
-          // phone: phoneNumber,
           phone: `${countryCode} ${phoneNumber}`,
           date_of_birth: dateOfBirth ? dateOfBirth.toISOString().split('T')[0] : undefined,
           gender: gender,
-          // date_of_birth: dateOfBirth.toISOString().split('T')[0],
-          // gender: gender,
+         
         }
       };
 
@@ -171,8 +163,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    // <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
-    <View style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} >
+    <ImageBackground style={[styles.container, flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
       <Header
         backIcon={true}
         text={"Account Details"}
@@ -196,19 +187,20 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}
+              style={[styles.input, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic'  }]}
               value={email}
               onChangeText={setEmail}
               placeholder="Email Address"
               keyboardType="email-address"
               editable={false}
+
             />
           </View>
         </View>
 
-        <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>Date of Birth</Text>
+        {/* <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>Date of Birth</Text>
         <TouchableOpacity onPress={() => setShowDatePicker(true)} style={[styles.dateInput, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, justifyContentSpaceBetween]}>
-          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{dateOfBirth.toLocaleDateString()}</Text>
+          <Text style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}>{dateOfBirth.toLocaleDateString()}</Text>
           <Ionicons name="calendar" size={20} color={colors.blackColor} />
         </TouchableOpacity>
         {showDatePicker && (
@@ -222,25 +214,25 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         )}
         <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>Gender</Text>
         <TouchableOpacity onPress={() => setShowGenderPicker(true)} style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
-          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{gender || "Select Gender"}</Text>
+          <Text style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic'  }}>{gender || "Select Gender"}</Text>
         </TouchableOpacity>
         <Modal visible={showGenderPicker} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={[styles.modalTitle,{ fontFamily: 'Montserrat-BoldItalic'}]}>Select Gender</Text>
+              <Text style={[styles.modalTitle,{fontFamily: 'Montserrat-BoldItalic'}]}>Select Gender</Text>
               {["Male", "Female", "Other"].map((item) => (
                 <Pressable key={item} onPress={() => handleGenderSelect(item)}>
-                  <Text style={[styles.modalOption,{ fontFamily: 'Montserrat-BoldItalic'}]}>{item}</Text>
+                  <Text style={[styles.modalOption,{fontFamily: 'Montserrat-BoldItalic'}]}>{item}</Text>
                 </Pressable>
               ))}
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         <Text style={[styles.textInputHeading, { color: colors.blackColor, }]}>Phone Number</Text>
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}
+              style={[styles.input, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic'  }]}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               placeholder="Phone Number"
@@ -251,12 +243,11 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
         <Pressable style={[styles.submitButton, positionAbsolute, alignJustifyCenter]} onPress={() => handleSubmit(customerId)}>
-          <Text style={[styles.submitButtonText, { color: whiteColor, fontFamily: 'Montserrat-BoldItalic' }]}>Submit</Text>
+          <Text style={[styles.submitButtonText, { color: whiteColor }]}>Submit</Text>
         </Pressable>
       </View>
-      <ChatButton onPress={handleChatButtonPress} bottom={60} />
-      {/* </ImageBackground> */}
-    </View>
+      <ChatButton onPress={handleChatButtonPress} bottom={hp(10)} />
+    </ImageBackground>
   );
 };
 
@@ -270,7 +261,8 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     paddingLeft: spacings.large,
-    color: blackColor
+    color: blackColor,
+     fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: '100%',
@@ -303,7 +295,8 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: style.fontSizeNormal2x.fontSize,
-    fontWeight: style.fontWeightThin.fontWeight
+    fontWeight: style.fontWeightThin.fontWeight,
+     fontFamily: 'Montserrat-BoldItalic'
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal1x.fontSize,
@@ -311,12 +304,12 @@ const styles = StyleSheet.create({
     color: blackColor,
     marginTop: spacings.xxxxLarge,
     marginBottom: spacings.normal,
-    fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: 'Montserrat-BoldItalic'
   },
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { width: '80%', padding: 20, backgroundColor: whiteColor, borderRadius: 10 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  modalOption: { fontSize: 16, paddingVertical: 10, textAlign: 'center' },
+  modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, fontFamily: 'Montserrat-BoldItalic' },
+  modalOption: { fontSize: 16, paddingVertical: 10, textAlign: 'center', fontFamily: 'Montserrat-BoldItalic' },
 
 });
 

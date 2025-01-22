@@ -55,7 +55,7 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
   }
   return (
     <View>
-      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "99%", backgroundColor: whiteColor }]}>
+      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "99%" }]}>
         <View style={[flexDirectionRow, alignItemsCenter]}>
           {backIcon && <TouchableOpacity style={[alignJustifyCenter, { width: wp(10) }]} onPress={OnClickBackIcon}>
             <Ionicons name={"arrow-back"} size={25} color={colors.blackColor} />
@@ -107,11 +107,11 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: style.fontSizeMedium1x.fontSize,
+    fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
     marginLeft: spacings.normalx,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: 'Montserrat-BoldItalic',
   },
   input: {
     width: "100%",
