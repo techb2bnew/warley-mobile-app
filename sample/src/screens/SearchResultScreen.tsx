@@ -14,7 +14,7 @@ import { useCart } from '../context/Cart';
 import type { ShopifyProduct } from '../../@types';
 import { logEvent } from '@amplitude/analytics-react-native';
 import Header from '../components/Header'
-import { BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE } from '../assests/images';
+import { BACKGROUND_IMAGE, DARK_BACKGROUND_IMAGE,COMING_SOON_IMG } from '../assests/images';
 import { useSelector } from 'react-redux';
 import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
@@ -194,6 +194,7 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
                       nodes {
                         price
                         inventoryQuantity
+                        inventoryPolicy
                         id
                         title
                         image {
@@ -235,32 +236,34 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
           hasNextPage = pageInfo.hasNextPage;
           endCursor = pageInfo.endCursor;
         }
+        const sortedProducts = allProducts.sort((a, b) => a.title.localeCompare(b.title));
 
         // Set the accumulated products and other data in state
-        setProducts(allProducts);
+        setProducts(sortedProducts);
 
-        const inventoryQuantities = allProducts.map((product) =>
+        const inventoryQuantities = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => variant.inventoryQuantity)
         );
         setBestDealInventoryQuantities(inventoryQuantities);
 
-        const fetchedTags = allProducts.map((product) => product.tags);
+        const fetchedTags = sortedProducts.map((product) => product.tags);
         setbestDealTags(fetchedTags);
 
-        const fetchedOptions = allProducts.map((product) => product.options);
+        const fetchedOptions = sortedProducts.map((product) => product.options);
         setBestDealOptions(fetchedOptions);
 
-        const productVariantData = allProducts.map((product) =>
+        const productVariantData = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => ({
             id: variant.id,
             title: variant.title,
             inventoryQty: variant.inventoryQuantity,
+            continueSelling: variant?.inventoryPolicy === "CONTINUE",
             image: variant.image,
           }))
         );
         setBestDealProductVariantsIDS(productVariantData);
 
-        console.log("Total Products Fetched:", allProducts.length);
+        console.log("Total Products Fetched:", sortedProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -381,7 +384,7 @@ const ProductItem = ({ item, addToCartProduct, BestDealInventoryQuantities, Best
 
   return (
     <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden, { backgroundColor: isDarkMode ? colors.grayColor : whiteColor }]} onPress={onPress}>
-      <Image source={{ uri: imageSrc }} style={[styles.image, resizeModeContain]} />
+      {imageSrc ? <Image source={{ uri: imageSrc }} style={[styles.image, resizeModeContain]} /> : <Image style={[styles.image, resizeModeContain]} source={COMING_SOON_IMG} />}
       <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor }]}>{trimcateText(productTitle)}</Text>
       <View style={[styles.quantityContainer, borderWidth1, flexDirectionRow, alignJustifyCenter, { backgroundColor: colors.whiteColor }]}>
         <TouchableOpacity onPress={decrementQuantity}>

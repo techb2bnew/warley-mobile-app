@@ -448,7 +448,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
   const priceAmount = price?.price ? price?.price : price?.amount;
   const currencyCode = price ? price?.currencyCode : null;
   const [quantity, setQuantity] = useState(1);
-  const outOfStock = inventoryQuantity <= 0; 
+  const outOfStock = inventoryQuantity <= 0;
   const dispatch = useDispatch();
   const wishList = useSelector(state => state.wishlist.wishlist);
   const isSelected = wishList.some(item => item.id === product.id);
@@ -672,7 +672,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
         }]}>
           <ActivityIndicator size="small" color={redColor} />
         </View>
-      ) : (showQuantity && !outOfStock ? (
+      ) : (showQuantity && ids?.[0]?.continueSelling === true ? (
         <View style={{
           position: "absolute",
           top: 1,
@@ -706,7 +706,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
           >-</Text>
         </View>
       ) : (
-        !outOfStock && priceAmount != 0 && (
+        ids?.[0]?.continueSelling === true && priceAmount != 0 && (
           <Pressable
             style={{
               position: "absolute",
@@ -730,17 +730,20 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
           </Pressable>
         )
       ))}
-      {(priceAmount <= 0 || outOfStock) && (
+      {(priceAmount <= 0 || ids?.[0]?.continueSelling != true) && (
         <View style={[styles.addToCartButton, { width: wp(9), backgroundColor: redColor }]}>
           <Text style={[styles.addToCartButtonText, { color: whiteColor, padding: spacings.small, fontSize: 9 }]}>Sold Out</Text>
         </View>
       )}
       {/* </>} */}
       <View style={{ width: "100%", marginBottom: spacings.small, borderRadius: 10 }}>
-        <Image
+        {imageSource ? <Image
           source={{ uri: imageSource }}
           style={[styles.productImage, resizeModeContain]}
-        />
+        /> : <Image
+          source={COMING_SOON_IMG}
+          style={[styles.productImage, resizeModeContain]}
+        />}
       </View>
       <View style={[styles.contentBox]}>
         <View style={[{ width: width ? width : wp(43), height: hp(108), alignSelf: "center" }]}>
@@ -752,7 +755,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
               <AntDesign
                 name={isSelected ? "heart" : "hearto"}
                 size={18}
-                color={isSelected ? "#eb4345" : colors.grayColor}
+                color={isSelected ? redColor : colors.grayColor}
               />
             </TouchableOpacity>
           </View>

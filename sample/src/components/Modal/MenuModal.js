@@ -105,7 +105,7 @@ const MenuModal = ({ modalVisible, setModalVisible, onPressCart, onPressSearch, 
     return (
       <View style={styles.contactUsCard}>
        <Text style={styles.contactUsTitle}>Contact Us on Email</Text>
-       <Text style={styles.contactUsEmail}>info@warleyfoodservice.com</Text>
+       <Text style={styles.contactUsEmail}>info@warleysuperstore.com</Text>
       </View>
     );
   };

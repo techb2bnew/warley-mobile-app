@@ -555,7 +555,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     placeholderTextColor={colors.grayColor}
                     onChangeText={setFirstName}
                     value={firstName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                   />
                 </View>
               </View>
@@ -572,7 +572,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     placeholderTextColor={colors.grayColor}
                     onChangeText={setLastName}
                     value={lastName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                   />
                 </View>
               </View>
@@ -599,7 +599,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 onChangeText={setPhone}
                 value={phone}
                 keyboardType="phone-pad"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                 maxLength={10}
               />
             </View>
@@ -617,7 +617,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 value={email}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
               />
             </View>
           </View>
@@ -636,7 +636,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     onChangeText={setPassword}
                     value={password}
                     secureTextEntry={!showPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowPassword}>
@@ -657,7 +657,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     onChangeText={setConfirmPassword}
                     value={confirmPassword}
                     secureTextEntry={!showConfirmPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -674,7 +674,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
           <View style={[alignJustifyCenter, {}]}>
             <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginVertical: 10 }]}>
               <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
-              <Text style={[{ color: colors.blackColor, margin: spacings.small, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>{"Or"}</Text>
+              <Text style={[{ color: colors.blackColor, margin: spacings.small, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{"Or"}</Text>
               <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
             </View>
             <View style={[styles.socialAuthBox, alignJustifyCenter, flexDirectionRow]}>
@@ -687,10 +687,10 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
             </View>
           </View>
           <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={onBackToLogin}>
-            <Text style={[{ marginTop: hp(3), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
+            <Text style={[{ marginTop: hp(3), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
           </Pressable>
-          <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 0 : hp(10), width: "100%" }]}>
-            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+          <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 2 : hp(10), width: "100%" }]}>
+            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
             <View style={[flexDirectionRow, { marginTop: 5, width: "100%" }, alignJustifyCenter]}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -699,7 +699,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Terms Of Services From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -708,7 +708,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Privacy Policy From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic' }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -773,13 +773,13 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: hp(5.5),
+    height: hp(5),
     paddingHorizontal: spacings.xLarge,
     marginVertical: spacings.medium,
   },
   halfInput: {
     width: '100%',
-    height: hp(5.5),
+    height: hp(5),
     paddingHorizontal: spacings.large,
     marginVertical: spacings.medium,
   },
@@ -791,7 +791,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: whiteColor,
-    fontSize: style.fontSizeLarge.fontSize,
+    fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     fontFamily: 'Montserrat-BoldItalic'
   },
@@ -817,7 +817,7 @@ const styles = StyleSheet.create({
     marginHorizontal: spacings.large
   },
   textInputHeading: {
-    fontSize: style.fontSizeNormal1x.fontSize,
+    fontSize: style.fontSizeSmall1x.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
     fontFamily: 'Montserrat-BoldItalic'

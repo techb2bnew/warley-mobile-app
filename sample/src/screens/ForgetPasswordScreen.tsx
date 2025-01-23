@@ -148,7 +148,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
         {currentStep === 'email' && (
           <View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
             <Text style={[styles.text, { color: colors.blackColor }]}>Forgot password</Text>
-            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
+            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
             <Text style={[styles.textInputHeading, { marginTop: spacings.large, color: colors.blackColor }]}>{EMAIL}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
               <View style={{ flex: 1 }}>
@@ -164,7 +164,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   value={email}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                 />
               </View>
 
@@ -195,7 +195,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
           </View>)}
         {currentStep === 'password' && (<View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
           <Text style={[styles.text, { color: colors.blackColor }]}>Reset password</Text>
-          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }]}>Set the new password for your account so you can login and access all the features.</Text>
+          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }]}>Set the new password for your account so you can login and access all the features.</Text>
           <View style={[{ width: "100%", height: hp(18), marginTop: spacings.Large1x }]}>
             <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{PASSWORD}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
@@ -206,7 +206,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   onChangeText={setPassword}
                   value={password}
                   secureTextEntry={!showPassword}
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowPassword}>
@@ -228,7 +228,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   }}
                   value={confirmPassword}
                   secureTextEntry={!showConfirmPassword}
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }}
+                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -264,14 +264,14 @@ const styles = StyleSheet.create({
     height: hp(5)
   },
   text: {
-    fontSize: style.fontSizeLarge2x.fontSize,
+    fontSize: style.fontSizeLarge1x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     color: blackColor,
     fontFamily: 'Montserrat-BoldItalic'
   },
   input: {
     width: '100%',
-    height: hp(6),
+    height: hp(5),
     borderColor: grayColor,
     paddingHorizontal: spacings.normal,
     marginVertical: spacings.large,
@@ -286,12 +286,12 @@ const styles = StyleSheet.create({
 
   },
   buttonText: {
-    fontSize: style.fontSizeNormal2x.fontSize,
+    fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     fontFamily: 'Montserrat-BoldItalic'
   },
   textInputHeading: {
-    fontSize: style.fontSizeNormal2x.fontSize,
+    fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
     fontFamily: 'Montserrat-BoldItalic'

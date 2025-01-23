@@ -13,8 +13,9 @@ import { useCart } from '../context/Cart';
 import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
 import { useSelector } from 'react-redux';
+import FastImage from 'react-native-fast-image';
 const { alignItemsCenter, alignJustifyCenter, flexDirectionRow, justifyContentSpaceBetween } = BaseStyle;
-const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory,trimtext }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
+const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory, trimtext }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
   const { totalQuantity } = useCart();
   const userLoggedIn = useSelector(state => state.auth.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false)
@@ -68,7 +69,18 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
           </TouchableOpacity>}
           {text && <Text style={[styles.text, { color: colors.blackColor }]}>{trimtext ? trimcateText(text) : text}</Text>}
         </View>
-        {image && <Image source={isDarkMode ? WARLEY_HEADER_LOGO_NEW : WARLEY_HEADER_LOGO_NEW} style={{ width: wp(34), height: hp(4.5), resizeMode: "contain", marginStart: Platform.OS === "android" ? menuImage ? userLoggedIn ? wp(12) : wp(1) : wp(1) : userLoggedIn ? wp(12) : wp(5) }} />}
+
+        {image &&
+          <View style={{ width: wp(34), height: hp(6), alignItems: "center", justifyContent: "center", marginStart: Platform.OS === "android" ? menuImage ? userLoggedIn ? wp(12) : wp(1) : wp(1) : userLoggedIn ? wp(12) : wp(5) }} >
+            <FastImage
+              source={{ uri: "https://warleysuperstoreonline.com/cdn/shop/files/warley_New.gif?v=1737359072&width=120" }}
+              style={[
+                { width: wp(19), height: hp(5.5)},
+              ]}
+              resizeMode={FastImage.resizeMode.contain}
+            />
+          </View>}
+        {/* {image && <Image source={isDarkMode ? WARLEY_HEADER_LOGO_NEW : WARLEY_HEADER_LOGO_NEW} style={{ width: wp(34), height: hp(4.5), resizeMode: "contain", marginStart: Platform.OS === "android" ? menuImage ? userLoggedIn ? wp(12) : wp(1) : wp(1) : userLoggedIn ? wp(12) : wp(5) }} />} */}
         <View style={[flexDirectionRow, { width: "auto", marginRight: spacings.large }, justifyContentSpaceBetween, alignItemsCenter]}>
           {textinput && <TouchableOpacity style={[alignJustifyCenter, { width: wp(8) }]} onPress={OnClickSearchBar}>
             <Image source={isDarkMode ? WHITE_SEARCH_ICON : SEARCH_ICON} style={{ width: wp(6), height: hp(3.5), resizeMode: "contain", marginLeft: spacings.large }} />

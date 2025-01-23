@@ -401,7 +401,7 @@ import Toast from 'react-native-simple-toast';
 import { useNavigation } from '@react-navigation/native';
 const { alignItemsCenter, resizeModeCover, flexDirectionRow, alignJustifyCenter, borderWidth1, resizeModeContain } = BaseStyle;
 
-const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress }) => {
+const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress,ids }) => {
   const imageSource = product?.images?.edges ? product?.images?.edges[0]?.node?.url : product?.images?.nodes[0]?.url;
   const price = product?.variants?.edges ? product?.variants?.edges[0]?.node?.price : product?.variants?.nodes[0];
   const priceAmount = price?.price ? price?.price : price?.amount;
@@ -479,13 +479,20 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress }) 
     onAddToCart((product?.variants?.edges) ? (product?.variants?.edges[0]?.node.id) : product?.variants?.nodes[0].id, quantity);
     setIsAddedToCart(true);
   };
+
   return (
     <View style={{ width: wp(28.5), marginHorizontal: 6, paddingHorizontal: spacings.large, paddingVertical: 6 }}>
       <Pressable style={[styles.productContainer, alignItemsCenter, { backgroundColor: whiteColor, overflow: "hidden" }]} onPress={onPress}>
-        <Image
+        {imageSource ? <Image
           source={{ uri: imageSource }}
           style={[styles.productImage, resizeModeContain]}
-        />
+        /> : <Image
+          source={COMING_SOON_IMG}
+          style={[styles.productImage, resizeModeCover, {
+            width: "95%",
+            height: hp(9.5)
+          }]}
+        />}
       </Pressable>
       <View style={{ width: "100%", paddingRight: spacings.large, marginTop: 10 }}>
         <View style={{ width: "100%", height: hp(3.5) }}>
@@ -502,7 +509,7 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress }) 
             </Text>
           ))}
       </View>
-      {!isAddedToCart && !outOfStock ? (
+      {!isAddedToCart && ids?.[0]?.continueSelling === true && priceAmount > 0 ? (
         <Pressable style={styles.addToCartButton} onPress={handleAddToCart}>
           <Text style={[styles.quantityButton, { color: colors.blackColor }]}>+</Text>
         </Pressable>
@@ -541,7 +548,7 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress }) 
           >-</Text>
         </View>
       ) : null}
-      {outOfStock && (
+      {(ids?.[0]?.continueSelling !== true || priceAmount <= 0) && (
         <View style={[styles.commingSoonAddToCart, { width: wp(8) }]}>
           <Text style={[{ color: whiteColor, textAlign: "center", fontFamily: 'Montserrat-BoldItalic', fontSize: 8 }]}>Sold out</Text>
         </View>

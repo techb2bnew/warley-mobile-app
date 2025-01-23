@@ -65,6 +65,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const collections = shopifyCollection || [];
   const [collectionImages, setCollectionImages] = useState({});
   const catagory = [...collections.slice(0, 5)];
+  const recentlyViewedProduct = useSelector((state) => state.recentlyViewed);
+
 
   const productsBest = [
     {
@@ -139,6 +141,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
               nodes {
                 price
                 inventoryQuantity
+                inventoryPolicy
                 id
                 title
                 image {
@@ -162,25 +165,30 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         .then((response) => response.text())
         .then((result) => {
           const fetchedProducts = JSON.parse(result);
-          setBestDealProducts(fetchedProducts?.data?.collection?.products?.nodes);
-          const inventoryQuantities = fetchedProducts?.data?.collection?.products?.nodes?.map((productEdge) => {
+          const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
+            a.title.localeCompare(b.title)
+          );
+
+          setBestDealProducts(sortedProducts);
+          const inventoryQuantities = sortedProducts?.map((productEdge) => {
             return productEdge?.variants?.nodes?.map((variants) => variants?.inventoryQuantity);
           });
           setBestDealInventoryQuantities(inventoryQuantities)
-          const fetchedOptions = fetchedProducts?.data?.collection?.products?.nodes.map((product) => product.options);
+          const fetchedOptions = sortedProducts.map((product) => product.options);
           setBestDealOptions(fetchedOptions);
 
-          const productVariantData = fetchedProducts?.data?.collection?.products?.nodes.map((product) =>
+          const productVariantData = sortedProducts.map((product) =>
             product.variants.nodes.map((variant) => ({
               id: variant?.id,
               title: variant?.title,
               inventoryQty: variant?.inventoryQuantity,
+              continueSelling: variant?.inventoryPolicy === "CONTINUE",
               image: variant?.image
             }))
           );
           setBestDealProductVariantsIDS(productVariantData);
 
-          const fetchedTags = fetchedProducts?.data?.collection?.products?.nodes.map(productEdge => productEdge?.tags);
+          const fetchedTags = sortedProducts.map(productEdge => productEdge?.tags);
           setbestDealTags(fetchedTags)
         })
         .catch((error) => console.log(error));
@@ -220,6 +228,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 nodes {
                   price
                   inventoryQuantity
+                  inventoryPolicy
                   id
                   title
                   image {
@@ -243,26 +252,30 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         .then((response) => response.text())
         .then((result) => {
           const fetchedProducts = JSON.parse(result);
-          setProducts(fetchedProducts?.data?.collection?.products?.nodes);
+          const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
+            a.title.localeCompare(b.title)
+          );
+          setProducts(sortedProducts);
           setSkeletonLoading(false)
-          const inventoryQuantities = fetchedProducts?.data?.collection?.products?.nodes?.map((productEdge) => {
+          const inventoryQuantities = sortedProducts?.map((productEdge) => {
             return productEdge?.variants?.nodes?.map((variants) => variants?.inventoryQuantity);
           });
           setInventoryQuantities(inventoryQuantities)
-          const fetchedOptions = fetchedProducts?.data?.collection?.products?.nodes?.map((product) => product?.options);
+          const fetchedOptions = sortedProducts?.map((product) => product?.options);
           setOptions(fetchedOptions);
 
-          const productVariantData = fetchedProducts?.data?.collection?.products?.nodes.map((product) =>
+          const productVariantData = sortedProducts.map((product) =>
             product.variants.nodes.map((variant) => ({
               id: variant?.id,
               title: variant?.title,
               inventoryQty: variant?.inventoryQuantity,
+              continueSelling: variant?.inventoryPolicy === "CONTINUE",
               image: variant?.image
             }))
           );
           setProductVariantsIDS(productVariantData);
 
-          const fetchedTags = fetchedProducts?.data?.collection?.products?.nodes.map(productEdge => productEdge?.tags);
+          const fetchedTags = sortedProducts.map(productEdge => productEdge?.tags);
           setTags(fetchedTags)
         })
         .catch((error) => { console.log(error), setSkeletonLoading(false) });
@@ -696,9 +709,12 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             borderWidth: isDarkMode ? 1 : 1,
             // borderColor: isDarkMode ? borderColor : borderColor, 
             borderColor: blackColor,
-            borderRadius: 50, width: "100%", height: "100%", backgroundColor: colors.whiteColor
+            borderRadius: 50,
+            width: "100%",
+            height: "100%",
+            backgroundColor: colors.whiteColor
           }, alignJustifyCenter]}>
-            <Image source={{ uri: imageUrl }} style={[{ resizeMode: "contain", width: "100%", height: "100%" }]} />
+            <Image source={{ uri: imageUrl }} style={[{ resizeMode: "contain", width: "95%", height: "95%", alignItems: "center", justifyContent: "center", borderRadius: 50 }]} />
           </View>
         </Pressable>
         <Text style={[styles.collectionText, textAlign, { color: colors.blackColor }]}>
@@ -1030,10 +1046,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 //   color={colors.blackColor}
                 // />
                 <SkeletonPlaceholder>
-                  <View style={{ flexDirection: 'row',  }}>
+                  <View style={{ flexDirection: 'row', }}>
                     <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                     <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
-                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                     <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                   </View>
                 </SkeletonPlaceholder>
@@ -1101,15 +1117,15 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 style={{ width: "100%" }}
               /> :
                 <SkeletonPlaceholder>
-                  <View style={{ flexDirection: 'row'}}>
-                  <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                  <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
-                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                   </View>
-                  <View style={{ flexDirection: 'row'}}>
-                  <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                  <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
-                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5}} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
+                    <View style={{ width: wp(30), height: hp(24), borderRadius: 10, marginRight: 5 }} />
                   </View>
                 </SkeletonPlaceholder>
               }
@@ -1124,6 +1140,95 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
               )}
               onBannerPress={handleBannerPress}
             />
+
+
+            {recentlyViewedProduct?.length > 0 && (
+              <>
+                <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
+                  <Text style={[styles.text, { color: colors.blackColor }]}>{"Recently Viewed"}</Text>
+                </View>
+                <View style={[{ height: "auto", width: "100%", paddingHorizontal: spacings.large }]}>
+                  <FlatList
+                    // data={
+                    //   recentlyViewedProduct.length % 2 === 0
+                    //     ? recentlyViewedProduct
+                    //     : [...recentlyViewedProduct, { id: 'placeholder', comingSoon: true }]
+                    // }
+                    data={recentlyViewedProduct}
+                    renderItem={({ item, index }) => {
+                      // Log the item for debugging
+                      const variantData = (item?.variants?.edges || item?.variants?.nodes || []).map(variant => {
+                        const node = variant?.node || variant; // Handle both edges and nodes
+                        return {
+                          id: node?.id,                         // Extract the variant ID
+                          title: node?.title,                   // Extract the variant title
+                          inventoryQuantity: node?.inventoryQuantity, 
+                          continueSelling: node?.inventoryPolicy === "CONTINUE",
+                          image: node?.image?.src              
+                        };
+                      });
+                      // console.log('Rendered item:', variantData);
+
+                      // if (item.comingSoon) {
+                      //   return (
+                      //     <Pressable
+                      //       style={{
+                      //         width: wp(42.2),
+                      //         height: hp(24),
+                      //         margin: spacings.small,
+                      //         justifyContent: 'center',
+                      //         alignItems: 'center',
+                      //         backgroundColor: colors.lightGrayColor,
+                      //         borderRadius: 10,
+                      //       }}
+                      //       onPress={() => navigation.navigate("Catalog")}
+                      //     >
+                      //       <Text
+                      //         style={{
+                      //           color: colors.grayColor,
+                      //           fontSize: 16,
+                      //           fontWeight: 'bold',
+                      //         }}
+                      //       >
+                      //         See More
+                      //       </Text>
+                      //     </Pressable>
+                      //   );
+                      // }
+
+                      return (
+                        <Product
+                          product={item}
+                          onAddToCart={addToCartProduct}
+                          loading={addingToCart?.has(getVariant(item)?.id ?? '')}
+                          inventoryQuantity={item.inventoryQuantity}
+                          option={item.option}
+                          ids={variantData}
+                          spaceTop={spacings.small}
+                          width={wp(28)}
+                          onPress={() => {
+                            console.log('Product item pressed:', item);
+                            navigation.navigate('ProductDetails', {
+                              product: item,
+                              variant: getVariant(item),
+                              inventoryQuantity: item.inventoryQuantity,
+                              tags: item.tags,
+                              option: item.options,
+                              ids: variantData,
+                            });
+                          }}
+                        />
+                      );
+                    }}
+                    showsHorizontalScrollIndicator={false}
+                    numColumns={3}
+                    keyExtractor={(item, index) => `${item?.id}-${index}`}
+                    style={{ width: '100%' }}
+                  />
+
+                </View>
+              </>
+            )}
           </View>
         )}
 

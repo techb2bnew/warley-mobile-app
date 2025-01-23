@@ -331,7 +331,9 @@ const UserDashboardScreen = () => {
 
     const ids = item?.variants?.nodes?.map(variant => ({
       id: variant.id,
-      title: variant.title
+      title: variant.title,
+      inventoryQty: variant.inventoryQuantity,
+      continueSelling: variant?.inventoryPolicy === "CONTINUE"
     }));
 
     const getCartItem = (variantId) =>
@@ -343,7 +345,7 @@ const UserDashboardScreen = () => {
       logEvent('Increase Product Quantity');
       const newQuantity = productquantity + 1;
       setProductQuantity(newQuantity);
-      addToCart(item?.variants?.nodes[0]?.id, 1); 
+      addToCart(item?.variants?.nodes[0]?.id, 1);
     };
 
     const decrementQuantity = () => {
@@ -378,21 +380,35 @@ const UserDashboardScreen = () => {
           <AntDesign
             name={"heart"}
             size={20}
-            color={"#eb4345"}
+            color={redColor}
           />
         </Pressable>
         <>
-          {inventoryQuantity > 0 && item.price?.[0] != 0 && itemPrice != 0 ? (
+          {ids?.[0]?.continueSelling === true || item.price?.[0] != 0 && itemPrice != 0 ? (
             productQuantity > 0 ? (
               // If product is in the cart with quantity > 0, show increment/decrement buttons
               <View key={cartItem.node.id} style={[styles.quantityContainer]}>
-                <TouchableOpacity onPress={() => incrementQuantity(variantId)}>
-                  <AntDesign name={"pluscircle"} size={25} color={"#399918"} />
+                {/* <TouchableOpacity onPress={() => incrementQuantity(variantId)}>
+                  <AntDesign name={"pluscircle"} size={25} color={redColor} />
                 </TouchableOpacity>
                 <Text style={styles.quantity}>{productQuantity}</Text>
                 <TouchableOpacity onPress={() => decrementQuantity(variantId)}>
-                  <AntDesign name={"minuscircle"} size={25} color={"#399918"} />
-                </TouchableOpacity>
+                  <AntDesign name={"minuscircle"} size={25} color={redColor} />
+                </TouchableOpacity> */}
+                <Text style={[styles.quantityButton, { color: colors.blackColor }]}
+                  onPress={incrementQuantity}
+                >+</Text>
+                <Text
+                  style={[
+                    styles.quantityButton, alignJustifyCenter,
+                    { color: colors.blackColor, backgroundColor: redColor, width: wp(9), textAlign: "center", padding: 5 },
+                  ]}
+                >
+                  {productQuantity}
+                </Text>
+                <Text style={[styles.quantityButton, { color: colors.blackColor }]}
+                  onPress={decrementQuantity}
+                >-</Text>
               </View>
             ) : (
               // If product is not in the cart (quantity 0), show Add to Cart button
@@ -595,7 +611,7 @@ const UserDashboardScreen = () => {
                 renderItem={renderProductItem}
               />
             </View> :
-            <View style={[styles.centeredContainer, alignJustifyCenter, { width: wp(80),height:hp(80), alignSelf: "center" }]}>
+            <View style={[styles.centeredContainer, alignJustifyCenter, { width: wp(80), height: hp(80), alignSelf: "center" }]}>
               <View>
                 <AntDesign
                   name={"hearto"}

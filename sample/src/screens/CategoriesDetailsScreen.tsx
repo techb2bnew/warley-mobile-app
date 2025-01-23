@@ -7,7 +7,7 @@ import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color'
 import Header from '../components/Header';
 import { BaseStyle } from '../constants/Style';
 import Toast from 'react-native-simple-toast';
-import { FILTER_ICON, WHITE_FILTER_ICON, DARK_BACKGROUND_IMAGE, BACKGROUND_IMAGE, NO_PRODUCT_IMG } from '../assests/images';
+import { FILTER_ICON, WHITE_FILTER_ICON, DARK_BACKGROUND_IMAGE, BACKGROUND_IMAGE, NO_PRODUCT_IMG, COMING_SOON_IMG } from '../assests/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, ADD_TO_CART, OUT_OF_STOCK } from '../constants/Constants'
 import { ShopifyProduct } from '../../@types';
@@ -197,6 +197,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                             title
                                             price
                                             inventoryQuantity
+                                            inventoryPolicy
                                             image {
                                                 originalSrc
                                             }
@@ -242,38 +243,79 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
         }
     };
 
+    // const processFetchedData = (newProducts) => {
+    //     // Append new products to the existing list
+    //     setProducts((prev) => [...prev, ...newProducts]);
+
+    //     // Append inventory quantities incrementally
+    //     setInventoryQuantities((prev) => [
+    //         ...prev,
+    //         ...newProducts.map((product) =>
+    //             product.variants.nodes.map((variant) => variant.inventoryQuantity)
+    //         ),
+    //     ]);
+
+    //     // Append tags incrementally
+    //     setTags((prev) => [...prev, ...newProducts.map((product) => product.tags)]);
+
+    //     // Append options incrementally
+    //     setOptions((prev) => [...prev, ...newProducts.map((product) => product.options)]);
+
+    //     // Append product variants incrementally
+    //     setProductVariantsIDS((prev) => [
+    //         ...prev,
+    //         ...newProducts.map((product) =>
+    //             product.variants.nodes.map((variant) => ({
+    //                 id: variant.id,
+    //                 title: variant.title,
+    //                 inventoryQty: variant.inventoryQuantity,
+    //                 image: variant.image?.originalSrc,
+    //             }))
+    //         ),
+    //     ]);
+    // };
+
     const processFetchedData = (newProducts) => {
-        // Append new products to the existing list
-        setProducts((prev) => [...prev, ...newProducts]);
+        // Sort new products alphabetically by title
+        const sortedNewProducts = [...newProducts].sort((a, b) =>
+            a.title.localeCompare(b.title)
+        );
+
+        // Update the products state with sorted products
+        setProducts((prev) =>
+            [...prev, ...sortedNewProducts].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            )
+        );
 
         // Append inventory quantities incrementally
         setInventoryQuantities((prev) => [
             ...prev,
-            ...newProducts.map((product) =>
+            ...sortedNewProducts.map((product) =>
                 product.variants.nodes.map((variant) => variant.inventoryQuantity)
             ),
         ]);
 
         // Append tags incrementally
-        setTags((prev) => [...prev, ...newProducts.map((product) => product.tags)]);
+        setTags((prev) => [...prev, ...sortedNewProducts.map((product) => product.tags)]);
 
         // Append options incrementally
-        setOptions((prev) => [...prev, ...newProducts.map((product) => product.options)]);
+        setOptions((prev) => [...prev, ...sortedNewProducts.map((product) => product.options)]);
 
         // Append product variants incrementally
         setProductVariantsIDS((prev) => [
             ...prev,
-            ...newProducts.map((product) =>
+            ...sortedNewProducts.map((product) =>
                 product.variants.nodes.map((variant) => ({
                     id: variant.id,
                     title: variant.title,
                     inventoryQty: variant.inventoryQuantity,
+                    continueSelling: variant?.inventoryPolicy === "CONTINUE",
                     image: variant.image?.originalSrc,
                 }))
             ),
         ]);
     };
-
 
     const handleSubcategorySelect = (item) => {
         setSelectedItem(item.url)
@@ -351,7 +393,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     };
     return (
         <ImageBackground style={[{ flex: 1 }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
-        {/* // <View style={[{ flex: 1, backgroundColor: whiteColor }]} > */}
+            {/* // <View style={[{ flex: 1, backgroundColor: whiteColor }]} > */}
             <>
                 <Header backIcon={true} text={routeName} navigation={navigation} />
                 <View style={{ width: "100%", height: 5, backgroundColor: colors.whiteColor }}></View>
@@ -516,8 +558,8 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
 
             </>
             <ChatButton onPress={handleChatButtonPress} />
-            </ImageBackground>
-        
+        </ImageBackground>
+
     );
 };
 
@@ -563,8 +605,8 @@ const ProductItem = ({ item, InventoryQuantities, ids, onPress, addToCartProduct
 
     return (
         <Pressable style={[styles.itemContainer, alignJustifyCenter, borderRadius10, overflowHidden, { backgroundColor: isDarkMode ? colors.grayColor : whiteColor }]} onPress={onPress}>
-            <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} />
-            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor, paddingHorizontal: 8 }]}>{item?.title}</Text>
+            {(item?.images?.nodes[0]?.url) ? <Image source={{ uri: item?.images?.nodes[0]?.url }} style={[styles.categoryImage, resizeModeContain]} /> :
+                <Image source={COMING_SOON_IMG} style={[styles.categoryImage, resizeModeContain, { width: wp(40), height: hp(20.5) }]} />}            <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.blackColor, paddingHorizontal: 8 }]}>{item?.title}</Text>
             <Text style={[styles.categoryName, textAlign, { fontWeight: style.fontWeightThin1x.fontWeight, color: colors.redColor, paddingHorizontal: 8, fontFamily: 'arrialnarrow' }]}>{shopCurrency} {priceAmount}</Text>
             <View style={[styles.quantityContainer, borderWidth1, flexDirectionRow, alignJustifyCenter]}>
                 <TouchableOpacity onPress={decrementQuantity}>

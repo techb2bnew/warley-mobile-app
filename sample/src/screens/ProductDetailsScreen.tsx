@@ -16,7 +16,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../utils'
 import { YOU_MIGHT_LIKE, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, STOREFRONT_ACCESS_TOKEN, GOOGLE_APIKEY, STORE_LOCATION_ID, WRITE_REVIEW_URL, RATING_REVIEWS, reviews } from '../constants/Constants';
 import { logEvent } from '@amplitude/analytics-react-native';
 import { ShopifyProduct } from '../../@types';
-import { BACKGROUND_IMAGE, LADY_DONALD_RICE, DARK_BACKGROUND_IMAGE } from '../assests/images';
+import { BACKGROUND_IMAGE, LADY_DONALD_RICE, DARK_BACKGROUND_IMAGE, COMING_SOON_IMG } from '../assests/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWishlist, removeFromWishlist } from '../redux/actions/wishListActions';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
@@ -30,6 +30,8 @@ import { lightColors, darkColors } from '../constants/Color';
 import ChatButton from '../components/ChatButton';
 import { useNavigation } from '@react-navigation/native';
 import { scheduleNotification } from '../notifications';
+import { addToRecentlyViewed } from '../redux/actions/recentlyViewedActions';
+
 const { alignJustifyCenter, flexDirectionRow, resizeModeCover, justifyContentSpaceBetween, borderRadius10, borderRadius5, textAlign, positionAbsolute,
   alignItemsCenter, resizeModeContain, textDecorationUnderline } = BaseStyle;
 
@@ -90,14 +92,23 @@ function ProductDetailsScreen({ navigation, route }: Props) {
         console.log('Error fetching related products:', error);
       }
     };
-
-    // if (tags?.length > 0) {
     fetchRelatedProducts();
-    // } else {
-    // Clear related products when tags are empty
-    // setRelatedProducts([]);
-    // }
+
   }, [tags, route?.params?.product?.title]);
+
+  const recentlyViewed = useSelector((state) => state.recentlyViewed);
+
+  useEffect(() => {
+    if (route.params?.product) {
+      const productWithInventory = {
+        ...route.params?.product,
+        inventoryQuantity: route?.params?.inventoryQuantity || 0, // Default to 0 if undefined
+      };
+
+      dispatch(addToRecentlyViewed(productWithInventory, recentlyViewed));
+    }
+    console.log("route?.params?.inventoryQuantity", route?.params?.inventoryQuantity)
+  }, [route.params?.product, route?.params?.inventoryQuantity]);
 
   const handleSelectOption = (optionName, value) => {
     logEvent(`Selected Product  variant Name:${optionName} Value:${value}`);
@@ -357,6 +368,7 @@ function ProductDetails({
   };
 
   const getSelectedVariantId = () => {
+    console.log("ids",ids)
     const selectedOptionString = Object.values(selectedOptions).join(' / ');
     const selectedVariant = ids?.find(variant => variant.title === selectedOptionString);
     return selectedVariant ? selectedVariant.id : null;
@@ -452,12 +464,7 @@ function ProductDetails({
     });
   };
 
-  const trimcateText = (text, maxLength = 25) => {
-    if (text?.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  };
+
 
 
   useEffect(() => {
@@ -598,103 +605,11 @@ function ProductDetails({
     </View>
   );
 
-  const capitalizeFirstLetter = (str) => {
-    if (str.length === 0) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
 
   const handleChatButtonPress = () => {
     logEvent('Chat button clicked in ProdcutDetails Screen');
     navigation.navigate("ShopifyInboxScreen");
   };
-
-  const presentCheckout = async () => {
-    logEvent('Click CheckOut ');
-    if (!userLoggedIn) {
-      logEvent('user not login Go to Auth');
-      openModal()
-      // navigation.navigate("AuthStack");
-      Toast.show("Please First complete the registration process")
-    } else {
-      if (checkoutURL) {
-        // console.log(checkoutURL)
-        // ShopifyCheckout.present(checkoutURL);
-        navigation.navigate('ShopifyCheckOut', {
-          url: checkoutURL,
-        });
-        cancelScheduledNotification()
-        logEvent('Open CheckOut ');
-      } else {
-        console.log('Checkout URL is not available');
-      }
-    }
-  };
-
-  const openModal = () => {
-    setLoginModalVisible(true);
-    // Animate from bottom to top
-    Animated.timing(slideAnim, {
-      toValue: 0, // Slide to the top
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const closeModal = () => {
-    Animated.timing(slideAnim, {
-      toValue: 720, // Slide back to bottom
-      duration: 500,
-      useNativeDriver: true,
-    }).start(() => {
-      setLoginModalVisible(false);
-    });
-  };
-
-
-  const fetchReviews = async () => {
-    if (reviewloading) return;
-    setReviewLoading(true);
-
-    try {
-      // Construct the API URL
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${STORE_LOCATION_ID}&fields=reviews&key=${GOOGLE_APIKEY}`;
-
-      // Fetch data from the Google Places API
-      const response = await fetch(url);
-      const data = await response.json();
-
-      console.log('API response:', data.result.reviews);
-
-      // Check if reviews are available
-      if (data.result && data.result.reviews) {
-        // Filter reviews to get only 5-star ratings
-        const fiveStarReviews = data.result.reviews.filter(review => review.rating === 5);
-        console.log('Filtered 5-star reviews:', fiveStarReviews);
-
-        // Limit to the first 10 5-star reviews
-        const first10Reviews = fiveStarReviews;
-        console.log('First 10 5-star reviews:', first10Reviews);
-
-        // Update the state with the new 5-star reviews
-        setAllReviews(first10Reviews);
-
-        // If there are more pages, increment the page number
-        if (data.next_page_token) {
-          setPage(prevPage => prevPage + 1); // Increment the page number for the next fetch
-        }
-      } else {
-        console.log('No reviews found');
-      }
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    } finally {
-      setReviewLoading(false); // Set loading to false once the fetch is done
-    }
-  };
-
-  useEffect(() => {
-    fetchReviews();
-  }, []);
 
   const handleWriteReview = () => {
     const url = WRITE_REVIEW_URL;
@@ -750,12 +665,15 @@ function ProductDetails({
         showsVerticalScrollIndicator={false}
       >
         <View key={product?.id} style={[styles.productItem, borderRadius10, { width: "100%", paddingBottom: hp(15) }]}>
-          <Image
+          {image?.src || image?.url || image ? (<Image
             resizeMethod="resize"
             style={[styles.productImage, resizeModeCover, borderRadius10]}
-            alt={image?.altText}
             source={{ uri: (image?.src) ? (image?.src) : (image?.url) ? (image?.url) : image }}
-          />
+          />) : (<Image
+            resizeMethod="resize"
+            style={[styles.productImage, resizeModeCover, borderRadius10]}
+            source={COMING_SOON_IMG}
+          />)}
           <TouchableOpacity style={[positionAbsolute, alignJustifyCenter, styles.favButton]} onPress={onPressFavButton}>
             <AntDesign
               name={isSelected ? "heart" : "hearto"}
@@ -765,12 +683,12 @@ function ProductDetails({
           </TouchableOpacity>
           <View style={[styles.productText, justifyContentSpaceBetween]}>
             <View>
-            <View style={[flexDirectionRow, { width: "100%", justifyContent: "space-between", alignItems: "center" }]}>
-                <View style={{width:"70%"}}>
+              <View style={[flexDirectionRow, { width: "100%", justifyContent: "space-between", alignItems: "center" }]}>
+                <View style={{ width: "70%" }}>
                   <Text style={[styles.productTitle, { color: themecolors.blackColor, fontSize: 16 }]}>{product.title}</Text>
                 </View>
 
-               {(variant?.price?.amount || variant?.price) > 0 && <View style={[styles.quantityContainer, flexDirectionRow,alignJustifyCenter]}>
+                {(variant?.price?.amount || variant?.price) > 0 && <View style={[styles.quantityContainer, flexDirectionRow, alignJustifyCenter]}>
                   <TouchableOpacity onPress={decrementQuantity} >
                     <AntDesign
                       name={"minuscircleo"}
@@ -789,11 +707,14 @@ function ProductDetails({
                 </View>}
               </View>
               <View style={[flexDirectionRow, { width: "100%" }]}>
-                {(variant?.price?.amount || variant?.price) && (
+                {(variant?.price?.amount || variant?.price) > 0 ? (
                   <Text style={[styles.productPrice, { color: "#eb4335", fontSize: 16 }]}>
                     {(variant?.price?.currencyCode) ? variant.price.currencyCode === "GBP" && "£" : shopCurrency} {(variant?.price?.amount) ? variant.price.amount : variant.price}
                   </Text>
-                )}
+                ) :
+                  <Text style={[styles.productPrice, { color: redColor, fontSize: 14 }]}>
+                    Coming Soon
+                  </Text>}
                 <Pressable style={[flexDirectionRow, alignItemsCenter, { marginLeft: spacings.large }]}>
 
                 </Pressable>
@@ -856,7 +777,7 @@ function ProductDetails({
             />
             {shuffledReviews.length > 0 && <Pressable
               onPress={handleWriteReview}
-              style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(4.5), padding: spacings.large }]}
+              style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
             >
               <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeSmall2x.fontSize, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>
                 Write a Review
@@ -923,17 +844,18 @@ function ProductDetails({
           {shareProductloading && <LoadingModal visible={shareProductloading} />}
         </View>
       </ScrollView>
-      <ChatButton onPress={handleChatButtonPress} bottom={ hp(15) } />
+      <ChatButton onPress={handleChatButtonPress} bottom={hp(15)} />
       <View style={[flexDirectionRow, positionAbsolute, alignJustifyCenter, {
         // alignItems: "baseline",
         top: Platform.OS === "android" ? hp(77.6) : !(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? hp(68) : hp(68),
         width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(8)
       }]}>
         <View style={[styles.addToCartButtonContainer, { paddingTop: 5 }]}>
-          {(getInventoryQuantity() <= 0 || inventoryQuantity === 0) ? (
+          {ids[0]?.continueSelling != true ||
+            (variant?.price?.amount || variant?.price) <= 0 ? (
             <Pressable style={[styles.outOfStockButton, borderRadius10]}>
               <Text style={[styles.addToCartButtonText, textAlign]}>
-                Out of stock
+                Sold Out
               </Text>
             </Pressable>
           ) : (
@@ -1024,7 +946,7 @@ function createStyles(colors: Colors) {
       width: wp(95),
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
       backgroundColor: redColor,
-      padding: spacings.xxLarge,
+      padding: spacings.xLarge,
     },
     addToCartButtonText: {
       fontSize: style.fontSizeNormal.fontSize,

@@ -80,6 +80,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
                       nodes {
                         price
                         inventoryQuantity
+                        inventoryPolicy
                         id
                         title
                         image {
@@ -121,32 +122,34 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           hasNextPage = pageInfo.hasNextPage;
           endCursor = pageInfo.endCursor;
         }
+        const sortedProducts = allProducts.sort((a, b) => a.title.localeCompare(b.title));
 
         // Set the accumulated products and other data in state
-        setProducts(allProducts);
+        setProducts(sortedProducts);
 
-        const inventoryQuantities = allProducts.map((product) =>
+        const inventoryQuantities = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => variant.inventoryQuantity)
         );
         setInventoryQuantities(inventoryQuantities);
 
-        const fetchedTags = allProducts.map((product) => product.tags);
+        const fetchedTags = sortedProducts.map((product) => product.tags);
         setTags(fetchedTags);
 
-        const fetchedOptions = allProducts.map((product) => product.options);
+        const fetchedOptions = sortedProducts.map((product) => product.options);
         setOptions(fetchedOptions);
 
-        const productVariantData = allProducts.map((product) =>
+        const productVariantData = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => ({
             id: variant.id,
             title: variant.title,
             inventoryQty: variant.inventoryQuantity,
+            continueSelling: variant?.inventoryPolicy === "CONTINUE",
             image: variant.image
           }))
         );
         setProductVariantsIDS(productVariantData);
 
-        console.log("Total Products Fetched:", allProducts.length);
+        console.log("Total Products Fetched:", sortedProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -192,6 +195,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
                       nodes {
                         price
                         inventoryQuantity
+                        inventoryPolicy
                         id
                         title
                         image {
@@ -233,32 +237,34 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           hasNextPage = pageInfo.hasNextPage;
           endCursor = pageInfo.endCursor;
         }
+        const sortedProducts = allProducts.sort((a, b) => a.title.localeCompare(b.title));
 
         // Set the accumulated products and other data in state
-        setProducts(allProducts);
+        setProducts(sortedProducts);
 
-        const inventoryQuantities = allProducts.map((product) =>
+        const inventoryQuantities = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => variant.inventoryQuantity)
         );
         setInventoryQuantities(inventoryQuantities);
 
-        const fetchedTags = allProducts.map((product) => product.tags);
+        const fetchedTags = sortedProducts.map((product) => product.tags);
         setTags(fetchedTags);
 
-        const fetchedOptions = allProducts.map((product) => product.options);
+        const fetchedOptions = sortedProducts.map((product) => product.options);
         setOptions(fetchedOptions);
 
-        const productVariantData = allProducts.map((product) =>
+        const productVariantData = sortedProducts.map((product) =>
           product.variants.nodes.map((variant) => ({
             id: variant.id,
             title: variant.title,
             inventoryQty: variant.inventoryQuantity,
+            continueSelling: variant?.inventoryPolicy === "CONTINUE",
             image: variant.image
           }))
         );
         setProductVariantsIDS(productVariantData);
 
-        console.log("Total Products Fetched:", allProducts.length);
+        console.log("Total Products Fetched:", sortedProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -279,7 +285,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
     logEvent(`Add To Cart Pressed variantId:${variantId} Qty:${quantity}`);
     setLoadingProductId(variantId);
     await addToCart(variantId, quantity);
-    navigation.navigate('Cart')
+    // navigation.navigate('Cart')
     Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
     setLoadingProductId(null);
     scheduleNotification();

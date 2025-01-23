@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['wishlist','auth','cart'], // specify which reducers you want to persist
+  whitelist: ['wishlist','auth','cart','recentlyViewed'], // specify which reducers you want to persist
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
