@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
-import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView, ActivityIndicator, TextInput, ImageBackground, Modal, Button, Dimensions, Alert, Platform } from 'react-native';
+import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView, ActivityIndicator, TextInput, ImageBackground, Modal, Button, Dimensions, Alert, Platform, Animated } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { whiteColor, blackColor, grayColor, redColor, lightGrayOpacityColor } from '../constants/Color'
 import { spacings, style } from '../constants/Fonts';
@@ -29,6 +29,7 @@ import { lightColors, darkColors } from '../constants/Color';
 import { scheduleNotification } from '../notifications';
 import AgeVerificationModal from '../components/Modal/AgeVerificationModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginModal from '../components/Modal/LoginModal'
 const { flex, alignJustifyCenter, flexDirectionRow, resizeModeCover, justifyContentSpaceBetween, borderRadius10, alignItemsCenter,
   textAlign, overflowHidden } = BaseStyle;
 const { height: screenHeight } = Dimensions.get('window');
@@ -66,7 +67,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const [collectionImages, setCollectionImages] = useState({});
   const catagory = [...collections.slice(0, 5)];
   const recentlyViewedProduct = useSelector((state) => state.recentlyViewed);
-
+  const slideAnim = useRef(new Animated.Value(500)).current;
+  const [loginModalVisible, setLoginModalVisible] = useState(false);
 
   const productsBest = [
     {
@@ -832,24 +834,46 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   };
 
 
+  const openModal = () => {
+    setLoginModalVisible(true);
+    // Animate from bottom to top
+    Animated.timing(slideAnim, {
+      toValue: 0, // Slide to the top
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeModal = () => {
+    Animated.timing(slideAnim, {
+      toValue: 720, // Slide back to bottom
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setLoginModalVisible(false);
+    });
+  };
+
   return (
     // <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
     <View style={[flex, { backgroundColor: colors.whiteColor }]} >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1, marginTop: 0 }}
-        stickyHeaderIndices={[1]}
-      >
-        {/* {/ Header /} */}
-        <View>
+      <View>
           <Header
             navigation={navigation}
             image={true}
             menuImage={true}
             notification={true}
             onPressShopByCatagory={onPressShopAll}
+            onPressProfile={openModal}
           />
         </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, marginTop: 0 }}
+        // stickyHeaderIndices={[1]}
+      >
+        {/* {/ Header /} */}
+        
 
         {/* {/ Search Bar (Sticky) /} */}
         <View>
@@ -1149,11 +1173,6 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </View>
                 <View style={[{ height: "auto", width: "100%", paddingHorizontal: spacings.large }]}>
                   <FlatList
-                    // data={
-                    //   recentlyViewedProduct.length % 2 === 0
-                    //     ? recentlyViewedProduct
-                    //     : [...recentlyViewedProduct, { id: 'placeholder', comingSoon: true }]
-                    // }
                     data={recentlyViewedProduct}
                     renderItem={({ item, index }) => {
                       // Log the item for debugging
@@ -1162,40 +1181,11 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                         return {
                           id: node?.id,                         // Extract the variant ID
                           title: node?.title,                   // Extract the variant title
-                          inventoryQuantity: node?.inventoryQuantity, 
+                          inventoryQuantity: node?.inventoryQuantity,
                           continueSelling: node?.inventoryPolicy === "CONTINUE",
-                          image: node?.image?.src              
+                          image: node?.image?.src
                         };
                       });
-                      // console.log('Rendered item:', variantData);
-
-                      // if (item.comingSoon) {
-                      //   return (
-                      //     <Pressable
-                      //       style={{
-                      //         width: wp(42.2),
-                      //         height: hp(24),
-                      //         margin: spacings.small,
-                      //         justifyContent: 'center',
-                      //         alignItems: 'center',
-                      //         backgroundColor: colors.lightGrayColor,
-                      //         borderRadius: 10,
-                      //       }}
-                      //       onPress={() => navigation.navigate("Catalog")}
-                      //     >
-                      //       <Text
-                      //         style={{
-                      //           color: colors.grayColor,
-                      //           fontSize: 16,
-                      //           fontWeight: 'bold',
-                      //         }}
-                      //       >
-                      //         See More
-                      //       </Text>
-                      //     </Pressable>
-                      //   );
-                      // }
-
                       return (
                         <Product
                           product={item}
@@ -1229,11 +1219,16 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
                 </View>
               </>
             )}
+
           </View>
+
         )}
 
         {/* </View> */}
       </ScrollView>
+      {loginModalVisible && (
+        <LoginModal modalVisible={loginModalVisible} closeModal={closeModal} slideAnim={slideAnim} />
+      )}
       {showAgePopup && <AgeVerificationModal onVerify={handleAgeVerified} />}
       <ChatButton onPress={handleChatButtonPress} />
       {/* </ImageBackground> */}
@@ -1296,7 +1291,7 @@ const styles = StyleSheet.create({
     borderWidth: .1,
     borderRadius: 10,
     paddingHorizontal: spacings.large,
-    marginHorizontal: 10,
+    margin: 10,
     shadowOffset: {
       width: 0,
       height: 2,

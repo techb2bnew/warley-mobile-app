@@ -401,7 +401,7 @@ import Toast from 'react-native-simple-toast';
 import { useNavigation } from '@react-navigation/native';
 const { alignItemsCenter, resizeModeCover, flexDirectionRow, alignJustifyCenter, borderWidth1, resizeModeContain } = BaseStyle;
 
-const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress,ids }) => {
+const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress, ids }) => {
   const imageSource = product?.images?.edges ? product?.images?.edges[0]?.node?.url : product?.images?.nodes[0]?.url;
   const price = product?.variants?.edges ? product?.variants?.edges[0]?.node?.price : product?.variants?.nodes[0];
   const priceAmount = price?.price ? price?.price : price?.amount;
@@ -488,7 +488,7 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress,ids
           style={[styles.productImage, resizeModeContain]}
         /> : <Image
           source={COMING_SOON_IMG}
-          style={[styles.productImage, resizeModeCover, {
+          style={[styles.productImage, resizeModeContain, {
             width: "95%",
             height: hp(9.5)
           }]}
@@ -505,7 +505,7 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress,ids
             </Text>
           ) : (
             <Text style={[styles.productPrice, { color: redColor }]}>
-              Coming Soon
+              {/* Coming Soon */}
             </Text>
           ))}
       </View>
@@ -548,9 +548,22 @@ const Product = ({ product, onAddToCart, loading, inventoryQuantity, onPress,ids
           >-</Text>
         </View>
       ) : null}
-      {(ids?.[0]?.continueSelling !== true || priceAmount <= 0) && (
+      {/* {(ids?.[0]?.continueSelling !== true || priceAmount <= 0) && (
         <View style={[styles.commingSoonAddToCart, { width: wp(8) }]}>
           <Text style={[{ color: whiteColor, textAlign: "center", fontFamily: 'Montserrat-BoldItalic', fontSize: 8 }]}>Sold out</Text>
+        </View>
+      )} */}
+      {priceAmount <= 0 ? (
+        <View style={[styles.commingSoonAddToCart, { width: wp(9) }]}>
+          <Text style={{ color: whiteColor, textAlign: "center", fontFamily: 'Montserrat-BoldItalic', fontSize: 8 }}>
+            Coming Soon
+          </Text>
+        </View>
+      ) : ids?.[0]?.continueSelling !== true && (
+        <View style={[styles.commingSoonAddToCart, { width: wp(8) }]}>
+          <Text style={{ color: whiteColor, textAlign: "center", fontFamily: 'Montserrat-BoldItalic', fontSize: 8 }}>
+            Sold Out
+          </Text>
         </View>
       )}
     </View>

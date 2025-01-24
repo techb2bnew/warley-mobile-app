@@ -50,6 +50,9 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false)
   const [showOTP, setShowOTP] = useState(false);
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
   const [sessionId, setSessionId] = useState('');
@@ -215,23 +218,43 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
     setError('');
     setLoading(true);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    if (!firstName && !lastName && !phone && !email && !password && !confirmPassword) {
+      setFirstNameError("First name is required.");
+      setLastNameError("Last name is required.");
+      setPhoneError("Phone number is required.");
+      setEmailError("Email is required.");
+      setPasswordError("Password is required.");
+      setConfirmPasswordError("Confirm password is required.");
+      setLoading(false);
+      return
+    }
     // Validation
     if (!firstName) {
       setLoading(false);
-      return Alert.alert("Validation Error", "Please Enter Your First Name");
+      setFirstNameError("Please enter your first name.");
+      return;
     }
+
     if (!lastName) {
       setLoading(false);
-      return Alert.alert("Validation Error", "Please Enter Your Last Name");
+      setLastNameError("Please enter your last name.");
+      return;
     }
+
     if (!phone) {
       setLoading(false);
-      return Alert.alert("Validation Error", "Please Enter Your Phone Number");
+      setPhoneError("Please enter your phone number.");
+      return;
     }
     if (phone.length < 10) {
       setLoading(false);
-      return Alert.alert("Validation Error", "Please Enter Your 10 Digit Phone Number");
+      setPhoneError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    if (!email) {
+      setLoading(false);
+      setEmailError("Email is required.");
+      return;
     }
     if (!emailPattern.test(email)) {
       setEmailError("Invalid email format");
@@ -244,7 +267,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
       return;
     }
     if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
+      setError("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -553,12 +576,23 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   <TextInput
                     placeholder={FIRST_NAME}
                     placeholderTextColor={colors.grayColor}
-                    onChangeText={setFirstName}
+                    onChangeText={(text) => {
+                      setFirstName(text);
+                      // Reset error if user starts typing
+                      if (text) {
+                        setFirstNameError('');
+                      }
+                      // Validation
+                      if (!text) {
+                        setFirstNameError("Please Enter Your First Name");
+                      }
+                    }}
                     value={firstName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
                   />
                 </View>
               </View>
+              {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
             </View>
             <View style={{ width: "48%", marginRight: spacings.large, }}>
               <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{LAST_NAME}</Text>
@@ -570,12 +604,20 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   <TextInput
                     placeholder={LAST_NAME}
                     placeholderTextColor={colors.grayColor}
-                    onChangeText={setLastName}
+                    // onChangeText={setLastName}
+                    onChangeText={(text) => {
+                      setLastName(text);
+                      // Reset error if user starts typing
+                      if (text) {
+                        setLastNameError('');
+                      }
+                    }}
                     value={lastName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
                   />
                 </View>
               </View>
+              {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
             </View>
           </View>
           <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{"Phone Number"}</Text>
@@ -584,26 +626,26 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
               <MaterialCommunityIcons name={"phone"} size={20} color={colors.grayColor} />
             </View>
             <View style={{ flex: 1 }}>
-              {/* <TextInput
-                placeholder="+91"
-                placeholderTextColor={colors.grayColor}
-                onChangeText={setPhone}
-                value={phone}
-                keyboardType="phone-pad"
-                style={{ color: colors.blackColor,width:"10%" }}
-                maxLength={2}
-              /> */}
               <TextInput
                 placeholder="Enter your Phone Number"
                 placeholderTextColor={colors.grayColor}
-                onChangeText={setPhone}
+                // onChangeText={setPhone}
+                onChangeText={(text) => {
+                  setPhone(text);
+                  // Reset error if user starts typing
+                  if (text) {
+                    setPhoneError('');
+                  }
+
+                }}
                 value={phone}
                 keyboardType="phone-pad"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
                 maxLength={10}
               />
             </View>
           </View>
+          {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
           <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{EMAIL}</Text>
           <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
             <View style={{ width: wp(7) }}>
@@ -613,11 +655,18 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
               <TextInput
                 placeholder={"Enter your Email"}
                 placeholderTextColor={colors.grayColor}
-                onChangeText={setEmail}
+                // onChangeText={setEmail}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  // Reset error if user starts typing
+                  if (text) {
+                    setEmailError('');
+                  }
+                }}
                 value={email}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
               />
             </View>
           </View>
@@ -633,16 +682,25 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   <TextInput
                     placeholder={"Current"}
                     placeholderTextColor={colors.grayColor}
-                    onChangeText={setPassword}
+                    // onChangeText={setPassword}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      // Reset error if user starts typing
+                      if (text) {
+                        setPasswordError('');
+                      }
+                    }}
                     value={password}
                     secureTextEntry={!showPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowPassword}>
                   <MaterialCommunityIcons name={showPassword ? "eye" : "eye-off"} size={20} color={grayColor} />
                 </TouchableOpacity>
               </View>
+              {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+
             </View>
             <View style={{ width: "48%", marginRight: spacings.large, }}>
               <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{CONFIRM_PASSWORD}</Text>
@@ -654,24 +712,33 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   <TextInput
                     placeholder={"Confirm"}
                     placeholderTextColor={colors.grayColor}
-                    onChangeText={setConfirmPassword}
+                    // onChangeText={setConfirmPassword}
+                    onChangeText={(text) => {
+                      setConfirmPassword(text);
+                      // Reset error if user starts typing
+                      if (text) {
+                        setConfirmPasswordError('');
+                      }
+                    }}
                     value={confirmPassword}
                     secureTextEntry={!showConfirmPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowConfirmPassword}>
                   <MaterialCommunityIcons name={showConfirmPassword ? "eye" : "eye-off"} size={20} color={colors.grayColor} />
                 </TouchableOpacity>
               </View>
+              {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
+
             </View>
           </View>
-          {confirmPasswordError || passwordError || error ? <Text style={styles.errorText}>{confirmPasswordError || passwordError || error}</Text> : null}
+          {error ? <Text style={styles.errorText}>{ error}</Text> : null}
           <Pressable style={[styles.button, alignItemsCenter, borderRadius5]} onPress={handleSignUp}>
             <Text style={styles.buttonText}>{"Register"}</Text>
           </Pressable>
 
-          <View style={[alignJustifyCenter, {}]}>
+          {/* <View style={[alignJustifyCenter, {}]}>
             <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginVertical: 10 }]}>
               <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
               <Text style={[{ color: colors.blackColor, margin: spacings.small, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{"Or"}</Text>
@@ -685,12 +752,12 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 <Image source={APPLE_LOGO_IMAGE} style={[{ width: wp(6), height: hp(4) }, resizeModeContain]} />
               </TouchableOpacity>}
             </View>
-          </View>
+          </View> */}
           <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={onBackToLogin}>
-            <Text style={[{ marginTop: hp(3), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
+            <Text style={[{ marginTop: hp(5), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
           </Pressable>
           <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 2 : hp(10), width: "100%" }]}>
-            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
             <View style={[flexDirectionRow, { marginTop: 5, width: "100%" }, alignJustifyCenter]}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -699,7 +766,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Terms Of Services From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -708,7 +775,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Privacy Policy From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -802,7 +869,8 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: redColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: 'Montserrat-BoldItalic',
+    fontSize: 9
   },
   socialAuthBox: {
     width: '100%',

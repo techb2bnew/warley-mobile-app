@@ -204,7 +204,7 @@ function ProductDetailsScreen({ navigation, route }: Props) {
     <View style={[styles.container, { backgroundColor: themecolors.whiteColor }]} >
       <Header
         backIcon={true} textinput={true} text={route?.params?.product?.title}
-        shoppingCart={true} share={true} navigation={navigation} productId={route?.params?.product.id}
+        shoppingCart={true}  navigation={navigation} productId={route?.params?.product.id}
         shareProduct={shareProduct} trimtext={true} />
       <View style={{ width: "100%", height: 5, backgroundColor: themecolors.whiteColor }}></View>
 
@@ -671,7 +671,7 @@ function ProductDetails({
             source={{ uri: (image?.src) ? (image?.src) : (image?.url) ? (image?.url) : image }}
           />) : (<Image
             resizeMethod="resize"
-            style={[styles.productImage, resizeModeCover, borderRadius10]}
+            style={[styles.productImage, resizeModeContain, borderRadius10]}
             source={COMING_SOON_IMG}
           />)}
           <TouchableOpacity style={[positionAbsolute, alignJustifyCenter, styles.favButton]} onPress={onPressFavButton}>

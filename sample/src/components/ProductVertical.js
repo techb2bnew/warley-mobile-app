@@ -651,7 +651,6 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
       onPress={onPress}
     >
       {/* {userLoggedIn && <> */}
-
       {loading ? (
         <View style={[{
           padding: spacings.large, position: "absolute",
@@ -730,9 +729,22 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
           </Pressable>
         )
       ))}
-      {(priceAmount <= 0 || ids?.[0]?.continueSelling != true) && (
+      {/* {(priceAmount <= 0 || ids?.[0]?.continueSelling != true) && (
         <View style={[styles.addToCartButton, { width: wp(9), backgroundColor: redColor }]}>
           <Text style={[styles.addToCartButtonText, { color: whiteColor, padding: spacings.small, fontSize: 9 }]}>Sold Out</Text>
+        </View>
+      )} */}
+      {priceAmount <= 0 ? (
+        <View style={[styles.addToCartButton, { width: wp(12), backgroundColor: redColor }]}>
+          <Text style={[styles.addToCartButtonText, { color: whiteColor, padding: spacings.small, fontSize: 9 }]}>
+            Coming Soon
+          </Text>
+        </View>
+      ) : ids?.[0]?.continueSelling !== true && (
+        <View style={[styles.addToCartButton, { width: wp(9), backgroundColor: redColor }]}>
+          <Text style={[styles.addToCartButtonText, { color: whiteColor, padding: spacings.small, fontSize: 9 }]}>
+            Sold Out
+          </Text>
         </View>
       )}
       {/* </>} */}
@@ -768,7 +780,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
                   </Text>
                 ) : (
                   <Text style={[styles.productPrice, { color: redColor, marginTop: Platform.OS === "android" ? 5 : 0, paddingLeft: spacings.medium }]}>
-                    Coming Soon
+                    {/* Coming Soon */}
                   </Text>
                 )
               )}
@@ -845,7 +857,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 8,
     position: "absolute",
-    right: -5,
+    right: -2,
     top: 1,
     zIndex: 1000
   },

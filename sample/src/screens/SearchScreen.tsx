@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-BoldItalic'
   },
   hintText: {
-    padding: spacings.large,
+    paddingHorizontal: spacings.large,
     color: grayColor,
     fontSize: style.fontSizeNormal.fontSize,
     fontFamily: 'Montserrat-BoldItalic'

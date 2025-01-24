@@ -139,22 +139,35 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email && !password) {
+      setEmailError('Email is required.');
+      setPasswordError('Password is required.');
+      logEvent('BothFieldsEmpty');
+      return;
+    }
     if (!emailPattern.test(email)) {
-          setEmailError(INVALID_EMAIL_FORMAT);
-          logEvent(INVALID_EMAIL_FORMAT);
-          setPasswordError('');
-          return;
-        }
-        if (password.length < 8) {
-          setEmailError('');
-          logEvent(PASSWORD_MUST_BE_AT);
-          setPasswordError(PASSWORD_MUST_BE_AT)
-          return;
-        }
-        if (!rememberMe) {
-          Toast.show('Please select the "Remember Me" checkbox');
-          return;
-        }
+      setEmailError('Invalid email format. Please enter a valid email address.');
+      logEvent(INVALID_EMAIL_FORMAT);
+      setPasswordError('');
+      return;
+    }
+    if ( !password) {
+      setEmailError('');
+      setPasswordError('Password is required.');
+      logEvent('BothFieldsEmpty');
+      return;
+    }
+    if (password.length < 8) {
+      setEmailError('');
+      logEvent(PASSWORD_MUST_BE_AT);
+      setPasswordError(PASSWORD_MUST_BE_AT)
+      return;
+    }
+    if (!rememberMe) {
+      Toast.show('Please select the "Remember Me" checkbox to proceed.');
+      return;
+    }
     const raw = JSON.stringify({
       email: email,
       password: password
@@ -326,7 +339,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
 
       const isRegistered = await checkIfUserIsRegistered(user.email);
       // console.log("isRegistered", isRegistered);
-      
+
       if (isRegistered) {
         Toast.show(`User LoggedIn Succesfully`);
       }
@@ -365,7 +378,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
 
-      const { email,identityToken} = appleAuthRequestResponse;
+      const { email, identityToken } = appleAuthRequestResponse;
       // console.log(
       //   "appleAuthRequestResponse>>::",
       //   appleAuthRequestResponse,
@@ -431,7 +444,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               value={email}
               keyboardType="email-address"
               autoCapitalize="none"
-              style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize: 12 }}
+              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
             />
           </View>
         </View>
@@ -453,7 +466,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               }}
               value={password}
               secureTextEntry={!showPassword}
-              style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize: 12 }}
+              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
             />
           </View>
           <TouchableOpacity onPress={toggleShowPassword}>
@@ -467,19 +480,19 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               {rememberMe ? <Fontisto name="toggle-on" size={25} color={colors.redColor} />
                 : <Fontisto name="toggle-off" size={25} color={colors.grayColor} />}
             </TouchableOpacity>
-            <Text style={[{ color: colors.blackColor, paddingHorizontal: 4,fontFamily: 'Montserrat-BoldItalic',fontSize: 12 }]}>{REMEMBER_ME}</Text>
+            <Text style={[{ color: colors.blackColor, paddingHorizontal: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }]}>{REMEMBER_ME}</Text>
           </View >
           <TouchableOpacity
             onPress={() => { navigation.navigate("ForgetPasswordScreen"), onCloseModal() }}
-            style={{marginTop:5}}
+            style={{ marginTop: 5 }}
           >
-            <Text style={[{ color: redColor,fontFamily: 'Montserrat-BoldItalic',fontSize: 12 }]}>{FORGET_PASSWORD}</Text>
+            <Text style={[{ color: redColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }]}>{FORGET_PASSWORD}</Text>
           </TouchableOpacity>
         </View>
         <Pressable style={[styles.button, alignItemsCenter, borderRadius5]} onPress={handleLogin}>
           <Text style={styles.buttonText}>{LOGIN}</Text>
         </Pressable>
-        <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginTop: spacings.large }]}>
+        {/* <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginTop: spacings.large }]}>
           <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
           <Text style={[{ color: colors.blackColor, marginVertical: spacings.xxxxLarge, marginHorizontal: spacings.small ,fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize}, textAlign]}>or</Text>
           <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
@@ -491,12 +504,12 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
           {Platform.OS === 'ios' && <TouchableOpacity style={[styles.socialButton, alignJustifyCenter]} onPress={appleSignIn}>
             <Image source={APPLE_LOGO_IMAGE} style={[{ width: wp(6), height: hp(4) }, resizeModeContain]} />
           </TouchableOpacity>}
-        </View>
+        </View> */}
         <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={() => handleSignUpClick()}>
-          <Text style={[{ marginTop: spacings.Large1x, color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
+          <Text style={[{ marginTop: hp(7), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
         </Pressable>
         <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 0 : hp(10), width: "100%" }]}>
-          <Text style={[{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+          <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
           <View style={[flexDirectionRow, { marginTop: spacings.large, width: "100%" }, alignJustifyCenter]}>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -505,7 +518,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Terms Of Services From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4,fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall2x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -514,7 +527,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Privacy Policy From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4,fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall2x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
             </TouchableOpacity>
 
           </View>
@@ -530,7 +543,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    backgroundColor:whiteColor
+    backgroundColor: whiteColor
   },
   text: {
     fontSize: style.fontSizeLarge3x.fontSize,
@@ -574,7 +587,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: redColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: 'Montserrat-BoldItalic',
+    fontSize:9
   },
   backIcon: {
     top: 15,

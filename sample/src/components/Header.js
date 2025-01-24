@@ -15,7 +15,7 @@ import { lightColors, darkColors } from '../constants/Color';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 const { alignItemsCenter, alignJustifyCenter, flexDirectionRow, justifyContentSpaceBetween } = BaseStyle;
-const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory, trimtext }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
+const Header = ({ navigation, backIcon, text, share, onPress, productId, shareProduct, textinput, notification, image, closeIcon, menuImage, onClosePress, shoppingCart, onPressShopByCatagory, trimtext, onPressProfile }: { navigation: any, backIcon?: boolean, text?: string, textinput?: boolean, notification?: boolean }) => {
   const { totalQuantity } = useCart();
   const userLoggedIn = useSelector(state => state.auth.isAuthenticated);
   const [modalVisible, setModalVisible] = useState(false)
@@ -56,7 +56,7 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
   }
   return (
     <View>
-      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "99%" }]}>
+      <View style={[flexDirectionRow, alignJustifyCenter, justifyContentSpaceBetween, { height: hp(7), width: "100%",backgroundColor: '#E6E664' }]}>
         <View style={[flexDirectionRow, alignItemsCenter]}>
           {backIcon && <TouchableOpacity style={[alignJustifyCenter, { width: wp(10) }]} onPress={OnClickBackIcon}>
             <Ionicons name={"arrow-back"} size={25} color={colors.blackColor} />
@@ -75,7 +75,7 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
             <FastImage
               source={{ uri: "https://warleysuperstoreonline.com/cdn/shop/files/warley_New.gif?v=1737359072&width=120" }}
               style={[
-                { width: wp(19), height: hp(5.5)},
+                { width: wp(19), height: hp(5.5) },
               ]}
               resizeMode={FastImage.resizeMode.contain}
             />
@@ -91,9 +91,15 @@ const Header = ({ navigation, backIcon, text, share, onPress, productId, sharePr
 
 
           {notification && <TouchableOpacity style={[alignJustifyCenter, { width: userLoggedIn ? wp(15) : wp(5) }]} onPress={OnClickNotification}>
-            <Image source={isDarkMode ? NOTIFICTION_IMG_WHITE : NOTIFICTION_IMG} style={{ width: wp(6), height: hp(3), resizeMode: "contain", marginLeft: spacings.large }} />
+            {/* <Image source={isDarkMode ? NOTIFICTION_IMG_WHITE : NOTIFICTION_IMG} style={{ width: wp(6), height: hp(3), resizeMode: "contain", marginLeft: spacings.large }} /> */}
           </TouchableOpacity>}
-          {userLoggedIn && notification && <TouchableOpacity style={[alignJustifyCenter, { width: wp(7) }]} onPress={() => navigation.navigate("ProfileStack")} >
+          {notification && <TouchableOpacity style={[alignJustifyCenter, { width: wp(7) }]} onPress={() => {
+            if (userLoggedIn) {
+              navigation.navigate("ProfileStack");
+            } else {
+              onPressProfile()
+            }
+          }} >
             {/* <Image
               source={PROFILE_ICON}
               style={{ width: wp(6), height: hp(3), resizeMode: "contain",  }}
