@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Image, ImageBackground, StyleSheet, Text, View, Pressable, FlatList } from 'react-native'
 import { useThemes } from '../context/ThemeContext';
 import { lightColors, darkColors } from '../constants/Color';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color';
 import Header from '../components/Header';
 import { BaseStyle } from '../constants/Style'; 
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     categoryText:{
         textAlign: 'center',
         fontSize: 11,
-        fontFamily: 'Montserrat-BoldItalic',
+        fontFamily: appFonts.semiBold,
         color:blackColor
     }
 })

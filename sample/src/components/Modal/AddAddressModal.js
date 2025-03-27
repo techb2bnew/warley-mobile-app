@@ -3,7 +3,7 @@ import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Scr
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '.././../utils';
 import { blackColor, redColor, whiteColor, blackOpacity5 } from '../../constants/Color';
 import { getAdminAccessToken, getStoreDomain, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN } from '../../constants/Constants';
-import { spacings, style } from '../../constants/Fonts';
+import { appFonts, spacings, style } from '../../constants/Fonts';
 import { BaseStyle } from '../../constants/Style';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import Toast from 'react-native-simple-toast';
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   input: {
     height: hp(6),
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     marginBottom: spacings.large,
     paddingLeft: spacings.large,
     borderRadius: 5,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   closeButton: {
     top: spacings.small,
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     marginTop: spacings.Large1x,
     marginBottom: 10,
     alignSelf: "center",
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   }
 });
 

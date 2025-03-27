@@ -5,7 +5,7 @@ import { Colors, useTheme } from '../context/Theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import { blackColor, redColor, whiteColor, grayColor, lightGrayOpacityColor, mediumGray } from '../constants/Color'
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import Header from '../components/Header'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
@@ -72,7 +72,7 @@ function CatalogScreen({ navigation }: Props) {
         const response = await axios(requestOptions);
         const collection = response.data.data.collectionByHandle;
 
-        // console.log(`Fetched image for handle "${handle}":`, collection?.image?.url);
+        console.log(`Fetched image for handle "${handle}":`, collection?.image?.url);
         return collection?.image?.url;
       } catch (error) {
         console.error('Error fetching collection image:', error);
@@ -200,6 +200,8 @@ function CatalogScreen({ navigation }: Props) {
           renderItem={({ item, index }) => {
             const borderColor = borderColors[index % borderColors.length];
             const imageUrl = collectionImages[item.url];
+            console.log("image",item.url);
+            
             return (
               <Pressable style={{ width: wp(24.5), height: Platform.OS === "android" ? hp(16) : hp(14) }} onPress={() => handleCategoryPress(item, index)}>
                 <View style={{ height: hp(12), paddingHorizontal: spacings.xLarge, paddingVertical: spacings.small, alignItems: "center", justifyContent: "center", }}>
@@ -273,7 +275,7 @@ function createStyles() {
       color: blackColor,
       // marginVertical: spacings.small,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     text: {
       fontSize: style.fontSizeLarge.fontSize,

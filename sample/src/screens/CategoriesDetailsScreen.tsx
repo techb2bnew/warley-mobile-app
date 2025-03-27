@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, Dimensions, Pressable, Image, ImageBackground, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import { useThemes } from '../context/ThemeContext';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style ,appFonts} from '../constants/Fonts';
 import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color';
 import Header from '../components/Header';
 import { BaseStyle } from '../constants/Style';
@@ -358,7 +358,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
     const addToCartProduct = async (variantId: any, quantity: any) => {
         logEvent(`Add To Cart Product variantId:${variantId} Qty:${quantity}`);
         await addToCart(variantId, quantity);
-        navigation.navigate('Cart')
+        // navigation.navigate('Cart')
         Toast.show(`${quantity} item${quantity !== 1 ? 's' : ''} added to cart`);
         scheduleNotification()
     };
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
     subCategoryText: {
         textAlign: 'center',
         fontSize: style.fontSizeSmall.fontSize,
-        fontFamily: 'Montserrat-BoldItalic'
+        fontFamily: appFonts.semiBold
     },
     tabButton: {
         flex: 1,
@@ -704,7 +704,7 @@ const styles = StyleSheet.create({
     tabText: {
         textAlign: 'center',
         fontSize: style.fontSizeSmall.fontSize,
-        fontFamily: 'Montserrat-BoldItalic'
+        fontFamily: appFonts.semiBold
     },
     closeModalButton: {
         position: 'absolute',
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
     categoryName: {
         fontSize: 14,
         color: blackColor,
-        fontFamily: 'Montserrat-BoldItalic'
+        fontFamily: appFonts.semiBold
     },
     itemContainer: {
         width: wp(45.5),
@@ -779,7 +779,7 @@ const styles = StyleSheet.create({
         fontSize: style.fontSizeMedium1x.fontSize,
         fontWeight: style.fontWeightThin1x.fontWeight,
         color: blackColor,
-        fontFamily: 'Montserrat-BoldItalic'
+        fontFamily: appFonts.semiBold
     },
     addToCartButton: {
         borderRadius: 10,
@@ -794,7 +794,7 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         color: whiteColor,
         fontWeight: style.fontWeightThin1x.fontWeight,
-        fontFamily: 'Montserrat-BoldItalic'
+        fontFamily: appFonts.semiBold
     },
     emptyText: {
         textAlign: 'center',

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ImageBackground, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor, mediumGray } from '../constants/Color';
 import { SHIPPING_ADDRESS, MY_WISHLIST, ORDERS } from '../constants/Constants';
@@ -31,6 +31,7 @@ const { alignJustifyCenter, textAlign, positionAbsolute, resizeModeContain, flex
 
 const UserDashboardScreen = () => {
   const selectedItem = useSelector((state) => state.menu.selectedItem);
+  const userLoggedIn = useSelector(state => state.auth.isAuthenticated);
   const { addToCart, addingToCart, cartId, removeFromCart, removeOneFromCart } = useCart();
   const { queries } = useShopify();
   const [fetchCart, { data }] = queries.cart;
@@ -440,7 +441,7 @@ const UserDashboardScreen = () => {
               <Text style={[{
                 fontSize: 9,
                 color: whiteColor,
-                fontFamily: 'Montserrat-BoldItalic'
+                fontFamily: appFonts.semiBold
               }]}>Sold Out</Text>
             </View>
           )}
@@ -459,8 +460,7 @@ const UserDashboardScreen = () => {
           <View style={{ width: "100%" }}>
             <Text style={[styles.wishListItemName, { color: colors.blackColor }]}>{trimcateText(item?.title)}</Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}>
-
+          {userLoggedIn && <View style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}>
             <View>
               {item.price?.[0] > 0 || itemPrice > 0 ? (
                 <Text style={[styles.wishListItemPrice, { color: redColor }]}>
@@ -472,7 +472,7 @@ const UserDashboardScreen = () => {
               )}
             </View>
 
-          </View>
+          </View>}
         </View>
       </Pressable>
     );
@@ -514,7 +514,7 @@ const UserDashboardScreen = () => {
                       navigation.navigate('OrderDetails', { order: item, image: lineItemImage });
                     }}
                   >
-                    <Text style={[styles.orderTitle, { color: colors.blackColor, marginBottom: spacings.medium, fontFamily: 'Montserrat-BoldItalic' }]}>
+                    <Text style={[styles.orderTitle, { color: colors.blackColor, marginBottom: spacings.medium, fontFamily: appFonts.semiBold }]}>
                       Order Id : #{item.id}
                     </Text>
                     {item?.line_items && item.line_items.length > 0 && (
@@ -540,20 +540,20 @@ const UserDashboardScreen = () => {
                               {/* Product Details */}
                               <View style={{ flex: 1 }}>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Date:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{new Date(item.created_at).toLocaleDateString()}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: appFonts.semiBold }}>Date:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: appFonts.semiBold }}>{new Date(item.created_at).toLocaleDateString()}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Total Price:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.total_price}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: appFonts.semiBold }}>Total Price:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: appFonts.semiBold }}>{item.total_price}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Total Number of  items:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.line_items.length}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: appFonts.semiBold }}>Total Number of  items:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: appFonts.semiBold }}>{item.line_items.length}</Text>
                                 </View>
                                 <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
-                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>Currency:</Text>
-                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item.currency}</Text>
+                                  <Text style={{ fontWeight: "bold", color: colors.blackColor, fontFamily: appFonts.semiBold }}>Currency:</Text>
+                                  <Text style={{ marginLeft: spacings.medium, color: colors.blackColor, fontFamily: appFonts.semiBold }}>{item.currency}</Text>
                                 </View>
 
                                 {/* <View style={[flexDirectionRow, { marginBottom: spacings.small, width: "80%" }]}>
@@ -592,8 +592,8 @@ const UserDashboardScreen = () => {
 
             </View> :
             <View style={[styles.centeredContainer, alignJustifyCenter]}>
-              <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>No orders placed.</Text>
-              <Text style={[textAlign, { color: colors.blackColor, margin: spacings.large, fontFamily: 'Montserrat-BoldItalic' }]}>Your all ordered will appear here. Currently its Empty</Text>
+              <Text style={{ color: colors.blackColor, fontFamily: appFonts.semiBold }}>No orders placed.</Text>
+              <Text style={[textAlign, { color: colors.blackColor, margin: spacings.large, fontFamily: appFonts.semiBold }]}>Your all ordered will appear here. Currently its Empty</Text>
               <Pressable style={styles.button} onPress={() => onPressContinueShopping(ORDERS)}>
                 <Text style={[styles.buttonText, textAlign]}>Continue Shopping</Text>
               </Pressable>
@@ -619,8 +619,8 @@ const UserDashboardScreen = () => {
                   color={colors.mediumGray}
                 />
               </View>
-              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontFamily: 'Montserrat-BoldItalic' }}>No Saved found.</Text>
-              <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: 'Montserrat-BoldItalic' }}>You don’t have any saved items. Go to home and add some.</Text>
+              <Text style={{ color: colors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontFamily: appFonts.semiBold }}>No Saved found.</Text>
+              <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: appFonts.semiBold }}>You don’t have any saved items. Go to home and add some.</Text>
             </View>)
         }
         {
@@ -693,7 +693,7 @@ const UserDashboardScreen = () => {
             </Pressable>
           </View> :
             <View style={[styles.centeredContainer, alignJustifyCenter]}>
-              <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>No address found.</Text>
+              <Text style={{ color: colors.blackColor, fontFamily: appFonts.semiBold }}>No address found.</Text>
               <Pressable style={styles.button} onPress={() => onPressContinueShopping(SHIPPING_ADDRESS)}>
                 <Text style={[styles.buttonText, textAlign]}>Continue Shopping</Text>
               </Pressable>
@@ -766,7 +766,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: whiteColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addAddressButtonRounded: {
     bottom: hp(15),
@@ -810,7 +810,7 @@ const styles = StyleSheet.create({
   additemText: {
     fontSize: style.fontSizeNormal.fontSize,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
     // fontWeight: style.fontWeightThin1x.fontWeight,
   },
   // addToCartButtonText: {
@@ -856,7 +856,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addToCartButton: {
     // borderRadius: 10,
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
     color: redColor,
     fontWeight: '700',
     textAlign: 'center',
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 });
 

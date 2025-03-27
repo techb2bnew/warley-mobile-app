@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, Switch } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor, mediumGray } from '../constants/Color';
 import ConfirmationModal from '../components/Modal/ConfirmationModal'
@@ -311,7 +311,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         <TouchableOpacity style={[styles.backIcon, alignItemsCenter]} onPress={() => { logEvent(`Back Button Pressed from Profile`), navigation.goBack() }}>
           <Ionicons name={"arrow-back"} size={33} color={colors.blackColor} />
         </TouchableOpacity>
-        <Text style={[styles.text, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic' }]}>{"Account"}</Text>
+        <Text style={[styles.text, { color: colors.blackColor,fontFamily: appFonts.semiBold }]}>{"Account"}</Text>
       </View>
       <View style={[styles.header, alignItemsCenter]}>
         <FallbackAvatar name={userName} />
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     marginTop: spacings.large,
     fontSize: style.fontSizeLarge.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   section: {
     marginTop: spacings.Large2x,
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium.fontSize,
     paddingLeft: spacings.xLarge,
     color: grayColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   backIcon: {
     width: wp(10),

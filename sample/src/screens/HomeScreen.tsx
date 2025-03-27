@@ -3,7 +3,7 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView, ActivityIndicator, TextInput, ImageBackground, Modal, Button, Dimensions, Alert, Platform, Animated } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { whiteColor, blackColor, grayColor, redColor, lightGrayOpacityColor } from '../constants/Color'
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import Carousal from '../components/Carousal'
 import Header from '../components/Header'
@@ -858,22 +858,22 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     // <ImageBackground style={[flex, { backgroundColor: colors.whiteColor }]} source={isDarkMode ? DARK_BACKGROUND_IMAGE : BACKGROUND_IMAGE}>
     <View style={[flex, { backgroundColor: colors.whiteColor }]} >
       <View>
-          <Header
-            navigation={navigation}
-            image={true}
-            menuImage={true}
-            notification={true}
-            onPressShopByCatagory={onPressShopAll}
-            onPressProfile={openModal}
-          />
-        </View>
+        <Header
+          navigation={navigation}
+          image={true}
+          menuImage={true}
+          notification={true}
+          onPressShopByCatagory={onPressShopAll}
+          onPressProfile={openModal}
+        />
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, marginTop: 0 }}
-        // stickyHeaderIndices={[1]}
+      // stickyHeaderIndices={[1]}
       >
         {/* {/ Header /} */}
-        
+
 
         {/* {/ Search Bar (Sticky) /} */}
         <View>
@@ -891,7 +891,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           >
 
             <View style={[flex]}>
-              <Text style={{ color: isDarkMode ? whiteColor : "#808080", fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize, }}> Search here for anything you want...</Text>
+              <Text style={{ color: isDarkMode ? whiteColor : "#808080", fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize, }}> Search here for anything you want...</Text>
             </View>
             <Image
               source={WARLEY_SEARCH}
@@ -948,7 +948,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Categories"}</Text>
               <Pressable onPress={onPressShopAll}>
-                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic' }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+                <Text style={{ color: redColor, fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: appFonts.semiBold }} >See All <AntDesign name={"arrowright"} size={16} color={redColor} /></Text>
               </Pressable>
             </View>
             <View style={[{ width: wp(100), height: "auto", marginTop: 10 }, flexDirectionRow]}>
@@ -979,7 +979,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             <View style={[{ width: "100%", marginTop: 20, marginBottom: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>Popular <Text style={{ color: "#ff1111" }}>Brands</Text></Text>
               <Pressable onPress={onPressBrandSeeALL}>
-                <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic' }} >See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+                <Text style={{ color: redColor, fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: appFonts.semiBold }} >See All <AntDesign name={"arrowright"} size={16} color={redColor} /></Text>
               </Pressable>
             </View>
             <View style={[{ width: "100%", height: "auto", marginTop: 5 }, flexDirectionRow]}>
@@ -1106,7 +1106,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             {/* our product */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Top Sellers"}</Text>
-              <Text style={{ color: "#717171", fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={"#717171"} /></Text>
+              <Text style={{ color: redColor, fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,fontFamily: appFonts.semiBold }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={redColor} /></Text>
             </View>
             <View style={[{ height: "auto", width: "100%", paddingHorizontal: spacings.large }, alignJustifyCenter]}>
               {products?.length > 0 ? <FlatList
@@ -1245,7 +1245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  collectionText: { fontSize: 9, paddingVertical: 5, fontFamily: 'Montserrat-BoldItalic' },
+  collectionText: { fontSize: 9, paddingVertical: 5, fontFamily: appFonts.semiBold },
   modalContainer: {
     height: screenHeight * 0.4,
     backgroundColor: 'white',
@@ -1279,10 +1279,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   text: {
-    fontSize: style.fontSizeNormal.fontSize,
-    fontWeight: style.fontWeightThin1x.fontWeight,
+    fontSize: style.fontSizeNormal1x.fontSize,
+    fontWeight: style.fontWeightMedium.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.black
   },
   input: {
     width: "95%",

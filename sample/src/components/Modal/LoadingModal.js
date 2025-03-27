@@ -5,6 +5,7 @@ import { BaseStyle } from '../../constants/Style';
 import LoaderKit from 'react-native-loader-kit'
 import { useThemes } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../constants/Color';
+import { appFonts } from '../../constants/Fonts';
 const { alignJustifyCenter, flex, borderRadius10, flexDirectionColumn } = BaseStyle;
 
 const LoadingModal = ({ visible, text }) => {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     color: whiteColor,
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
 });
 export default LoadingModal;

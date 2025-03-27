@@ -420,7 +420,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator, Platform, PlatformColor } from 'react-native';
 import { blackColor, grayColor, redColor, whiteColor, lightGreenColor, lightGrayColor, lightGrayOpacityColor } from '../constants/Color'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { ADD_TO_CART, INSTOCK, OUT_OF_STOCK } from '../constants/Constants';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
@@ -735,7 +735,7 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
         </View>
       )} */}
       {priceAmount <= 0 ? (
-        <View style={[styles.addToCartButton, { width: wp(12), backgroundColor: redColor }]}>
+        <View style={[styles.addToCartButton, { width: Platform.OS === "android" ? wp(14) : wp(12), backgroundColor: redColor }]}>
           <Text style={[styles.addToCartButtonText, { color: whiteColor, padding: spacings.small, fontSize: 9 }]}>
             Coming Soon
           </Text>
@@ -771,23 +771,23 @@ const ProductVertical = ({ product, onAddToCart, inventoryQuantity, loading, onP
               />
             </TouchableOpacity>
           </View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", height: hp(4) }}>
-            <View style={{ paddingLeft: 3 }}>
-              {(priceAmount) && (
-                priceAmount > 0 ? (
-                  <Text style={[styles.productPrice, { color: redColor, marginTop: Platform.OS === "android" ? 5 : 0, paddingLeft: spacings.medium }]}>
-                    {currencyCode === "GBP" ? "£" : shopCurrency} {priceAmount}
-                  </Text>
-                ) : (
-                  <Text style={[styles.productPrice, { color: redColor, marginTop: Platform.OS === "android" ? 5 : 0, paddingLeft: spacings.medium }]}>
-                    {/* Coming Soon */}
-                  </Text>
-                )
-              )}
+          {userLoggedIn &&
+            <View style={{ flexDirection: "row", justifyContent: "space-between", height: hp(4) }}>
+              <View style={{ paddingLeft: 3 }}>
+                {(priceAmount) && (
+                  priceAmount > 0 ? (
+                    <Text style={[styles.productPrice, { color: redColor, marginTop: Platform.OS === "android" ? 5 : 0, paddingLeft: spacings.medium }]}>
+                      {currencyCode === "GBP" ? "£" : shopCurrency} {priceAmount}
+                    </Text>
+                  ) : (
+                    <Text style={[styles.productPrice, { color: redColor, marginTop: Platform.OS === "android" ? 5 : 0, paddingLeft: spacings.medium }]}>
+                      {/* Coming Soon */}
+                    </Text>
+                  )
+                )}
+              </View>
             </View>
-
-          </View>
-
+          }
         </View>
       </View>
 
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: style.fontSizeExtraExtraSmall.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   text: {
     color: "#006400",
@@ -821,9 +821,9 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: style.fontSizeSmall1x.fontSize,
-    fontWeight: style.fontWeightMedium.fontWeight,
+    fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
-    fontFamily: 'arialnarrow'
+    fontFamily: appFonts.semiBold
   },
   contentBox: {
     width: "100%",
@@ -851,7 +851,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addToCartButton: {
     borderRadius: 10,
@@ -867,7 +867,7 @@ const styles = StyleSheet.create({
     color: redColor,
     fontWeight: '100',
     textAlign: 'center',
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   favButton: {
     width: wp(10),

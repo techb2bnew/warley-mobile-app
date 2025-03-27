@@ -1,8 +1,8 @@
 export const darkgrayColor ="#252837";
 export const whiteColor ="#fff";
-export const blackColor ="#252837";
+export const blackColor ="#0c0c0c";
 export const grayColor="#646E77";
-export const redColor="#c82031";
+export const redColor="#e00e19";
 export const goldColor="#FFA928";
 export const lightGrayColor="#D1D4D6";
 export const lightBlueColor ="#42A5F5";
@@ -21,9 +21,9 @@ export const blackOpacity7='rgba(0,0,0,0.7)';
 export const lightColors = {
   darkgrayColor: "#252837",
   whiteColor: "#fff",
-  blackColor: "#252837",
+  blackColor: "#0c0c0c",
   grayColor: "#646E77",
-  redColor: "#c82031",
+  redColor: "#e00e19",
   goldColor: "#FFA928",
   lightGrayColor: "#D1D4D6",
   lightBlueColor: "#42A5F5",
@@ -43,7 +43,7 @@ export const darkColors = {
   whiteColor: "#1B1D26",
   blackColor: "#fff",
   grayColor: "#474A54",
-  redColor: "#c82031",
+  redColor: "#e00e19",
   goldColor: "#FFA928",
   lightGrayColor: "#30333D",
   lightBlueColor: "#376995",

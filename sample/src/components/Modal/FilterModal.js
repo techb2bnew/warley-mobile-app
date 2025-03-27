@@ -3,7 +3,7 @@ import { View, Text, TextInput, Pressable, Modal, StyleSheet, TouchableOpacity, 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '.././../utils';
 import { whiteColor, darkgrayColor, redColor, blackColor, goldColor, lightGrayColor, lightBlueColor, grayColor, lightGrayOpacityColor, blackOpacity5, mediumGray } from '../../constants/Color';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import { spacings, style } from '../../constants/Fonts';
+import { appFonts, spacings, style } from '../../constants/Fonts';
 import { BaseStyle } from '../../constants/Style';
 import { ALL, APPLY, AVAILABILITY, BRAND, CLEAR, FILTER, INSTOCK, OUT_OF_STOCK, PRICE } from '../../constants/Constants';
 import { logEvent } from '@amplitude/analytics-react-native';
@@ -227,11 +227,11 @@ const FilterModal = ({ applyFilters, onClose, visible, allProducts, vendor, onSe
               {showAvailibility && (
                 <View>
                   <TouchableOpacity style={[styles.Box, flexDirectionRow]} onPress={() => setShowInStock(!showInStock)}>
-                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{INSTOCK}</Text>
+                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>{INSTOCK}</Text>
                     {showInStock && <Ionicons name="checkmark" size={20} color={colors.blackColor} style={{ marginLeft: "auto", marginRight: spacings.xxxxLarge }} />}
                   </TouchableOpacity>
                   <TouchableOpacity style={[styles.Box, flexDirectionRow]} onPress={() => setShowInStock(false)}>
-                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{OUT_OF_STOCK}</Text>
+                    <Text style={[styles.optionText, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>{OUT_OF_STOCK}</Text>
                     {!showInStock && <Ionicons name="checkmark" size={20} color={colors.blackColor} style={{ marginLeft: "auto", marginRight: spacings.xxxxLarge }} />}
                   </TouchableOpacity>
                 </View>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   backIconBox: {
     paddingHorizontal: 4
@@ -283,12 +283,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   graytext: {
     fontSize: 16,
     color: mediumGray,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   vendorButton: {
     padding: 12,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     width: "40%",
     borderRadius: 10,
     height: 40,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   sliderContainer: {
     height: 20,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   resetButtonText: {
     color: whiteColor,
     fontWeight: '600',
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
   applyButton: {
     backgroundColor: redColor,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: whiteColor,
     fontWeight: '600',
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
   optionButton: {
     padding: spacings[3],

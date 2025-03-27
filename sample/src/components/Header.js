@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, } from 'reac
 import { redColor, blackColor, grayColor, whiteColor } from '../constants/Color'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { MENU_ICON, SHOPPINGBUCKET_ICON, ICON_ADDCART, SHARE, SEARCH_ICON, WARLEY_HEADER_LOGO_NEW, WHITE_MENU_ICON, WHITE_SHOPPINGBUCKET_ICON, WHITE_SEARCH_ICON, NOTIFICTION_IMG, NOTIFICTION_IMG_WHITE, ADD_TO_CART_IMG_WHITE, SHARE_WHITE, PROFILE_ICON } from '../assests/images'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
     marginLeft: spacings.normalx,
-    fontFamily: 'Montserrat-BoldItalic',
+    fontFamily: appFonts.semiBold,
   },
   input: {
     width: "100%",

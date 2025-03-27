@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ImageBackground, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor, mediumGray } from '../constants/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -148,7 +148,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
         {currentStep === 'email' && (
           <View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
             <Text style={[styles.text, { color: colors.blackColor }]}>Forgot password</Text>
-            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
+            <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: appFonts.semiBold,fontSize:12 }]}>Enter your email for the verification process.We will send 6 digits code to your email.</Text>
             <Text style={[styles.textInputHeading, { marginTop: spacings.large, color: colors.blackColor }]}>{EMAIL}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
               <View style={{ flex: 1 }}>
@@ -164,7 +164,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   value={email}
                   keyboardType="email-address"
                   autoCapitalize="none"
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                  style={{ color: colors.blackColor,fontFamily: appFonts.semiBold,fontSize:12 }}
                 />
               </View>
 
@@ -177,7 +177,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
         {currentStep === 'otp' && (
           <View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
             <Text style={[styles.text, { color: colors.blackColor }]}>Enter 6 Digit Code</Text>
-            <Text style={{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic' }}>Enter 6 digit code that you received on your email
+            <Text style={{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: appFonts.semiBold }}>Enter 6 digit code that you received on your email
               <Text style={{ color: colors.blackColor }}> ({email}).</Text></Text>
             <View style={[{ width: "100%", height: hp(18) }, alignJustifyCenter]}>
               <OTPTextInput
@@ -195,7 +195,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
           </View>)}
         {currentStep === 'password' && (<View style={{ width: "100%", height: hp(90), padding: spacings.large }}>
           <Text style={[styles.text, { color: colors.blackColor }]}>Reset password</Text>
-          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }]}>Set the new password for your account so you can login and access all the features.</Text>
+          <Text style={[{ color: isDarkMode ? whiteColor : mediumGray, paddingVertical: spacings.small,fontFamily: appFonts.semiBold,fontSize:12 }]}>Set the new password for your account so you can login and access all the features.</Text>
           <View style={[{ width: "100%", height: hp(18), marginTop: spacings.Large1x }]}>
             <Text style={[styles.textInputHeading, { color: colors.blackColor }]}>{PASSWORD}</Text>
             <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter]}>
@@ -206,7 +206,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   onChangeText={setPassword}
                   value={password}
                   secureTextEntry={!showPassword}
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                  style={{ color: colors.blackColor,fontFamily: appFonts.semiBold,fontSize:12 }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowPassword}>
@@ -228,7 +228,7 @@ const ForgetPasswordScreen = ({ navigation }: { navigation: any }) => {
                   }}
                   value={confirmPassword}
                   secureTextEntry={!showConfirmPassword}
-                  style={{ color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic',fontSize:12 }}
+                  style={{ color: colors.blackColor,fontFamily: appFonts.semiBold,fontSize:12 }}
                 />
               </View>
               <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge1x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   input: {
     width: '100%',
@@ -288,13 +288,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   otpContainer: {
     marginVertical: spacings.xLarge,
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: redColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 })
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '.././../utils';
 import { whiteColor, darkgrayColor, redColor, blackColor, goldColor, lightGrayColor, lightBlueColor, grayColor, lightGrayOpacityColor, blackOpacity5 } from '../../constants/Color'
-import { spacings, style } from '../../constants/Fonts';
+import { appFonts, spacings, style } from '../../constants/Fonts';
 import { BaseStyle } from '../../constants/Style';
 import { logEvent } from '@amplitude/analytics-react-native';
 import { useThemes } from '../../context/ThemeContext';
@@ -28,14 +28,14 @@ const ConfirmationModal = ({ visible, onConfirm, onCancel, message }) => {
     >
       <View style={[styles.modalContainer, flex, alignJustifyCenter]}>
         <View style={[styles.modalContent, alignItemsCenter, borderRadius10, { backgroundColor: colors.whiteColor }]}>
-          <Text style={[styles.text, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>{"Confirmation"}</Text>
-          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{message}</Text>
+          <Text style={[styles.text, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>{"Confirmation"}</Text>
+          <Text style={{ color: colors.blackColor, fontFamily: appFonts.semiBold }}>{message}</Text>
           <View style={[styles.buttonContainer, flexDirectionRow]}>
             <TouchableOpacity onPress={onConfirmClick} style={[styles.confirmButton, borderRadius5, alignJustifyCenter]}>
-              <Text style={[textAlign, { color: whiteColor, fontFamily: 'Montserrat-BoldItalic' }]}>Confirm</Text>
+              <Text style={[textAlign, { color: whiteColor, fontFamily: appFonts.semiBold }]}>Confirm</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onCancleClick} style={[styles.cancelButton, borderRadius5, alignJustifyCenter, borderWidth1]}>
-              <Text style={[textAlign, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Cancel</Text>
+              <Text style={[textAlign, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>

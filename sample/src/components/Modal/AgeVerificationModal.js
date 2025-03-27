@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, BackHandler } from 'react-native';
 import { useThemes } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../constants/Color';
+import { appFonts } from '../../constants/Fonts';
 
 const AgeVerificationModal = ({ onVerify }) => {
   const { isDarkMode } = useThemes();
@@ -23,8 +24,8 @@ const AgeVerificationModal = ({ onVerify }) => {
     >
       <View style={styles.overlay}>
         <View style={[styles.popup, { backgroundColor: colors.whiteColor }]}>
-          <Text style={[styles.title, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Are you 18 or older?</Text>
-          <Text style={[styles.message, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>You must be 18+ to use this app.</Text>
+          <Text style={[styles.title, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>Are you 18 or older?</Text>
+          <Text style={[styles.message, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>You must be 18+ to use this app.</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.buttonYes} onPress={handleYes}>
               <Text style={styles.buttonText}>Yes</Text>
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 });
 

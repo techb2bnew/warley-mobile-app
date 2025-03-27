@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '.././../utils';
 import { blackColor, grayColor, redColor, whiteColor, blackOpacity5 } from '../../constants/Color';
-import { spacings, style } from '../../constants/Fonts';
+import { appFonts, spacings, style } from '../../constants/Fonts';
 import { BaseStyle } from '../../constants/Style';
 import { useNavigation } from '@react-navigation/native';
 import { SUCCESS_IMAGE } from '../../assests/images'
@@ -54,12 +54,12 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge.fontSize,
     color: blackColor,
     marginTop: spacings.large,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   text: {
     fontSize: style.fontSizeNormal.fontSize,
     color: grayColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   closeButton: {
     top: spacings.small,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: whiteColor,
     fontSize: style.fontSizeMedium.fontSize,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 });
 

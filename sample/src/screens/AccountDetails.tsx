@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, P
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor } from '../constants/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -179,7 +179,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
                 setFullName(text);
               }}
               value={fullName}
-              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}
+              style={{ color: colors.blackColor, fontFamily: appFonts.semiBold }}
             />
           </View>
         </View>
@@ -187,7 +187,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic'  }]}
+              style={[styles.input, { color: colors.blackColor,fontFamily: appFonts.semiBold  }]}
               value={email}
               onChangeText={setEmail}
               placeholder="Email Address"
@@ -232,7 +232,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         <View style={[styles.input, borderRadius5, borderWidth1, flexDirectionRow, alignItemsCenter, { borderColor: colors.grayColor }]}>
           <View style={{ flex: 1 }}>
             <TextInput
-              style={[styles.input, { color: colors.blackColor,fontFamily: 'Montserrat-BoldItalic'  }]}
+              style={[styles.input, { color: colors.blackColor,fontFamily: appFonts.semiBold  }]}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               placeholder="Phone Number"
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     fontWeight: style.fontWeightMedium.fontWeight,
     paddingLeft: spacings.large,
     color: blackColor,
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
   input: {
     width: '100%',
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: style.fontSizeNormal2x.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal1x.fontSize,
@@ -304,12 +304,12 @@ const styles = StyleSheet.create({
     color: blackColor,
     marginTop: spacings.xxxxLarge,
     marginBottom: spacings.normal,
-     fontFamily: 'Montserrat-BoldItalic'
+     fontFamily: appFonts.semiBold
   },
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { width: '80%', padding: 20, backgroundColor: whiteColor, borderRadius: 10 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, fontFamily: 'Montserrat-BoldItalic' },
-  modalOption: { fontSize: 16, paddingVertical: 10, textAlign: 'center', fontFamily: 'Montserrat-BoldItalic' },
+  modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, fontFamily: appFonts.semiBold },
+  modalOption: { fontSize: 16, paddingVertical: 10, textAlign: 'center', fontFamily: appFonts.semiBold },
 
 });
 

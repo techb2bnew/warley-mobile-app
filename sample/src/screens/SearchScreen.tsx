@@ -7,7 +7,7 @@ import {
 } from '../constants/Constants'
 import type { ShopifyProduct } from '../../@types';
 import { BaseStyle } from '../constants/Style';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { logEvent } from '@amplitude/analytics-react-native';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import Feather from 'react-native-vector-icons/dist/Feather';
@@ -188,7 +188,7 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                 <TextInput
                   placeholder={"Search here for anything you want..."}
                   placeholderTextColor={isDarkMode ? whiteColor : grayColor}
-                  style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize, height: hp(5), }}
+                  style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize, height: hp(5), }}
                   value={searchQuery}
                   onChangeText={async (text) => {
                     setSearchQuery(text);
@@ -249,8 +249,8 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                             <Image style={[{ width: wp(13), height: hp(10), marginRight: spacings.large }, resizeModeContain]} source={COMING_SOON_IMG} />
                           )}
                         <View style={{ width: wp(55) }}>
-                          <Text style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }}>{item?.title}</Text>
-                          <Text style={{ color: colors.mediumGray }}>{shopCurrency} {item?.price} </Text>
+                          <Text style={{ color: colors.blackColor, fontFamily: appFonts.semiBold }}>{item?.title}</Text>
+                          {userLoggedIn && <Text style={{ color: colors.mediumGray }}>{shopCurrency} {item?.price} </Text>}
                         </View>
                         <View style={[{ width: "25%" }, alignJustifyCenter]}>
                           <Feather name="arrow-up-right" size={25} color={colors.blackColor} />
@@ -264,8 +264,8 @@ const SearchScreen = ({ navigation }: { navigation: any }) => {
                     <View>
                       <Ionicons name="search" size={40} color={colors.grayColor} />
                     </View>
-                    <Text style={{ color: colors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontFamily: 'Montserrat-BoldItalic' }}>No Results Found!</Text>
-                    <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: 'Montserrat-BoldItalic' }}>Try a similar word or something more general.</Text>
+                    <Text style={{ color: colors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontFamily: appFonts.semiBold }}>No Results Found!</Text>
+                    <Text style={{ color: colors.mediumGray, textAlign: "center", fontFamily: appFonts.semiBold }}>Try a similar word or something more general.</Text>
                   </View>
                 )}
               </Pressable>
@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   hintText: {
     paddingHorizontal: spacings.large,
     color: grayColor,
     fontSize: style.fontSizeNormal.fontSize,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   input: {
     width: "100%",

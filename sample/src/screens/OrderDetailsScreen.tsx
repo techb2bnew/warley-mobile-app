@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import Header from '../components/Header';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { ADMINAPI_ACCESS_TOKEN, STOREFRONT_DOMAIN } from '../constants/Constants';
 import { useThemes } from '../context/ThemeContext';
@@ -101,13 +101,13 @@ const OrderDetailsScreen = ({ route, navigation }) => {
                 <Text style={[styles.variantText, { color: colors.blackColor }]}>Variant: {item.variant_title}</Text>
               )}
               <Text style={[styles.quantityText, { color: colors.blackColor }]}>Quantity: {item.quantity}</Text>
-              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Price: {order.currency === "GBP" && "£"} {item.price} </Text>
-              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic' }]}>Total Price: {order.currency === "GBP" && "£"}{totalPrice} </Text>
+              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>Price: {order.currency === "GBP" && "£"} {item.price} </Text>
+              <Text style={[styles.priceText, { color: colors.blackColor, fontFamily: appFonts.semiBold }]}>Total Price: {order.currency === "GBP" && "£"}{totalPrice} </Text>
 
             </View>
           </View>
           <TouchableOpacity onPress={() => addToCartProduct(item.variant_id, 1)} style={[styles.buyAgainButton, { backgroundColor: colors.redColor }]}>
-            <Text style={{ color: colors.whiteColor, fontFamily: 'Montserrat-BoldItalic' }}>Buy Again</Text>
+            <Text style={{ color: colors.whiteColor, fontFamily: appFonts.semiBold }}>Buy Again</Text>
           </TouchableOpacity>
         </View>
 
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: style.fontSizeExtraSmall.fontSize,
     fontWeight: 'bold',
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   value: {
     fontSize: style.fontSizeSmall.fontSize,
     marginTop: 5,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   itemContainer: {
     marginVertical: 5,
@@ -202,18 +202,18 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily:appFonts.semiBold
   },
   variantText: {
     fontSize: style.fontSizeSmall.fontSize,
     marginTop: 2,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   quantityText: {
     fontSize: style.fontSizeSmall.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
     marginTop: 5,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   priceText: {
     fontSize: style.fontSizeSmall.fontSize,
@@ -228,11 +228,11 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: style.fontSizeNormal2x.fontSize,
     fontWeight: style.fontWeightMedium.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addressTitle: {
     fontWeight: 'bold',
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   buyAgainButton: {
     marginTop: spacings.large,

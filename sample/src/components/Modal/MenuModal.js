@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet, Image, Pressable, Platform } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '.././../utils';
 import { blackColor, lightGrayOpacityColor, whiteColor, blackOpacity5, grayColor, redColor } from '../../constants/Color';
-import { spacings, style } from '../../constants/Fonts';
+import { appFonts, spacings, style } from '../../constants/Fonts';
 import { BaseStyle } from '../../constants/Style';
 import { USER_IMAGE, WHITE_USER_IMAGE } from '../../assests/images'
 import Feather from 'react-native-vector-icons/dist/Feather';
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   bottomContainer: {
     width: wp(100),
@@ -216,13 +216,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: whiteColor, 
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   contactUsEmail: {
     fontSize: 14,
     color: whiteColor, 
     marginTop: 5,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   }
 });
 

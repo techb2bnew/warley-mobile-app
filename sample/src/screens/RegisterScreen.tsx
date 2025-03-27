@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, Platform, ActivityIndicator, ImageBackground, Pressable, Alert, Modal } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, redColor, } from '../constants/Color'
 import {
@@ -283,7 +283,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
           first_name: firstName,
           last_name: lastName,
           email,
-          phone: `+44${phone}`,
+          phone: `+44 ${phone}`,
           addresses: [{ address1: null, city: null, province: null, country: null, zip: null, phone: null, default: true }],
           password,
           password_confirmation: confirmPassword,
@@ -293,8 +293,13 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
       const responseData = await response.json();
       console.log("responseData:::", responseData);
 
-      if (responseData.message) {
-        setError(responseData.message);
+      if (responseData.errors) {
+        const { phone, email } = responseData.errors;
+        if (phone) {
+          setError(phone);
+        } else if (email) {
+          setError(email);
+        }
         setLoading(false);
         return;
       }
@@ -312,6 +317,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
       });
 
       const loginData = await loginResponse.json();
+      
       if (loginResponse.ok && loginData.token) {
         // Store the token in AsyncStorage
         await AsyncStorage.setItem('authToken', loginData.token);
@@ -320,8 +326,6 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
         setShowOTP(false);
         onCloseModal();
         navigation.navigate('Cart');
-      } else {
-        setError("Login failed during signup. Please check your credentials.");
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -588,7 +592,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                       }
                     }}
                     value={firstName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                    style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
                   />
                 </View>
               </View>
@@ -613,7 +617,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                       }
                     }}
                     value={lastName}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                    style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
                   />
                 </View>
               </View>
@@ -640,7 +644,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 }}
                 value={phone}
                 keyboardType="phone-pad"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
                 maxLength={10}
               />
             </View>
@@ -666,7 +670,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                 value={email}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
               />
             </View>
           </View>
@@ -692,7 +696,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     }}
                     value={password}
                     secureTextEntry={!showPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                    style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowPassword}>
@@ -722,7 +726,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                     }}
                     value={confirmPassword}
                     secureTextEntry={!showConfirmPassword}
-                    style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+                    style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
                   />
                 </View>
                 <TouchableOpacity onPress={toggleShowConfirmPassword}>
@@ -754,10 +758,10 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
             </View>
           </View> */}
           <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={onBackToLogin}>
-            <Text style={[{ marginTop: hp(5), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
+            <Text style={[{ marginTop: hp(5), color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }]}>{ALREADY_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {LOGIN}</Text></Text>
           </Pressable>
           <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 2 : hp(10), width: "100%" }]}>
-            <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+            <Text style={[{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
             <View style={[flexDirectionRow, { marginTop: 5, width: "100%" }, alignJustifyCenter]}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -766,7 +770,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Terms Of Services From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('WebViewScreen', {
@@ -775,7 +779,7 @@ const RegisterScreen = ({ onBackToLogin, onCloseModal }) => {
                   logEvent('Privacy Policy From login');
                 onCloseModal()
               }}>
-                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+                <Text style={[{ color: colors.redColor, margin: 4, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -829,14 +833,14 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge2x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   title: {
     fontSize: style.fontSizeLarge1x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     marginBottom: spacings.Large2x,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   input: {
     width: '100%',
@@ -860,7 +864,7 @@ const styles = StyleSheet.create({
     color: whiteColor,
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   textInputBox: {
     width: "100%",
@@ -869,7 +873,7 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: redColor,
-    fontFamily: 'Montserrat-BoldItalic',
+    fontFamily: appFonts.semiBold,
     fontSize: 9
   },
   socialAuthBox: {
@@ -888,7 +892,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeSmall1x.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   image: {
     width: wp(70),
@@ -906,7 +910,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
   modalContent: { backgroundColor: 'white', padding: 20, borderRadius: 10, width: '98%' },
-  modalTitle: { fontSize: 18, marginBottom: 20, textAlign: 'center', fontFamily: 'Montserrat-BoldItalic' },
+  modalTitle: { fontSize: 18, marginBottom: 20, textAlign: 'center', fontFamily: appFonts.semiBold },
   closeButton: {
     position: 'absolute',
     top: 10,

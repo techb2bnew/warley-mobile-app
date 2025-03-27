@@ -1031,7 +1031,7 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 12,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: 'Montserrat-SemiBold'
   },
   tabStyle: {
     justifyContent: 'center',

@@ -6,6 +6,8 @@ import { LOADER_NAME } from '../constants/Constants';
 import { logEvent } from '@amplitude/analytics-react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { spacings, style,appFonts } from '../constants/Fonts';
+
 const ShopifyCheckOut = ({ route }) => {
   const { url } = route.params;
   const navigation = useNavigation();
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     marginLeft: 10,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 });
 

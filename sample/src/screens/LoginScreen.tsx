@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, KeyboardAvoidingView, Platform, ImageBackground, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../utils';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { whiteColor, blackColor, grayColor, lightBlueColor, redColor } from '../constants/Color'
 import {
@@ -152,7 +152,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
       setPasswordError('');
       return;
     }
-    if ( !password) {
+    if (!password) {
       setEmailError('');
       setPasswordError('Password is required.');
       logEvent('BothFieldsEmpty');
@@ -444,7 +444,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               value={email}
               keyboardType="email-address"
               autoCapitalize="none"
-              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+              style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
             />
           </View>
         </View>
@@ -466,7 +466,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               }}
               value={password}
               secureTextEntry={!showPassword}
-              style={{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }}
+              style={{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: 12 }}
             />
           </View>
           <TouchableOpacity onPress={toggleShowPassword}>
@@ -480,18 +480,24 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
               {rememberMe ? <Fontisto name="toggle-on" size={25} color={colors.redColor} />
                 : <Fontisto name="toggle-off" size={25} color={colors.grayColor} />}
             </TouchableOpacity>
-            <Text style={[{ color: colors.blackColor, paddingHorizontal: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }]}>{REMEMBER_ME}</Text>
+            <Text style={[{ color: colors.blackColor, paddingHorizontal: 4, fontFamily: appFonts.semiBold, fontSize: 12 }]}>{REMEMBER_ME}</Text>
           </View >
           <TouchableOpacity
             onPress={() => { navigation.navigate("ForgetPasswordScreen"), onCloseModal() }}
             style={{ marginTop: 5 }}
           >
-            <Text style={[{ color: redColor, fontFamily: 'Montserrat-BoldItalic', fontSize: 12 }]}>{FORGET_PASSWORD}</Text>
+            <Text style={[{ color: redColor, fontFamily: appFonts.semiBold, fontSize: 12 }]}>{FORGET_PASSWORD}</Text>
           </TouchableOpacity>
         </View>
         <Pressable style={[styles.button, alignItemsCenter, borderRadius5]} onPress={handleLogin}>
           <Text style={styles.buttonText}>{LOGIN}</Text>
         </Pressable>
+
+        <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginTop: spacings.large }]}>
+          <Text style={[{ color: redColor, marginVertical: spacings.xxxxLarge, marginHorizontal: spacings.small, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>
+            Login required to access products information and complete your purchase.
+          </Text>
+        </View>
         {/* <View style={[flexDirectionRow, alignJustifyCenter, { width: "100%", marginTop: spacings.large }]}>
           <View style={{ height: 1, backgroundColor: colors.grayColor, width: "46%" }}></View>
           <Text style={[{ color: colors.blackColor, marginVertical: spacings.xxxxLarge, marginHorizontal: spacings.small ,fontFamily: 'Montserrat-BoldItalic',fontSize: style.fontSizeSmall1x.fontSize}, textAlign]}>or</Text>
@@ -506,10 +512,10 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
           </TouchableOpacity>}
         </View> */}
         <Pressable style={[{ width: "100%" }, alignJustifyCenter]} onPress={() => handleSignUpClick()}>
-          <Text style={[{ marginTop: hp(7), color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
+          <Text style={[{ marginTop: hp(7), color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }]}>{DONT_HAVE_AN_ACCOUNT}<Text style={[{ color: colors.redColor }]}> {REGISTER}</Text></Text>
         </Pressable>
         <View style={[positionAbsolute, alignJustifyCenter, { bottom: Platform.OS === "android" ? 0 : hp(10), width: "100%" }]}>
-          <Text style={[{ color: colors.blackColor, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
+          <Text style={[{ color: colors.blackColor, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textAlign]}>{BY_CONTINUING_YOU_AGREE}</Text>
           <View style={[flexDirectionRow, { marginTop: spacings.large, width: "100%" }, alignJustifyCenter]}>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -518,7 +524,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Terms Of Services From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{TERM_OF_SERVICES}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               navigation.navigate('WebViewScreen', {
@@ -527,7 +533,7 @@ const LoginScreen = ({ handleSignUpClick, onCloseModal }) => {
                 logEvent('Privacy Policy From login');
               onCloseModal()
             }}>
-              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: 'Montserrat-BoldItalic', fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
+              <Text style={[{ color: colors.redColor, margin: 4, fontFamily: appFonts.semiBold, fontSize: style.fontSizeSmall1x.fontSize }, textDecorationUnderline]}>{PRIVACY_POLICY}</Text>
             </TouchableOpacity>
 
           </View>
@@ -549,13 +555,13 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeLarge3x.fontSize,
     fontWeight: style.fontWeightMedium1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   textInputHeading: {
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   input: {
     width: '100%',
@@ -574,7 +580,7 @@ const styles = StyleSheet.create({
     color: whiteColor,
     fontSize: style.fontSizeNormal.fontSize,
     fontWeight: style.fontWeightThin.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   textInputBox: {
     width: "100%",
@@ -587,8 +593,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: redColor,
-    fontFamily: 'Montserrat-BoldItalic',
-    fontSize:9
+    fontFamily: appFonts.semiBold,
+    fontSize: 9
   },
   backIcon: {
     top: 15,

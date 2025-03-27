@@ -10,7 +10,7 @@ import Share from 'react-native-share';
 import axios from 'axios';
 import LoaderKit from 'react-native-loader-kit';
 import { blackColor, redColor, whiteColor, lightGrayOpacityColor, goldColor, lightPink, grayColor } from '../constants/Color';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../utils';
 import { YOU_MIGHT_LIKE, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, STOREFRONT_ACCESS_TOKEN, GOOGLE_APIKEY, STORE_LOCATION_ID, WRITE_REVIEW_URL, RATING_REVIEWS, reviews } from '../constants/Constants';
@@ -204,7 +204,7 @@ function ProductDetailsScreen({ navigation, route }: Props) {
     <View style={[styles.container, { backgroundColor: themecolors.whiteColor }]} >
       <Header
         backIcon={true} textinput={true} text={route?.params?.product?.title}
-        shoppingCart={true}  navigation={navigation} productId={route?.params?.product.id}
+        shoppingCart={true} navigation={navigation} productId={route?.params?.product.id}
         shareProduct={shareProduct} trimtext={true} />
       <View style={{ width: "100%", height: 5, backgroundColor: themecolors.whiteColor }}></View>
 
@@ -368,7 +368,7 @@ function ProductDetails({
   };
 
   const getSelectedVariantId = () => {
-    console.log("ids",ids)
+    console.log("ids", ids)
     const selectedOptionString = Object.values(selectedOptions).join(' / ');
     const selectedVariant = ids?.find(variant => variant.title === selectedOptionString);
     return selectedVariant ? selectedVariant.id : null;
@@ -706,7 +706,7 @@ function ProductDetails({
                   </TouchableOpacity>
                 </View>}
               </View>
-              <View style={[flexDirectionRow, { width: "100%" }]}>
+              {userLoggedIn && <View style={[flexDirectionRow, { width: "100%" }]}>
                 {(variant?.price?.amount || variant?.price) > 0 ? (
                   <Text style={[styles.productPrice, { color: "#eb4335", fontSize: 16 }]}>
                     {(variant?.price?.currencyCode) ? variant.price.currencyCode === "GBP" && "£" : shopCurrency} {(variant?.price?.amount) ? variant.price.amount : variant.price}
@@ -718,8 +718,8 @@ function ProductDetails({
                 <Pressable style={[flexDirectionRow, alignItemsCenter, { marginLeft: spacings.large }]}>
 
                 </Pressable>
-              </View>
-              {product.description && <Text style={[styles.productPrice, { color: themecolors.blackColor, marginVertical: spacings.large, fontFamily: 'Montserrat-BoldItalic' }]}>About this product</Text>}
+              </View>}
+              {product.description && <Text style={[styles.productPrice, { color: themecolors.blackColor, marginVertical: spacings.large, fontFamily: appFonts.semiBold }]}>About this product</Text>}
               {product.description && <Pressable onPress={toggleExpanded} style={{ marginBottom: spacings.large }}>
                 <Text style={[styles.productDescription, { color: "#808080" }]} numberOfLines={expanded ? null : 2}
                   ellipsizeMode="tail">{product.description}</Text>
@@ -779,7 +779,7 @@ function ProductDetails({
               onPress={handleWriteReview}
               style={[styles.outOfStockButton, borderRadius10, alignJustifyCenter, { height: hp(5), padding: spacings.large }]}
             >
-              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeSmall2x.fontSize, fontFamily: 'Montserrat-BoldItalic' }, textAlign]}>
+              <Text style={[{ color: whiteColor, fontWeight: style.fontWeightThin1x.fontWeight, fontSize: style.fontSizeSmall2x.fontSize, fontFamily: appFonts.semiBold }, textAlign]}>
                 Write a Review
               </Text>
             </Pressable>}
@@ -912,7 +912,7 @@ function createStyles(colors: Colors) {
       lineHeight: 28,
       textAlign: 'left',
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     productDescription: {
       fontSize: 10,
@@ -921,13 +921,13 @@ function createStyles(colors: Colors) {
       lineHeight: 15,
       textAlign: 'left',
       color: colors.text,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     productPrice: {
       fontSize: 10,
       color: blackColor,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'arialnarrow'
+      fontFamily: appFonts.semiBold
     },
     productImage: {
       width: '100%',
@@ -953,7 +953,7 @@ function createStyles(colors: Colors) {
       lineHeight: 20,
       color: whiteColor,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     quantityContainer: {
       marginBottom: spacings.large,
@@ -991,7 +991,7 @@ function createStyles(colors: Colors) {
       fontSize: 16,
       fontWeight: style.fontWeightMedium.fontWeight,
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     relatedProductItem: {
       width: wp(40),
@@ -1031,7 +1031,7 @@ function createStyles(colors: Colors) {
     optionValue: {
       fontSize: style.fontSizeNormal.fontSize,
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     favButton: {
       width: wp(8),
@@ -1065,14 +1065,15 @@ function createStyles(colors: Colors) {
       borderRadius: 10,
     },
     relatedproductName: {
-      fontFamily: 'Montserrat-BoldItalic',
+      fontFamily: appFonts.semiBold,
       fontSize: style.fontSizeSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
     },
     relatedproductPrice: {
       fontSize: style.fontSizeSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'arialnarrow',
+      // fontFamily: 'arialnarrow',
+      fontFamily: appFonts.semiBold,
       color: redColor
     },
     fallbackAvatar: {
@@ -1096,7 +1097,7 @@ function createStyles(colors: Colors) {
       fontSize: style.fontSizeMedium1x.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     flatList: {
       width: "100%",
@@ -1133,7 +1134,7 @@ function createStyles(colors: Colors) {
       fontWeight: 'bold',
       fontSize: style.fontSizeMedium.fontSize,
       marginBottom: spacings.small,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     ratingContainer: {
       flexDirection: 'row',
@@ -1142,11 +1143,11 @@ function createStyles(colors: Colors) {
     timeDescription: {
       fontSize: style.fontSizeSmall.fontSize,
       marginBottom: spacings.small,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     reviewText: {
       fontSize: style.fontSizeSmall.fontSize,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
   });
 }

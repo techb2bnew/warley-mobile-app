@@ -8,7 +8,7 @@ import { Colors, useTheme } from '../context/Theme';
 import { useCart } from '../context/Cart';
 import Toast from 'react-native-simple-toast';
 import { blackColor, redColor, whiteColor, lightShadeBlue, mediumGray, grayColor } from '../constants/Color'
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { BaseStyle } from '../constants/Style';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import {
@@ -760,7 +760,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                 <View style={[styles.costBlock, justifyContentSpaceBetween, flexDirectionRow, { borderTopColor: colors.border, borderTopWidth: 1, marginTop: spacings.large }]}>
                   <Text style={[styles.costBlockTextStrong, { color: themecolors.blackColor }]}>{TOTAL}</Text>
                   <Text style={[styles.costBlockTextStrong, { color: themecolors.blackColor }]}>
-                    {getTotalAmount().currencyCode === "GBP" && "£"} {sum.toFixed(2)}
+                    {getTotalAmount().currencyCode === "GBP" && "£"} {sum?.toFixed(2)}
                   </Text>
                 </View>
                 <Text style={{
@@ -769,7 +769,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                   fontWeight: style.fontWeightThin1x.fontWeight,
                   lineHeight: 20,
                   color: themecolors.blackColor,
-                  fontFamily: 'Montserrat-BoldItalic'
+                  fontFamily: appFonts.semiBold
                 }}>Note : Shipping will be calculated at checkout.</Text>
 
               </View>
@@ -785,7 +785,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
           <View style={[flexDirectionRow, positionAbsolute, justifyContentSpaceBetween, { alignItems: "baseline", bottom: 0, width: wp(100), zIndex: 1, backgroundColor: themecolors.whiteColor, height: hp(8) }]}>
             <View style={{ width: wp(50), justifyContent: "center", alignItems: "center", height: hp(10) }}>
               <View style={[styles.quantityContainer, alignJustifyCenter, { flexDirection: "column", width: wp(50) }]}>
-                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700", fontFamily: 'Montserrat-BoldItalic' }}>Total: {getTotalAmount().currencyCode === "GBP" && "£"} {getTotalAmount().totalAmount} </Text>
+                <Text style={{ paddingHorizontal: spacings.large, color: themecolors.blackColor, fontSize: style.fontSizeMedium.fontSize, fontWeight: "700", fontFamily: appFonts.semiBold }}>Total: {getTotalAmount().currencyCode === "GBP" && "£"} {getTotalAmount().totalAmount} </Text>
                 {/* <Text style={{ backgroundColor: "#dafbd5", paddingHorizontal: 4, marginTop: 8, borderRadius: 5, color: "#018726" }}><AntDesign
                   name={"tag"}
                   size={15}
@@ -798,7 +798,7 @@ function CartScreen({ navigation }: { navigation: any }): React.JSX.Element {
                 style={[styles.addToCartButton, borderRadius10, { backgroundColor: redColor }]}
                 onPress={openModal}
               >
-                <Text style={[textAlign, { color: whiteColor, width: wp(12), fontFamily: 'Montserrat-BoldItalic' }]}>
+                <Text style={[textAlign, { color: whiteColor, width: wp(12), fontFamily: appFonts.semiBold }]}>
                   Login
                 </Text>
               </Pressable>
@@ -834,7 +834,6 @@ function CartItem({
   loading,
   addToCartitem,
   removeOneFromCart
-
 }: {
   item: CartLineItem;
   quantity: number;
@@ -846,6 +845,7 @@ function CartItem({
   const { isDarkMode } = useThemes();
   const themecolors = isDarkMode ? darkColors : lightColors;
   const [productquantity, setProductQuantity] = useState(quantity);
+  const userLoggedIn = useSelector(state => state.auth.isAuthenticated);
 
   const handleRemoveItem = () => {
     onRemove(item.id);
@@ -982,9 +982,11 @@ function CartItem({
       <View style={[styles.productText, flex, flexDirectionRow, { paddingHorizontal: spacings.large }]}>
         <View style={[{ width: "85%" }]}>
 
+          {/* {userLoggedIn &&  */}
           <Text style={[styles.productPrice, { color: themecolors.redColor }]}>
             {price(item?.merchandise?.price)}
           </Text>
+          {/* } */}
 
           <Text style={[styles.productTitle, { color: themecolors.blackColor }]}>
             {item?.merchandise?.product?.title}
@@ -1029,10 +1031,11 @@ function createStyles(colors: Colors) {
     loadingText: {
       marginVertical: spacings.Large2x,
       color: colors.text,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     scrollView: {
-      paddingBottom: spacings.xLarge,
+      paddingBottom: hp(25),
+      // height:hp(10)
     },
     cartButton: {
       width: 'auto',
@@ -1049,7 +1052,7 @@ function createStyles(colors: Colors) {
       lineHeight: 20,
       color: colors.secondaryText,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     cartButtonTextSubtitle: {
       fontSize: style.fontSizeSmall2x.fontSize,
@@ -1080,20 +1083,21 @@ function createStyles(colors: Colors) {
       fontSize: style.fontSizeExtraSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
-      fontFamily: 'Montserrat-BoldItalic',
+      fontFamily: appFonts.semiBold,
       marginTop: 5
     },
     productDescription: {
       fontSize: style.fontSizeNormal.fontSize,
       color: colors.textSubdued,
       padding: spacings.xLarge,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     productPrice: {
       fontSize: style.fontSizeSmall.fontSize,
       fontWeight: style.fontWeightThin1x.fontWeight,
       color: blackColor,
-      fontFamily: 'arialnarrow',
+      // fontFamily: 'arialnarrow',
+      fontFamily: appFonts.semiBold,
       marginTop: 5
     },
     removeButton: {
@@ -1103,7 +1107,7 @@ function createStyles(colors: Colors) {
     },
     removeButtonText: {
       color: colors.textSubdued,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     productImage: {
       width: wp(20),
@@ -1125,13 +1129,13 @@ function createStyles(colors: Colors) {
     costBlockText: {
       fontSize: style.fontSizeNormal.fontSize,
       color: colors.textSubdued,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     costBlockTextStrong: {
       fontSize: style.fontSizeNormal2x.fontSize,
       color: colors.text,
       fontWeight: style.fontWeightThin1x.fontWeight,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     addToCartButton: {
       fontSize: style.fontSizeExtraExtraSmall.fontSize,
@@ -1157,7 +1161,7 @@ function createStyles(colors: Colors) {
       fontSize: 16,
       fontWeight: 'bold',
       color: redColor,
-      fontFamily: 'Montserrat-BoldItalic'
+      fontFamily: appFonts.semiBold
     },
     relatedProductsContainer: {
       width: "100%",
@@ -1181,7 +1185,7 @@ function createStyles(colors: Colors) {
       marginVertical: spacings.large,
     },
     relatedproductName: {
-      fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: 'Montserrat-BoldItalic'
+      fontSize: style.fontSizeSmall2x.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: appFonts.semiBold
     },
     relatedproductPrice: {
       fontSize: style.fontSizeSmall1x.fontSize,

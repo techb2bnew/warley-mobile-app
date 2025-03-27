@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { blackColor, lightGrayOpacityColor, whiteColor, grayColor, redColor } from '../constants/Color'
 import { BaseStyle } from '../constants/Style';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { ADD_TO_CART, OUT_OF_STOCK, getAdminAccessToken, getStoreDomain, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, LOADER_NAME } from '../constants/Constants'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addToCartButton: {
     borderRadius: 10,
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: whiteColor,
     // fontWeight: style.fontWeightThin1x.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   textinputBox: {
     width: "85%",

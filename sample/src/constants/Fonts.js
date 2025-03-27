@@ -59,3 +59,13 @@ export const spacings = {
   ExtraLarge3x: normalizeText(baseSpacing * 9),
   ExtraLarge4x: normalizeText(baseSpacing * 10),
 };
+
+
+export const appFonts = {
+  black: 'Montserrat-Black',
+  boldItalic: 'Montserrat-BoldItalic',
+  bold: 'Montserrat-Bold',
+  semiBold: 'Montserrat-SemiBold',
+  medium: 'Montserrat-Medium',
+  regular: 'Montserrat-Regular',
+};

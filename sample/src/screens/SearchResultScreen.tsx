@@ -6,7 +6,7 @@ import {
   STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, 
 } from '../constants/Constants'
 import { BaseStyle } from '../constants/Style';
-import { spacings, style } from '../constants/Fonts';
+import { spacings, style,appFonts } from '../constants/Fonts';
 import Toast from 'react-native-simple-toast';
 import { useRoute } from '@react-navigation/native';
 import useShopify from '../hooks/useShopify';
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     fontSize: style.fontSizeMedium1x.fontSize,
     fontWeight: style.fontWeightThin1x.fontWeight,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   addToCartButton: {
     borderRadius: 10,
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: whiteColor,
     fontWeight: style.fontWeightThin1x.fontWeight,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
   image: {
     width: 100,
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 14,
     color: blackColor,
-    fontFamily: 'Montserrat-BoldItalic'
+    fontFamily: appFonts.semiBold
   },
 });
 
