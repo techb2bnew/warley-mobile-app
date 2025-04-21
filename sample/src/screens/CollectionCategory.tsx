@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { blackColor, lightGrayOpacityColor, whiteColor, grayColor, redColor } from '../constants/Color'
 import { BaseStyle } from '../constants/Style';
-import { spacings, style,appFonts } from '../constants/Fonts';
+import { spacings, style, appFonts } from '../constants/Fonts';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../utils';
 import { ADD_TO_CART, OUT_OF_STOCK, getAdminAccessToken, getStoreDomain, STOREFRONT_DOMAIN, ADMINAPI_ACCESS_TOKEN, LOADER_NAME } from '../constants/Constants'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
@@ -61,6 +61,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
                 products(first: 250, after: $cursor) {
                   nodes {
                     id
+                    status
                     images(first: 250) {
                       nodes {
                         src
@@ -112,7 +113,11 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
           const result = await response.json();
 
-          const fetchedProducts = result?.data?.collection?.products?.nodes || [];
+          // const fetchedProducts = result?.data?.collection?.products?.nodes || [];
+          let fetchedProducts = result?.data?.collection?.products?.nodes || [];
+          console.log("fetchedProducts ::::", fetchedProducts);
+          fetchedProducts = fetchedProducts.filter(product => product.status === 'ACTIVE');
+          console.log("fetchedProducts (only active)", fetchedProducts);
           const pageInfo = result?.data?.collection?.products?.pageInfo || {};
 
           // Accumulate fetched products
@@ -176,6 +181,7 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
                 edges {
                   node {
                     id
+                    status
                     images(first: 250) {
                       nodes {
                         src
@@ -227,7 +233,11 @@ const CollectionCategory = ({ navigation }: { navigation: any }) => {
           const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
           const result = await response.json();
 
-          const fetchedProducts = result?.data?.products?.edges.map(edge => edge.node) || [];
+          // const fetchedProducts = result?.data?.products?.edges.map(edge => edge.node) || [];
+          let fetchedProducts = result?.data?.products?.edges.map(edge => edge.node) || [];
+          console.log("fetchedProducts ::::", fetchedProducts);
+          fetchedProducts = fetchedProducts.filter(product => product.status === 'ACTIVE');
+          console.log("fetchedProducts (only active)", fetchedProducts);
           const pageInfo = result?.data?.products?.pageInfo || {};
 
           // Accumulate fetched products

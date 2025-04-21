@@ -57,114 +57,6 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
         return node?.variants?.nodes;
     }
 
-    // const fetchProductsByHandle = async (handle) => {
-    //     capitalizeFirstLetter(handle)
-    //     setLoading(true);
-    //     let allProducts = [];
-    //     let hasNextPage = true;
-    //     let endCursor = null;
-    //     try {
-    //         while (hasNextPage) {
-    //             const graphql = JSON.stringify({
-    //                 query: `
-    //                 query($handle: String!, $cursor: String) {
-    //                     collectionByHandle(handle: $handle) {
-    //                         id
-    //                         title
-    //                         products(first: 250, after: $cursor) {
-    //                             nodes {
-    //                                 id
-    //                                 tags
-    //                                 title
-    //                                 description
-    //                                 options(first: 250) {
-    //                                     id
-    //                                     name
-    //                                     values
-    //                                 }
-    //                                 images(first: 250) {
-    //                                     nodes {
-    //                                         url
-    //                                     }
-    //                                 }
-    //                                 variants(first: 250) {
-    //                                     nodes {
-    //                                         id
-    //                                         title
-    //                                         price
-    //                                         inventoryQuantity
-    //                                         image {
-    //                                             originalSrc
-    //                                         }
-    //                                     }
-    //                                 }
-    //                             }
-    //                             pageInfo {
-    //                                 hasNextPage
-    //                                 endCursor
-    //                             }
-    //                         }
-    //                     }
-    //                 }`,
-    //                 variables: { handle, cursor: endCursor },
-    //             });
-
-    //             const requestOptions = {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'X-Shopify-Access-Token': ADMINAPI_ACCESS_TOKEN,
-    //                 },
-    //                 body: graphql,
-    //             };
-
-    //             const response = await fetch(`https://${STOREFRONT_DOMAIN}/admin/api/2024-04/graphql.json`, requestOptions);
-    //             const result = await response.json();
-
-    //             const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
-    //             // console.log(fetchedProducts)
-    //             const pageInfo = result?.data?.collectionByHandle?.products?.pageInfo || {};
-
-    //             // Accumulate fetched products
-    //             allProducts = [...allProducts, ...fetchedProducts];
-
-    //             // Check if there are more products to fetch
-    //             hasNextPage = pageInfo.hasNextPage;
-    //             endCursor = pageInfo.endCursor;
-    //         }
-
-    //         // Set final products and other data
-    //         setProducts(allProducts);
-
-    //         const inventoryQuantities = allProducts.map((product) =>
-    //             product.variants.nodes.map((variant) => variant.inventoryQuantity)
-    //         );
-    //         setInventoryQuantities(inventoryQuantities);
-
-    //         const fetchedTags = allProducts.map((product) => product.tags);
-    //         setTags(fetchedTags);
-
-    //         const fetchedOptions = allProducts.map((product) => product.options);
-    //         setOptions(fetchedOptions);
-
-    //         const productVariantData = allProducts.map((product) =>
-    //             product.variants.nodes.map((variant) => ({
-    //                 id: variant.id,
-    //                 title: variant.title,
-    //                 inventoryQty: variant.inventoryQuantity,
-    //                 image: variant.image,
-    //             }))
-    //         );
-    //         setProductVariantsIDS(productVariantData);
-
-    //         // console.log("Total Products Fetched:", allProducts.length);
-    //     } catch (error) {
-    //         console.error('Error fetching products:', error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     const fetchProductsByHandle = async (handle, cursor = null) => {
 
         capitalizeFirstLetter(handle); // Capitalize the handle (optional)
@@ -180,6 +72,7 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
                                     id
                                     title
                                     description
+                                    status
                                     tags
                                     options(first: 250) {
                                         id
@@ -227,7 +120,10 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
             );
 
             const result = await response.json();
-            const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
+            // const fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
+            let fetchedProducts = result?.data?.collectionByHandle?.products?.nodes || [];
+            console.log("fetchedProducts", fetchedProducts)
+            fetchedProducts = fetchedProducts.filter((product) => product.status === 'ACTIVE');
             const pageInfo = result?.data?.collectionByHandle?.products?.pageInfo || {};
 
             // Process only the newly fetched products
@@ -242,38 +138,6 @@ const CategoriesDetailsScreen = ({ route, navigation }) => {
             setActivityLoading(false); // Stop loading indicator
         }
     };
-
-    // const processFetchedData = (newProducts) => {
-    //     // Append new products to the existing list
-    //     setProducts((prev) => [...prev, ...newProducts]);
-
-    //     // Append inventory quantities incrementally
-    //     setInventoryQuantities((prev) => [
-    //         ...prev,
-    //         ...newProducts.map((product) =>
-    //             product.variants.nodes.map((variant) => variant.inventoryQuantity)
-    //         ),
-    //     ]);
-
-    //     // Append tags incrementally
-    //     setTags((prev) => [...prev, ...newProducts.map((product) => product.tags)]);
-
-    //     // Append options incrementally
-    //     setOptions((prev) => [...prev, ...newProducts.map((product) => product.options)]);
-
-    //     // Append product variants incrementally
-    //     setProductVariantsIDS((prev) => [
-    //         ...prev,
-    //         ...newProducts.map((product) =>
-    //             product.variants.nodes.map((variant) => ({
-    //                 id: variant.id,
-    //                 title: variant.title,
-    //                 inventoryQty: variant.inventoryQuantity,
-    //                 image: variant.image?.originalSrc,
-    //             }))
-    //         ),
-    //     ]);
-    // };
 
     const processFetchedData = (newProducts) => {
         // Sort new products alphabetically by title

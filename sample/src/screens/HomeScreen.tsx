@@ -125,6 +125,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         products(first: 250) {
           nodes {
             id
+            status
             images(first: 250) {
               nodes {
                 src
@@ -167,10 +168,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         .then((response) => response.text())
         .then((result) => {
           const fetchedProducts = JSON.parse(result);
-          const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
-            a.title.localeCompare(b.title)
-          );
-
+          // const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
+          //   a.title.localeCompare(b.title)
+          // );
+          let sortedProducts = fetchedProducts?.data?.collection?.products?.nodes || [];
+          sortedProducts = sortedProducts
+            .filter(product => product.status === 'ACTIVE') // ✅ only active products
+            .sort((a, b) => a.title.localeCompare(b.title));
           setBestDealProducts(sortedProducts);
           const inventoryQuantities = sortedProducts?.map((productEdge) => {
             return productEdge?.variants?.nodes?.map((variants) => variants?.inventoryQuantity);
@@ -212,6 +216,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           products(first: 6) {
             nodes {
               id
+              status
               images(first: 6) {
                 nodes {
                   src
@@ -254,9 +259,15 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         .then((response) => response.text())
         .then((result) => {
           const fetchedProducts = JSON.parse(result);
-          const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
-            a.title.localeCompare(b.title)
-          );
+          // const sortedProducts = fetchedProducts?.data?.collection?.products?.nodes.sort((a, b) =>
+          //   a.title.localeCompare(b.title)
+          // );
+          let sortedProducts = fetchedProducts?.data?.collection?.products?.nodes || [];
+ 
+          // 🟢 Filter active products only
+          sortedProducts = sortedProducts
+            .filter(product => product.status === 'ACTIVE')
+            .sort((a, b) => a.title.localeCompare(b.title));
           setProducts(sortedProducts);
           setSkeletonLoading(false)
           const inventoryQuantities = sortedProducts?.map((productEdge) => {
@@ -1106,7 +1117,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
             {/* our product */}
             <View style={[{ width: "100%", marginVertical: 10 }, alignItemsCenter, justifyContentSpaceBetween, flexDirectionRow]}>
               <Text style={[styles.text, { color: colors.blackColor }]}>{"Top Sellers"}</Text>
-              <Text style={{ color: redColor, fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight,fontFamily: appFonts.semiBold }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={redColor} /></Text>
+              <Text style={{ color: redColor, fontSize: style.fontSizeNormal.fontSize, fontWeight: style.fontWeightThin1x.fontWeight, fontFamily: appFonts.semiBold }} onPress={() => onPressCollection(OUR_PRODUCT_COLLECTION_ID, "Top Sellers")}>See All <AntDesign name={"arrowright"} size={16} color={redColor} /></Text>
             </View>
             <View style={[{ height: "auto", width: "100%", paddingHorizontal: spacings.large }, alignJustifyCenter]}>
               {products?.length > 0 ? <FlatList

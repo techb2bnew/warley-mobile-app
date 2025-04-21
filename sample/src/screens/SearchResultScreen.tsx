@@ -118,8 +118,11 @@ const SearchResultScreen: React.FC = ({ navigation }: { navigation: any }) => {
           const result = await response.json();
 
           const fetchedProducts = result?.data?.products?.edges || [];
-          allProducts = [...allProducts, ...fetchedProducts]; // Accumulate fetched products
-
+          // allProducts = [...allProducts, ...fetchedProducts]; // Accumulate fetched products
+          allProducts = [
+            ...allProducts,
+            ...fetchedProducts.filter((product) => product.status === 'ACTIVE')
+          ];
           const pageInfo = result?.data?.products?.pageInfo || {};
           hasNextPage = pageInfo.hasNextPage; // Update the hasNextPage flag
           endCursor = pageInfo.endCursor; // Update the cursor for the next fetch
